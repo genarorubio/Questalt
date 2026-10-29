@@ -440,20 +440,42 @@
     }
 
     function fetchLiveLeaderboard() {
-      if (!GOOGLE_SHEET_API_URL) return;
-      fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
-        .then(function(res) { return res.json(); })
-        .then(function(json) {
-          if (json && json.rankings && json.rankings.length > 0) {
-            lawrencevilleRankings = json.rankings;
-            try { localStorage.setItem(STORAGE_KEY_RANKINGS, JSON.stringify(lawrencevilleRankings)); } catch (e) {}
-            if (huntStarted && activeGameTab === "rankings") {
-              renderMainContent();
-            }
+  if (!GOOGLE_SHEET_API_URL) return;
+  fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
+    .then(function(res) { return res.json(); })
+    .then(function(json) {
+      // 1. Update Leaderboard Rankings from Google Sheet
+      if (json && json.rankings && json.rankings.length > 0) {
+        lawrencevilleRankings = json.rankings;
+        try { localStorage.setItem(STORAGE_KEY_RANKINGS, JSON.stringify(lawrencevilleRankings)); } catch (e) {}
+        if (huntStarted && activeGameTab === "rankings") {
+          renderMainContent();
+        }
+      }
+
+      // 2. NEW: Update Clues, Answers, Hints & Perks dynamically from the "Clues" tab!
+      if (json && json.clues && json.clues.length > 0) {
+        window.MASTER_SHEET_CLUES = json.clues;
+        var sheetLawrencevilleClues = json.clues.filter(function(c) {
+          return (c.cityId || "lawrenceville") === "lawrenceville";
+        });
+
+        if (sheetLawrencevilleClues.length > 0) {
+          DEFAULT_LAWRENCEVILLE_CLUES.length = 0;
+          for (var i = 0; i < sheetLawrencevilleClues.length; i++) {
+            DEFAULT_LAWRENCEVILLE_CLUES.push(sheetLawrencevilleClues[i]);
           }
-        })
-        .catch(function() {});
-    }
+          if (typeof clues !== "undefined" && (!huntStarted || activeCityId === "lawrenceville")) {
+            clues = DEFAULT_LAWRENCEVILLE_CLUES;
+          }
+          if (typeof renderMainContent === "function") {
+            renderMainContent();
+          }
+        }
+      }
+    })
+    .catch(function() {});
+}
 
     // Secret 5-Tap Admin Trigger for Partner Demo Mode
     var secretTapCount = 0;
