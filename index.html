@@ -439,7 +439,7 @@
       }
     }
 
-    function fetchLiveLeaderboard() {
+function fetchLiveLeaderboard() {
   if (!GOOGLE_SHEET_API_URL) return;
   fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
     .then(function(res) { return res.json(); })
@@ -457,7 +457,6 @@
       if (json && json.clues && json.clues.length > 0) {
         window.MASTER_SHEET_CLUES = json.clues;
 
-        // Automatically flip any city in CITIES to "LIVE" if it has rows in your Google Sheet!
         if (typeof CITIES !== "undefined") {
           for (var c = 0; c < CITIES.length; c++) {
             var hasClues = json.clues.some(function(item) {
@@ -468,6 +467,28 @@
             }
           }
         }
+
+        var currentCity = (typeof activeCityId !== "undefined" && activeCityId) ? activeCityId : "lawrenceville";
+        var activeCityClues = json.clues.filter(function(item) {
+          return (item.cityId || "lawrenceville") === currentCity;
+        });
+
+        if (activeCityClues.length > 0) {
+          DEFAULT_LAWRENCEVILLE_CLUES.length = 0;
+          for (var i = 0; i < activeCityClues.length; i++) {
+            DEFAULT_LAWRENCEVILLE_CLUES.push(activeCityClues[i]);
+          }
+          if (typeof clues !== "undefined") {
+            clues = DEFAULT_LAWRENCEVILLE_CLUES;
+          }
+        }
+
+        if (typeof renderCitySelector === "function") renderCitySelector();
+        if (typeof renderMainContent === "function") renderMainContent();
+      }
+    })
+    .catch(function() {});
+}
 
         // Load the clues for whichever city is currently selected
         var currentCity = (typeof activeCityId !== "undefined" && activeCityId) ? activeCityId : "lawrenceville";
