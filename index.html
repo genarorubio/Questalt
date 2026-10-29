@@ -453,24 +453,41 @@
         }
       }
 
-      // 2. NEW: Update Clues, Answers, Hints & Perks dynamically from the "Clues" tab!
+      // 2. Update Clues & Unlock Any City Present in the Google Sheet!
       if (json && json.clues && json.clues.length > 0) {
         window.MASTER_SHEET_CLUES = json.clues;
-        var sheetLawrencevilleClues = json.clues.filter(function(c) {
-          return (c.cityId || "lawrenceville") === "lawrenceville";
+
+        // Automatically flip any city in CITIES to "LIVE" if it has rows in your Google Sheet!
+        if (typeof CITIES !== "undefined") {
+          for (var c = 0; c < CITIES.length; c++) {
+            var hasClues = json.clues.some(function(item) {
+              return item.cityId === CITIES[c].id;
+            });
+            if (hasClues) {
+              CITIES[c].status = "LIVE";
+            }
+          }
+        }
+
+        // Load the clues for whichever city is currently selected
+        var currentCity = (typeof activeCityId !== "undefined" && activeCityId) ? activeCityId : "lawrenceville";
+        var activeCityClues = json.clues.filter(function(item) {
+          return item.cityId === currentCity;
         });
 
-        if (sheetLawrencevilleClues.length > 0) {
+        if (activeCityClues.length > 0) {
           DEFAULT_LAWRENCEVILLE_CLUES.length = 0;
-          for (var i = 0; i < sheetLawrencevilleClues.length; i++) {
-            DEFAULT_LAWRENCEVILLE_CLUES.push(sheetLawrencevilleClues[i]);
+          for (var i = 0; i < activeCityClues.length; i++) {
+            DEFAULT_LAWRENCEVILLE_CLUES.push(activeCityClues[i]);
           }
-          if (typeof clues !== "undefined" && (!huntStarted || activeCityId === "lawrenceville")) {
+          if (typeof clues !== "undefined") {
             clues = DEFAULT_LAWRENCEVILLE_CLUES;
           }
-          if (typeof renderMainContent === "function") {
-            renderMainContent();
-          }
+        }
+
+        if (typeof renderCitySelector === "function") renderCitySelector();
+        if (typeof renderMainContent === "function") renderMainContent();
+      }
         }
       }
     })
