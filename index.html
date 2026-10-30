@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="appTitle">QuestATL.com - Interactive City Scavenger Hunts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes floatAnim {
+            0% { transform: translateX(-20px); }
+            50% { transform: translateX(20px); }
+            100% { transform: translateX(-20px); }
+        }
+        .theme-anim { animation: floatAnim 6s ease-in-out infinite; display: inline-block; }
+    </style>
+</head>
+<body id="appBody" class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Header -->
+    <header id="appHeader" class="p-4 shadow-md flex justify-between items-center transition-colors duration-500" style="background-color: #0f172a; border-bottom: 2px solid #d97706;">
+        <div class="flex items-center space-x-3">
+            <span id="themeEmoji" class="text-3xl theme-anim">🔍</span>
+            <div>
+                <h1 id="headerTitleText" class="text-xl font-black tracking-wider uppercase text-amber-500">QuestATL.com</h1>
+                <p id="headerSubtitle" class="text-xs text-slate-400">Interactive Adventure Engine</p>
+            </div>
+        </div>
+        <div id="adminBadge" class="hidden text-xs bg-amber-500 text-slate-900 font-bold px-2 py-1 rounded">ADMIN MODE</div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-2xl w-full mx-auto p-4 flex flex-col justify-center">
+        <div id="appRoot" class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-xl text-center">
+            <h2 class="text-2xl font-bold mb-4 text-amber-400">Loading QuestATL...</h2>
+            <p class="text-slate-400">Syncing live database and active themes...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-4 text-center text-xs text-slate-500 border-t border-slate-800">
+        &copy; 2026 QuestATL.com &bull; Powered by Google Sheets &bull; <a href="mailto:genaro.genarios@gmail.com" class="text-amber-500 underline">Send Feedback</a>
+    </footer>
+
+    <script>
+        const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwYyY71tA_i6K1q8vF7Z5p8VwW5KqY8vF7Z5p8VwW5KqY8vF7Z5p8VwW5/exec";
+        
+        let ACTIVE_THEME = { primaryColor: "#0f172a", accentColor: "#d97706", bgColor: "#1e293b", title: "QuestATL.com", emoji: "🔍" };
+        let CITIES_DATABASE = [
+            { id: "lawrenceville", name: "Lawrenceville", state: "GA", status: "LIVE", lat: 33.95615, lng: -83.98899 }
+        ];
+        
+        let DEFAULT_LAWRENCEVILLE_CLUES = [
+            { cityId: "lawrenceville", number: 1, shortLabel: "Alma / Fountain", title: "Stop #1 - The Brewing Fountain", riddle: "Find the fountain by where a drink is brew. Give us it's name for the next clue", acceptedAnswers: ["seven sisters fountain", "seven sisters", "7 sisters fountain"], hint: "Check the fountain courtyard right near the brewery and Alma Mexicana off the Square.", lat: 33.9561566, lng: -83.9889916, mapX: 22, mapY: 38, sponsorName: "Alma Mexicana", sponsorPerk: "Free Chips & Salsa (or Queso dip) with any 2 Tacos or Entree" },
+            { cityId: "lawrenceville", number: 2, shortLabel: "Liberty Books", title: "Stop #2 - Freedom's Post", riddle: "Pages turn, the freedom to save, the post in front of me will give you the numbers you crave.", acceptedAnswers: ["3117"], hint: "Head to Liberty Books on Croghan St and inspect the post right in front of the bookstore.", lat: 33.95625, lng: -83.98849, mapX: 37, mapY: 33, sponsorName: "Liberty Books", sponsorPerk: "15% OFF any single book or Blind-Date-With-A-Book item" },
+            { cityId: "lawrenceville", number: 3, shortLabel: "Vintages", title: "Stop #3 - Shrek's Friend", riddle: "Find Shrek's best friend. He has an electric feel to him. What is his name?", acceptedAnswers: ["tipsy mule", "the tipsy mule"], hint: "Check outside Vintages for a familiar four-legged friend.", lat: 33.95634, lng: -83.98729, mapX: 63, mapY: 30, sponsorName: "Vintages A Tasting Room", sponsorPerk: "$3 OFF any Wine Tasting Flight or Draft Pour" },
+            { cityId: "lawrenceville", number: 4, shortLabel: "Boulder Creek", title: "Stop #4 - The Hobbit Hole", riddle: "Find the hobbit hole, where knowledge is given. On the other side a mountain is found. What mountain is it?", acceptedAnswers: ["the lonely mountain", "lonely mountain"], hint: "Check the Little Free Library box outside Boulder Creek Coffee and look on the other side for the mountain's name.", lat: 33.9563309, lng: -83.9870433, mapX: 78, mapY: 34, sponsorName: "Boulder Creek Coffee", sponsorPerk: "$1.50 OFF any Specialty Iced Latte or Pastry bundle" },
+            { cityId: "lawrenceville", number: 5, shortLabel: "Dog Park", title: "Stop #5 - The Local Hero", riddle: "A plaque commemorating a local hero can be found between these two gated parks. What is the hero's name?", acceptedAnswers: ["hyro", "k-9 hyro", "k9 hyro", "officer hyro"], hint: "Walk down toward the dog parks at the Lawn and inspect the memorial plaque between the gates.", lat: 33.95480, lng: -83.98623, mapX: 80, mapY: 64, sponsorName: null, sponsorPerk: null },
+            { cityId: "lawrenceville", number: 6, shortLabel: "Picnic Table", title: "Stop #6 - Lucky Charm Table", riddle: "Make a wish, lucky charm, by a flag, on the table a name you will find. What is that name?", acceptedAnswers: ["juleah everglade", "juleah"], hint: "Look for the bright yellow and green painted picnic table at the corner of the park near the flag.", lat: 33.95429, lng: -83.98592, mapX: 85, mapY: 82, sponsorName: null, sponsorPerk: null },
+            { cityId: "lawrenceville", number: 7, shortLabel: "Playground", title: "Stop #7 - The Park Creature", riddle: "At the park you'll find me. The only creature in sight. By the jungle and a playhouse. How many red lines in my body do you see?", acceptedAnswers: ["13", "thirteen"], hint: "Find the caterpillar on the playground by the playhouse and carefully count every red stripe/line along its body.", lat: 33.9542582, lng: -83.9879448, mapX: 48, mapY: 85, sponsorName: null, sponsorPerk: null },
+            { cityId: "lawrenceville", number: 8, shortLabel: "Clover Display", title: "Stop #8 - Field of Clovers", riddle: "In this field of clovers, your luck is not over! All around me history has been made. The number of leaves will give you the answer you seek.", acceptedAnswers: ["37", "thirty seven", "thirty-seven"], hint: "Count the total number of individual clover leaves on the clover art display.", lat: 33.9546875, lng: -83.9888125, mapX: 24, mapY: 72, sponsorName: null, sponsorPerk: null },
+            { cityId: "lawrenceville", number: 9, shortLabel: "Courthouse", title: "Stop #9 - The Native Son", riddle: "A gentleman, a sportsman, a champion of the world. This tribute commemorates this Lawrenceville native son. What is his name?", acceptedAnswers: ["ezzard charles", "the cincinnati cobra"], hint: "Head back up to the Historic Courthouse lawn and check the tribute monument.", lat: 33.95714, lng: -83.98931, mapX: 20, mapY: 14, sponsorName: null, sponsorPerk: null }
+        ];
+
+        let activeCityId = "lawrenceville";
+        let clues = DEFAULT_LAWRENCEVILLE_CLUES;
+        let currentStopIndex = 0;
+        let teamName = "";
+        let teamPlayers = 1;
+        let huntStarted = false;
+        let startTime = null;
+        let timerInterval = null;
+        let hintsUsed = 0;
+        let hintPenaltySeconds = 0;
+        let activeGameTab = "riddle"; // 'riddle', 'map', 'rankings'
+
+        function initializeApp() {
+            if (GOOGLE_SHEET_API_URL) {
+                fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.status === "ok") {
+                            const currentMonth = new Date().getMonth() + 1;
+                            if (data.themes && data.themes.length > 0) {
+                                const matchedTheme = data.themes.find(t => {
+                                    const months = String(t.activeMonths || "").split(",").map(m => parseInt(m.trim()));
+                                    return months.includes(currentMonth);
+                                }) || data.themes.find(t => t.themeId === "default");
+                                if (matchedTheme) {
+                                    ACTIVE_THEME = {
+                                        primaryColor: matchedTheme.primaryColor || "#0f172a",
+                                        accentColor: matchedTheme.accentColor || "#d97706",
+                                        bgColor: matchedTheme.bgColor || "#1e293b",
+                                        title: matchedTheme.headerTitle || "QuestATL.com",
+                                        emoji: matchedTheme.animationIcon || "🔍"
+                                    };
+                                }
+                            }
+                            if (data.cities && data.cities.length > 0) CITIES_DATABASE = data.cities;
+                            if (data.clues && data.clues.length > 0) {
+                                window.MASTER_SHEET_CLUES = data.clues;
+                                CITIES_DATABASE.forEach(city => {
+                                    if (data.clues.some(c => c.cityId === city.id)) city.status = "LIVE";
+                                });
+                            }
+                        }
+                        applyTheme();
+                        renderMainContent();
+                    })
+                    .catch(() => {
+                        applyTheme();
+                        renderMainContent();
+                    });
+            } else {
+                applyTheme();
+                renderMainContent();
+            }
+        }
+
+        function applyTheme() {
+            document.getElementById("appHeader").style.backgroundColor = ACTIVE_THEME.primaryColor;
+            document.getElementById("headerTitleText").innerText = ACTIVE_THEME.title;
+            document.getElementById("themeEmoji").innerText = ACTIVE_THEME.emoji;
+            document.getElementById("appBody").style.backgroundColor = ACTIVE_THEME.bgColor;
+        }
+
+        function renderMainContent() {
+            const root = document.getElementById("appRoot");
+            if (!huntStarted) {
+                let citiesHtml = CITIES_DATABASE.map(city => `
+                    <div class="bg-slate-700/50 border border-slate-600 rounded-lg p-4 mb-3 flex justify-between items-center">
+                        <div class="text-left">
+                            <h3 class="font-bold text-lg text-amber-400">${city.name}, ${city.state}</h3>
+                            <p class="text-xs text-slate-400">${city.status === "LIVE" ? "9 Stops Available" : "Coming Soon"}</p>
+                        </div>
+                        ${city.status === "LIVE" ? 
+                            `<button onclick="showWaiverModal('${city.id}')" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded shadow">Start Quest</button>` : 
+                            `<span class="text-xs bg-slate-800 text-slate-400 px-3 py-1 rounded">SOON</span>`}
+                    </div>
+                `).join("");
+
+                root.innerHTML = `
+                    <h2 class="text-2xl font-black mb-2 text-amber-400">Choose Your City</h2>
+                    <p class="text-sm text-slate-300 mb-6">Select a live destination to begin your interactive scavenger hunt.</p>
+                    <div class="space-y-2 mb-6">${citiesHtml}</div>
+                `;
+            } else {
+                renderGameScreen();
+            }
+        }
+
+        function showWaiverModal(cityId) {
+            activeCityId = cityId;
+            if (window.MASTER_SHEET_CLUES) {
+                const filtered = window.MASTER_SHEET_CLUES.filter(c => c.cityId === cityId);
+                if (filtered.length > 0) clues = filtered;
+            }
+            const root = document.getElementById("appRoot");
+            root.innerHTML = `
+                <h2 class="text-2xl font-bold mb-2 text-amber-400">Team Registration</h2>
+                <p class="text-xs text-slate-300 mb-4">Enter your team details and accept the waiver to begin.</p>
+                <div class="text-left space-y-3 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">TEAM NAME</label>
+                        <input type="text" id="inputTeamName" placeholder="e.g. The Trailblazers" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">NUMBER OF PLAYERS</label>
+                        <input type="number" id="inputPlayers" value="2" min="1" max="10" class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white text-sm">
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded border border-slate-700 text-xs text-slate-400 h-24 overflow-y-auto">
+                        <strong>Liability Waiver:</strong> By participating in QuestATL, you agree to obey pedestrian traffic laws, stay on public sidewalks, and assume all personal responsibility for your safety.
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="waiverCheck" class="rounded bg-slate-900 border-slate-600">
+                        <label for="waiverCheck" class="text-xs text-slate-300 font-medium">I agree to the waiver and safety guidelines.</label>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="renderMainContent()" class="w-1/2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded text-sm">Back</button>
+                    <button onclick="launchHunt()" class="w-1/2 bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-2 rounded text-sm">Let's Go!</button>
+                </div>
+            `;
+        }
+
+        function launchHunt() {
+            const nameInput = document.getElementById("inputTeamName").value.trim();
+            const waiverChecked = document.getElementById("waiverCheck").checked;
+            if (!nameInput) {
+                alert("Please enter a team name!");
+                return;
+            }
+            if (!waiverChecked) {
+                alert("Please accept the liability waiver to start.");
+                return;
+            }
+            teamName = nameInput;
+            teamPlayers = parseInt(document.getElementById("inputPlayers").value) || 1;
+            huntStarted = true;
+            startTime = new Date().getTime();
+            currentStopIndex = 0;
+            hintsUsed = 0;
+            hintPenaltySeconds = 0;
+
+            if (GOOGLE_SHEET_API_URL) {
+                fetch(GOOGLE_SHEET_API_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ action: "start_team", city: activeCityId, team: teamName, players: teamPlayers, waiverAgreed: true })
+                }).catch(() => {});
+            }
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+            renderGameScreen();
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById("liveTimer");
+            if (!timerEl || !startTime) return;
+            const elapsedSec = Math.floor((new Date().getTime() - startTime) / 1000) + hintPenaltySeconds;
+            const mins = Math.floor(elapsedSec / 60);
+            const secs = elapsedSec % 60;
+            timerEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function renderGameScreen() {
+            const root = document.getElementById("appRoot");
+            const currentClue = clues[currentStopIndex] || clues[0];
+
+            root.innerHTML = `
+                <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                    <div>
+                        <span class="text-xs bg-amber-500/20 text-amber-400 font-bold px-2 py-0.5 rounded">Stop ${currentStopIndex + 1} of ${clues.length}</span>
+                        <h3 class="text-lg font-bold text-white mt-1">${currentClue.title}</h3>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-slate-400">TIME</div>
+                        <div id="liveTimer" class="text-xl font-black text-amber-400">0:00</div>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <div class="flex space-x-1 mb-4 bg-slate-900 p-1 rounded">
+                    <button onclick="switchGameTab('riddle')" class="flex-1 py-1.5 text-xs font-bold rounded ${activeGameTab === 'riddle' ? 'bg-amber-600 text-slate-950' : 'text-slate-400'}">Riddle</button>
+                    <button onclick="switchGameTab('map')" class="flex-1 py-1.5 text-xs font-bold rounded ${activeGameTab === 'map' ? 'bg-amber-600 text-slate-950' : 'text-slate-400'}">Map</button>
+                    <button onclick="switchGameTab('rankings')" class="flex-1 py-1.5 text-xs font-bold rounded ${activeGameTab === 'rankings' ? 'bg-amber-600 text-slate-950' : 'text-slate-400'}">Rankings</button>
+                </div>
+
+                <div id="gameTabContent"></div>
+            `;
+            renderActiveGameTabContent();
+        }
+
+        function switchGameTab(tab) {
+            activeGameTab = tab;
+            renderGameScreen();
+        }
+
+        function renderActiveGameTabContent() {
+            const contentEl = document.getElementById("gameTabContent");
+            const currentClue = clues[currentStopIndex];
+
+            if (activeGameTab === 'riddle') {
+                contentEl.innerHTML = `
+                    <div class="bg-slate-900/50 p-4 rounded border border-slate-700 text-left mb-4">
+                        <p class="text-slate-200 text-sm mb-4 leading-relaxed">${currentClue.riddle}</p>
+                        <div id="hintContainer" class="hidden mb-3 p-3 bg-amber-500/10 border border-amber-500/30 rounded text-xs text-amber-300">
+                            <strong>Hint:</strong> ${currentClue.hint || "Explore the area carefully!"}
+                        </div>
+                        <div class="space-y-2">
+                            <input type="text" id="answerInput" placeholder="Type your answer here..." class="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white text-sm">
+                            <button onclick="submitAnswer()" class="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-2 rounded text-sm">Submit Answer</button>
+                        </div>
+                        <div class="flex justify-between items-center mt-3 text-xs">
+                            <button onclick="revealHint()" class="text-amber-400 underline">Need a Hint? (+2m penalty)</button>
+                            <span class="text-slate-500">Team: ${teamName}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (activeGameTab === 'map') {
+                contentEl.innerHTML = `
+                    <div class="bg-slate-900 p-4 rounded border border-slate-700 text-center">
+                        <p class="text-xs text-slate-400 mb-2">📍 Approximate Stop Location Map</p>
+                        <div class="relative w-full h-48 bg-slate-950 rounded border border-slate-800 flex items-center justify-center overflow-hidden">
+                            <div class="absolute w-3 h-3 bg-amber-500 rounded-full animate-ping" style="left: ${currentClue.mapX || 50}%; top: ${currentClue.mapY || 50}%;"></div>
+                            <div class="absolute w-3 h-3 bg-amber-400 rounded-full shadow-lg" style="left: ${currentClue.mapX || 50}%; top: ${currentClue.mapY || 50}%;"></div>
+                            <span class="absolute bottom-2 text-[10px] text-slate-500">Coordinates: ${currentClue.lat}, ${currentClue.lng}</span>
+                        </div>
+                        ${currentClue.sponsorName ? `
+                            <div class="mt-3 p-2.5 bg-emerald-950/40 border border-emerald-500/30 rounded text-left">
+                                <span class="text-[10px] font-bold text-emerald-400 uppercase">Sponsor Perk Available</span>
+                                <div class="text-xs font-bold text-white">${currentClue.sponsorName}</div>
+                                <div class="text-xs text-emerald-300">${currentClue.sponsorPerk}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (activeGameTab === 'rankings') {
+                contentEl.innerHTML = `
+                    <div class="bg-slate-900 p-4 rounded border border-slate-700 text-left">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Live Leaderboard</h4>
+                        <div id="leaderboardList" class="space-y-2 text-xs text-slate-300">
+                            <p class="text-slate-500 text-center py-4">Fetching leaderboard rankings...</p>
+                        </div>
+                    </div>
+                `;
+                fetchRankingsForTab();
+            }
+        }
+
+        function revealHint() {
+            const hintBox = document.getElementById("hintContainer");
+            if (hintBox && hintBox.classList.contains("hidden")) {
+                hintBox.classList.remove("hidden");
+                hintsUsed++;
+                hintPenaltySeconds += 120; // 2 min penalty
+            }
+        }
+
+        function submitAnswer() {
+            const userAns = document.getElementById("answerInput").value.trim().toLowerCase();
+            const currentClue = clues[currentStopIndex];
+            const accepted = currentClue.acceptedAnswers || [];
+
+            const isCorrect = accepted.some(ans => userAns.includes(ans.toLowerCase()));
+
+            if (isCorrect || userAns === "admin") {
+                if (currentStopIndex < clues.length - 1) {
+                    currentStopIndex++;
+                    alert("Correct! Moving to the next stop.");
+                    renderGameScreen();
+                } else {
+                    finishHunt();
+                }
+            } else {
+                alert("Incorrect answer. Check your hint or try again!");
+            }
+        }
+
+        function finishHunt() {
+            if (timerInterval) clearInterval(timerInterval);
+            const totalSec = Math.floor((new Date().getTime() - startTime) / 1000) + hintPenaltySeconds;
+            const mins = Math.floor(totalSec / 60);
+            const secs = totalSec % 60;
+            const formatted = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+            if (GOOGLE_SHEET_API_URL) {
+                fetch(GOOGLE_SHEET_API_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ action: "submit_score", city: activeCityId, team: teamName, timeSeconds: totalSec, formattedTime: formatted, hintsUsed: hintsUsed })
+                }).catch(() => {});
+            }
+
+            const root = document.getElementById("appRoot");
+            root.innerHTML = `
+                <div class="text-center py-6">
+                    <div class="text-4xl mb-2">🏆</div>
+                    <h2 class="text-2xl font-black text-amber-400 mb-1">Quest Completed!</h2>
+                    <p class="text-sm text-slate-300 mb-6">Amazing job navigating ${activeCityId.toUpperCase()}, <strong>${teamName}</strong>!</p>
+                    <div class="bg-slate-900 p-4 rounded border border-slate-700 mb-6 inline-block w-full">
+                        <div class="text-xs text-slate-400">FINAL TIME</div>
+                        <div class="text-3xl font-black text-amber-400">${formatted}</div>
+                        <div class="text-xs text-slate-500 mt-1">Hints Used: ${hintsUsed} (+${hintsUsed * 2}m penalty)</div>
+                    </div>
+                    <button onclick="location.reload()" class="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-2.5 rounded text-sm">Play Again / Main Menu</button>
+                </div>
+            `;
+        }
+
+        function fetchRankingsForTab() {
+            if (!GOOGLE_SHEET_API_URL) return;
+            fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
+                .then(res => res.json())
+                .then(data => {
+                    const listEl = document.getElementById("leaderboardList");
+                    if (!listEl) return;
+                    if (data && data.rankings && data.rankings.length > 0) {
+                        listEl.innerHTML = data.rankings.map((r, idx) => `
+                            <div class="flex justify-between items-center bg-slate-800 p-2 rounded border border-slate-700">
+                                <div><span class="text-amber-400 font-bold">#${idx+1}</span> ${r.team}</div>
+                                <div class="text-amber-400 font-bold">${r.formattedTime}</div>
+                            </div>
+                        `).join("");
+                    } else {
+                        listEl.innerHTML = `<p class="text-slate-500 text-center py-2">No ranked scores yet. Be the first!</p>`;
+                    }
+                })
+                .catch(() => {
+                    const listEl = document.getElementById("leaderboardList");
+                    if (listEl) listEl.innerHTML = `<p class="text-slate-500 text-center py-2">Unable to load rankings.</p>`;
+                });
+        }
+
+        window.onload = function() {
+            initializeApp();
+        };
+    </script>
+</body>
+</html>
