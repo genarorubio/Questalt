@@ -1128,7 +1128,7 @@
       renderMainContent();
     }
 
-    function renderVictoryScreen(container, cityObj) {
+        function renderVictoryScreen(container, cityObj) {
       container.innerHTML =
         '<div class="card" style="text-align:center; padding:28px 20px;">' +
           '<div style="font-size:48px; margin-bottom:8px;">🏆</div>' +
@@ -1139,11 +1139,45 @@
             '<div style="font-size:34px; font-weight:900; color:#10b981;">' + formatSeconds(elapsedSeconds) + '</div>' +
             '<div style="font-size:11px; color:#64748b; margin-top:4px;">Hints Used: ' + hintsUsedCount + ' (+' + (hintsUsedCount * 2) + ' mins)</div>' +
           '</div>' +
-          '<button class="btn-primary" onclick="selectCity(\'' + activeCityId + '\')" style="margin-bottom:10px;">🔄 Back to Trail Home</button>' +
+          '<button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#052e16; margin-bottom:10px;" onclick="shareVictoryPost(\'' + escapeQuotes(cityObj.name) + '\')">' +
+            '📲 Share Our Time on Social Media' +
+          '</button>' +
+          '<div id="shareCopyFeedback" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-bottom:10px;">' +
+            '✅ Copied to clipboard! Paste it on your Story or post!' +
+          '</div>' +
+          '<button class="btn-secondary" style="width:100%;" onclick="selectCity(\'' + activeCityId + '\')">🔄 Back to Trail Home</button>' +
         '</div>' +
         renderVipPerksTabHtml() +
         renderLeaderboardCardHtml();
     }
+
+    function shareVictoryPost(cityName) {
+      var timeStr = formatSeconds(elapsedSeconds);
+      var shareMessage = "🏆 Team \"" + (teamName || "Explorer") + "\" just conquered the " + cityName + " Scavenger Hunt on QuestATL.com in " + timeStr + "! Think you can beat our time? 🧭🔥 https://QuestATL.com";
+
+      trackQuestEvent({
+        action: "social_share",
+        city: activeCityId,
+        team: teamName || "Explorer",
+        formattedTime: timeStr
+      });
+
+      if (navigator.share) {
+        navigator.share({
+          title: "We Conquered QuestATL!",
+          text: shareMessage,
+          url: "https://QuestATL.com"
+        }).catch(function() {});
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareMessage).then(function() {
+          var fb = document.getElementById("shareCopyFeedback");
+          if (fb) fb.style.display = "block";
+        });
+      } else {
+        prompt("Copy your official finish brag below to share on social media:", shareMessage);
+      }
+    }
+
 
     // =========================================================================
     // 9. SECRET 5-TAP ADMIN DEMO MODE & SUGGESTION EMAIL ROUTING
