@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>QuestATL.com — Interactive City Scavenger Hunts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Creepster&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #070b14;
+      --bg-card: #111827;
+      --bg-card-inner: #0b1120;
+      --primary: #f59e0b;
+      --primary-glow: rgba(245, 158, 11, 0.35);
+      --accent: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, #172036 0%, var(--bg-deep) 70%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 40px;
+    }
+
+    /* Seasonal Floating Header Animation */
+    @keyframes floatAcross {
+      0% { transform: translateX(-10vw) translateY(0px) rotate(-5deg); opacity: 0; }
+      15% { opacity: 0.85; }
+      50% { transform: translateX(45vw) translateY(-6px) rotate(6deg); opacity: 0.95; }
+      85% { opacity: 0.85; }
+      100% { transform: translateX(105vw) translateY(2px) rotate(-5deg); opacity: 0; }
+    }
+    .seasonal-floater {
+      position: fixed;
+      top: 10px;
+      left: 0;
+      font-size: 24px;
+      pointer-events: none;
+      z-index: 999;
+      animation: floatAcross 14s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+    }
+
+    /* Top Header & Hero */
+    .top-banner {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 17, 32, 0.88) 100%);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.25);
+      padding: 16px 16px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+    .header-row {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #ffffff, #fcd34d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    /* City Selector Pills */
+    .city-bar {
+      max-width: 640px;
+      margin: 12px auto 0;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .city-bar::-webkit-scrollbar { display: none; }
+    .city-pill {
+      flex-shrink: 0;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      background: rgba(30, 41, 59, 0.6);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .city-pill.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(234, 88, 12, 0.25));
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+    }
+    .badge-live {
+      background: #10b981;
+      color: #052e16;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 99px;
+      letter-spacing: 0.5px;
+    }
+    .badge-soon {
+      background: #334155;
+      color: #94a3b8;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 99px;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 640px;
+      margin: 18px auto;
+      padding: 0 14px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.78) 0%, rgba(15, 23, 42, 0.92) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      color: #090d16;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+      transition: transform 0.15s ease;
+    }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      background: rgba(30, 41, 59, 0.8);
+      color: #e2e8f0;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Game Navigation Tabs */
+    .game-tabs {
+      display: flex;
+      gap: 6px;
+      background: #090d16;
+      padding: 5px;
+      border-radius: 14px;
+      border: 1px solid #1e293b;
+      margin-bottom: 16px;
+    }
+    .game-tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px 6px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #94a3b8;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s;
+    }
+    .game-tab.active {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #090d16;
+      box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+    }
+
+    /* Interactive Radar & Street Map */
+    .map-viewport {
+      width: 100%;
+      height: 360px;
+      background: #060b13;
+      border-radius: 16px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+    }
+    .map-controls {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 20;
+    }
+    .map-ctrl-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(15, 23, 42, 0.9);
+      color: #fff;
+      font-weight: 900;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes radarSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .radar-sweep {
+      transform-origin: 500px 500px;
+      animation: radarSpin 8s linear infinite;
+    }
+    @keyframes pulsePin {
+      0% { r: 14; opacity: 0.9; }
+      100% { r: 34; opacity: 0; }
+    }
+    .pin-pulse {
+      animation: pulsePin 1.8s ease-out infinite;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 200;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: #111827;
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      max-width: 440px;
+      width: 100%;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      text-align: center;
+    }
+
+    input[type="text"], input[type="email"], textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      background: #090d16;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Seasonal Animation Element -->
+  <div id="seasonalFloater" class="seasonal-floater">👻</div>
+
+  <!-- Top Sticky Header -->
+  <header class="top-banner" id="appHeader">
+    <div class="header-row">
+      <div class="brand-box" onclick="handleSecretAdminTap()">
+        <div class="brand-icon" id="brandEmojiIcon">🧭</div>
+        <div>
+          <div class="brand-title" id="headerTitleText">QuestATL.com</div>
+          <div class="brand-sub" id="headerSubText">Live Outdoor City Quests</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span id="adminPill" style="display:none; background:#ef4444; color:#fff; font-size:10px; font-weight:900; padding:4px 8px; border-radius:99px; cursor:pointer;" onclick="openAdminDemoModal()">ADMIN DEMO</span>
+        <button class="btn-secondary" style="padding:7px 11px; font-size:11px;" onclick="openPartnerInfoModal()">🤝 Partners</button>
+      </div>
+    </div>
+    <!-- Dynamic City Selector Bar -->
+    <div class="city-bar" id="citySelectorBar"></div>
+  </header>
+
+  <!-- Optional Announcement Banner from Google Sheet Config -->
+  <div id="announcementBanner" style="display:none; background:linear-gradient(90deg,#f59e0b,#ea580c); color:#090d16; text-align:center; padding:8px 12px; font-size:12px; font-weight:800;"></div>
+
+  <!-- Main Content Area -->
+  <main class="container" id="mainContent"></main>
+
+  <!-- Bottom Suggestion & Feedback Box -->
+  <section class="container" style="margin-top:8px;">
+    <div class="card" style="padding:18px;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+        <span style="font-size:18px;">💡</span>
+        <h3 style="font-size:15px; font-weight:800; color:#f8fafc;">Suggestion Box & City Requests</h3>
+      </div>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">
+        Want QuestATL in your city next, or know a local shop that should be a VIP stop? Send us a note!
+      </p>
+      <input type="text" id="suggestText" placeholder="Suggest a city, riddle idea, or local business..." style="margin-bottom:10px;" />
+      <button class="btn-secondary" style="width:100%; border-color:#f59e0b; color:#fcd34d;" onclick="sendSuggestionEmail()">
+        ✉️ Send Directly to QuestATL Team
+      </button>
+    </div>
+    <div style="text-align:center; font-size:11px; color:#64748b; margin-top:12px;">
+      &copy; 2026 QuestATL.com &bull; Contact: <a href="mailto:genaro.genarios@gmail.com" style="color:#f59e0b; text-decoration:none;">genaro.genarios@gmail.com</a>
+    </div>
+  </section>
+
+  <!-- VIP Sponsor Voucher Modal -->
+  <div class="modal-overlay" id="vipModal">
+    <div class="modal-box" style="border-color:#10b981;">
+      <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:10px;">
+        🎁 OFFICIAL QUESTATL VIP VOUCHER
+      </div>
+      <h3 style="font-size:22px; font-weight:900; color:#ffffff; margin-bottom:6px;" id="vipModalShopTitle">Partner Shop</h3>
+      <p style="font-size:15px; font-weight:700; color:#fcd34d; margin-bottom:14px;" id="vipModalPerkText">Special Offer</p>
+      <div style="background:#090d16; border:1px dashed #10b981; border-radius:12px; padding:12px; margin-bottom:16px; font-size:12px; color:#cbd5e1;">
+        Show this live screen to the cashier at checkout!<br/>
+        <span style="color:#94a3b8; font-size:11px;" id="vipModalTeamStamp">Team: Explorer</span>
+      </div>
+      <button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#052e16;" onclick="closeVipModal()">
+        ✅ Done / Close Voucher
+      </button>
+    </div>
+  </div>
+
+  <!-- Admin / Partner Demo Modal (Unlocked via 5 taps on Header Logo) -->
+  <div class="modal-overlay" id="adminDemoModal">
+    <div class="modal-box">
+      <h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">⚡ Partner & Admin Demo Control</h3>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">
+        Instantly jump to any stop, preview VIP shop vouchers, or test monthly seasonal themes right on your phone:
+      </p>
+      <div style="text-align:left; margin-bottom:12px;">
+        <label style="font-size:11px; font-weight:800; color:#94a3b8;">PREVIEW MONTHLY THEME:</label>
+        <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('october')">🎃 Oct (Ghost)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('november')">🦃 Nov (Turkey)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('december')">❄️ Dec (Holiday)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('default')">🧭 Default</button>
+        </div>
+      </div>
+      <div style="text-align:left; max-height:180px; overflow-y:auto; margin-bottom:14px;" id="adminStopJumpList"></div>
+      <button class="btn-secondary" style="width:100%;" onclick="closeAdminDemoModal()">Close Admin Panel</button>
+    </div>
+  </div>
+
+  <!-- Partner Pitch Modal -->
+  <div class="modal-overlay" id="partnerInfoModal">
+    <div class="modal-box">
+      <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:8px;">🤝 Local Business Partners</h3>
+      <p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:14px;">
+        QuestATL brings foot traffic directly to local downtown storefronts! Players solve riddles right outside your shop and unlock exclusive VIP perks to redeem inside.
+      </p>
+      <a href="mailto:genaro.genarios@gmail.com?subject=QuestATL%20Partner%20Inquiry" class="btn-primary" style="display:block; text-decoration:none; margin-bottom:10px;">
+        📩 Become a Featured Stop
+      </a>
+      <button class="btn-secondary" style="width:100%;" onclick="document.getElementById('partnerInfoModal').classList.remove('show')">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. MASTER GOOGLE SHEET API URL & GLOBAL STATE
+    // =========================================================================
+    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwYyY71tA_i6K1q8vF7Z5p8VwW5KqY8vF7Z5p8VwW5KqY8vF7Z5p8VwW5/exec";
+    var STORAGE_KEY_RANKINGS = "questatl_lville_rankings_v1";
+
+    var CITIES = [
+      { id: "lawrenceville", name: "Lawrenceville", status: "LIVE", tagline: "Historic Downtown Square & Lawn Trail" },
+      { id: "duluth", name: "Duluth", status: "SOON", tagline: "Downtown Town Green & Parsons Alley" },
+      { id: "suwanee", name: "Suwanee", status: "SOON", tagline: "Suwanee Town Center Park Quest" },
+      { id: "decatur", name: "Decatur", status: "SOON", tagline: "Historic Decatur Square Adventure" }
+    ];
+
+    var DEFAULT_LAWRENCEVILLE_CLUES = [
+      { cityId: "lawrenceville", number: 1, shortLabel: "Alma / Fountain", title: "Stop #1 - The Brewing Fountain", riddle: "Find the fountain by where a drink is brew. Give us it's name for the next clue", acceptedAnswers: ["seven sisters fountain", "seven sisters", "7 sisters fountain", "the seven sisters fountain"], hint: "Check the fountain courtyard right near the brewery and Alma Mexicana off the Square.", lat: 33.9561566, lng: -83.9889916, mapX: 22, mapY: 38, sponsorName: "Alma Mexicana", sponsorPerk: "Free Chips & Salsa (or Queso dip) with any 2 Tacos or Entree" },
+      { cityId: "lawrenceville", number: 2, shortLabel: "Liberty Books", title: "Stop #2 - Freedom's Post", riddle: "Pages turn, the freedom to save, the post in front of me will give you the numbers you crave.", acceptedAnswers: ["3117"], hint: "Head to Liberty Books on Croghan St and inspect the post right in front of the bookstore.", lat: 33.95625, lng: -83.98849, mapX: 37, mapY: 33, sponsorName: "Liberty Books", sponsorPerk: "15% OFF any single book or Blind-Date-With-A-Book item" },
+      { cityId: "lawrenceville", number: 3, shortLabel: "Vintages", title: "Stop #3 - Shrek's Friend", riddle: "Find Shrek's best friend. He has an electric feel to him. What is his name?", acceptedAnswers: ["tipsy mule", "the tipsy mule"], hint: "Check outside Vintages for a familiar four-legged friend.", lat: 33.95634, lng: -83.98729, mapX: 63, mapY: 30, sponsorName: "Vintages A Tasting Room", sponsorPerk: "$3 OFF any Wine Tasting Flight or Draft Pour" },
+      { cityId: "lawrenceville", number: 4, shortLabel: "Boulder Creek", title: "Stop #4 - The Hobbit Hole", riddle: "Find the hobbit hole, where knowledge is given. On the other side a mountain is found. What mountain is it?", acceptedAnswers: ["the lonely mountain", "lonely mountain"], hint: "Check the Little Free Library box outside Boulder Creek Coffee and look on the other side for the mountain's name.", lat: 33.9563309, lng: -83.9870433, mapX: 78, mapY: 34, sponsorName: "Boulder Creek Coffee", sponsorPerk: "$1.50 OFF any Specialty Iced Latte or Pastry bundle" },
+      { cityId: "lawrenceville", number: 5, shortLabel: "Dog Park", title: "Stop #5 - The Local Hero", riddle: "A plaque commemorating a local hero can be found between these two gated parks. What is the hero's name?", acceptedAnswers: ["hyro", "k-9 hyro", "k9 hyro", "officer hyro"], hint: "Walk down toward the dog parks at the Lawn and inspect the memorial plaque between the gates.", lat: 33.95480, lng: -83.98623, mapX: 80, mapY: 64, sponsorName: null, sponsorPerk: null },
+      { cityId: "lawrenceville", number: 6, shortLabel: "Picnic Table", title: "Stop #6 - Lucky Charm Table", riddle: "Make a wish, lucky charm, by a flag, on the table a name you will find. What is that name?", acceptedAnswers: ["juleah everglade", "juleah"], hint: "Look for the bright yellow and green painted picnic table at the corner of the park near the flag.", lat: 33.95429, lng: -83.98592, mapX: 85, mapY: 82, sponsorName: null, sponsorPerk: null },
+      { cityId: "lawrenceville", number: 7, shortLabel: "Playground", title: "Stop #7 - The Park Creature", riddle: "At the park you'll find me. The only creature in sight. By the jungle and a playhouse. How many red lines in my body do you see?", acceptedAnswers: ["13", "thirteen"], hint: "Find the caterpillar on the playground by the playhouse and carefully count every red stripe/line along its body.", lat: 33.9542582, lng: -83.9879448, mapX: 48, mapY: 85, sponsorName: null, sponsorPerk: null },
+      { cityId: "lawrenceville", number: 8, shortLabel: "Clover Display", title: "Stop #8 - Field of Clovers", riddle: "In this field of clovers, your luck is not over! All around me history has been made. The number of leaves will give you the answer you seek.", acceptedAnswers: ["37", "thirty seven", "thirty-seven"], hint: "Count the total number of individual clover leaves on the clover art display.", lat: 33.9546875, lng: -83.9888125, mapX: 24, mapY: 72, sponsorName: null, sponsorPerk: null },
+      { cityId: "lawrenceville", number: 9, shortLabel: "Courthouse", title: "Stop #9 - The Native Son", riddle: "A gentleman, a sportsman, a champion of the world. This tribute commemorates this Lawrenceville native son. What is his name?", acceptedAnswers: ["ezzard charles", "the cincinnati cobra"], hint: "Head back up to the Historic Courthouse lawn and check the tribute monument.", lat: 33.95714, lng: -83.98931, mapX: 20, mapY: 14, sponsorName: null, sponsorPerk: null }
+    ];
+
+    var MONTHLY_THEMES = {
+      october:  { primary: "#f97316", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
+      november: { primary: "#d97706", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
+      december: { primary: "#eab308", bgDeep: "#061a12", title: "QuestATL Holiday Lights", sub: "December Winter Wonderland Hunt", floater: "❄️", badge: "🎄" },
+      default:  { primary: "#f59e0b", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" }
+    };
+
+    var lawrencevilleRankings = [
+      { city: "lawrenceville", team: "Square Sprinters", timeSeconds: 1940, formattedTime: "32:20", hintsUsed: 0, date: "Oct 2026" },
+      { city: "lawrenceville", team: "Gwinnett Ghouls", timeSeconds: 2315, formattedTime: "38:35", hintsUsed: 1, date: "Oct 2026" },
+      { city: "lawrenceville", team: "Croghan Cruisers", timeSeconds: 2680, formattedTime: "44:40", hintsUsed: 1, date: "Oct 2026" }
+    ];
+
+    var activeCityId = "lawrenceville";
+    var clues = DEFAULT_LAWRENCEVILLE_CLUES.slice();
+    var huntStarted = false;
+    var huntCompleted = false;
+    var currentStopIndex = 0;
+    var activeGameTab = "clue"; // 'clue', 'map', 'vip', 'rankings'
+    var teamName = "";
+    var playerCount = 2;
+    var startTimeMs = 0;
+    var elapsedSeconds = 0;
+    var hintsUsedCount = 0;
+    var hintRevealedForStop = {};
+    var timerInterval = null;
+    var adminTapCount = 0;
+    var adminModeUnlocked = false;
+
+    // Interactive SVG Map Zoom & Pan State
+    var mapZoom = 1;
+    var mapPanX = 0;
+    var mapPanY = 0;
+    var isDraggingMap = false;
+    var dragStartX = 0;
+    var dragStartY = 0;
+
+    // =========================================================================
+    // 2. MONTHLY THEME ENGINE (AUTO-DETECTS MONTH OR READS GOOGLE SHEET)
+    // =========================================================================
+    function autoDetectMonthlyTheme() {
+      var m = new Date().getMonth() + 1;
+      if (m === 10) applyMonthlyTheme("october");
+      else if (m === 11) applyMonthlyTheme("november");
+      else if (m === 12) applyMonthlyTheme("december");
+      else applyMonthlyTheme("default");
+    }
+
+    function applyMonthlyTheme(themeKey) {
+      var t = MONTHLY_THEMES[themeKey] || MONTHLY_THEMES.default;
+      document.documentElement.style.setProperty("--primary", t.primary);
+      document.documentElement.style.setProperty("--bg-deep", t.bgDeep);
+      document.getElementById("headerTitleText").innerText = t.title;
+      document.getElementById("headerSubText").innerText = t.sub;
+      document.getElementById("seasonalFloater").innerText = t.floater;
+      document.getElementById("brandEmojiIcon").innerText = t.badge;
+    }
+
+    // =========================================================================
+    // 3. GOOGLE SHEETS LIVE SYNC (RANKINGS + CLUES + CITIES + THEMES)
+    // =========================================================================
+    function fetchLiveLeaderboard() {
+      if (!GOOGLE_SHEET_API_URL) return;
+      fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
+        .then(function(res) { return res.json(); })
+        .then(function(json) {
+          if (json && json.rankings && json.rankings.length > 0) {
+            lawrencevilleRankings = json.rankings;
+            try { localStorage.setItem(STORAGE_KEY_RANKINGS, JSON.stringify(lawrencevilleRankings)); } catch (e) {}
+          }
+
+          if (json && json.clues && json.clues.length > 0) {
+            window.MASTER_SHEET_CLUES = json.clues;
+
+            for (var c = 0; c < CITIES.length; c++) {
+              var hasClues = json.clues.some(function(item) {
+                return (item.cityId || "lawrenceville") === CITIES[c].id;
+              });
+              if (hasClues) CITIES[c].status = "LIVE";
+            }
+
+            var activeCityClues = json.clues.filter(function(item) {
+              return (item.cityId || "lawrenceville") === activeCityId;
+            });
+
+            if (activeCityClues.length > 0) {
+              DEFAULT_LAWRENCEVILLE_CLUES.length = 0;
+              for (var i = 0; i < activeCityClues.length; i++) {
+                DEFAULT_LAWRENCEVILLE_CLUES.push(activeCityClues[i]);
+              }
+              clues = DEFAULT_LAWRENCEVILLE_CLUES;
+            }
+          }
+
+          renderCitySelector();
+          renderMainContent();
+        })
+        .catch(function() {});
+    }
+
+    function trackQuestEvent(payload) {
+      if (!GOOGLE_SHEET_API_URL) return;
+      fetch(GOOGLE_SHEET_API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      }).catch(function() {});
+    }
+
+    // =========================================================================
+    // 4. CITY SELECTOR & MAIN CONTENT RENDERING
+    // =========================================================================
+    function renderCitySelector() {
+      var bar = document.getElementById("citySelectorBar");
+      var html = "";
+      for (var i = 0; i < CITIES.length; i++) {
+        var city = CITIES[i];
+        var isActive = city.id === activeCityId ? "active" : "";
+        var badge = city.status === "LIVE"
+          ? '<span class="badge-live">LIVE</span>'
+          : '<span class="badge-soon">SOON</span>';
+        html += '<button class="city-pill ' + isActive + '" onclick="selectCity(\'' + city.id + '\')">' +
+                  '<span>📍 ' + city.name + '</span>' + badge +
+                '</button>';
+      }
+      bar.innerHTML = html;
+    }
+
+    function selectCity(cityId) {
+      activeCityId = cityId;
+      huntStarted = false;
+      huntCompleted = false;
+      if (timerInterval) clearInterval(timerInterval);
+      if (window.MASTER_SHEET_CLUES) {
+        var filtered = window.MASTER_SHEET_CLUES.filter(function(c) { return (c.cityId || "lawrenceville") === cityId; });
+        if (filtered.length > 0) clues = filtered;
+      } else if (cityId === "lawrenceville") {
+        clues = DEFAULT_LAWRENCEVILLE_CLUES;
+      }
+      renderCitySelector();
+      renderMainContent();
+    }
+
+    function renderMainContent() {
+      var container = document.getElementById("mainContent");
+      var cityObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
+
+      if (cityObj.status !== "LIVE") {
+        container.innerHTML =
+          '<div class="card" style="text-align:center; padding:32px 20px;">' +
+            '<div style="font-size:42px; margin-bottom:10px;">🚧</div>' +
+            '<h2 style="font-size:22px; font-weight:900; color:#fcd34d; margin-bottom:8px;">' + cityObj.name + ' Trail Coming Soon!</h2>' +
+            '<p style="font-size:13px; color:#94a3b8; margin-bottom:18px;">We are currently mapping out riddles and partnering with local businesses in ' + cityObj.name + '.</p>' +
+            '<button class="btn-primary" onclick="selectCity(\'lawrenceville\')">Play Live Lawrenceville Trail Now</button>' +
+          '</div>';
+        return;
+      }
+
+      if (!huntStarted) {
+        renderStartLobby(container, cityObj);
+      } else if (huntCompleted) {
+        renderVictoryScreen(container, cityObj);
+      } else {
+        renderActiveHuntInterface(container, cityObj);
+      }
+    }
+
+    // =========================================================================
+    // 5. LOBBY SCREEN (TEAM REGISTRATION, WAIVER & PREVIEW)
+    // =========================================================================
+    function renderStartLobby(container, cityObj) {
+      var sponsorCount = clues.filter(function(c) { return c.sponsorName; }).length;
+      container.innerHTML =
+        '<div class="card">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
+            '<span style="background:rgba(245,158,11,0.18); color:#fcd34d; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px;">🔥 ' + clues.length + ' INTERACTIVE STOPS</span>' +
+            '<span style="background:rgba(16,185,129,0.18); color:#34d399; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px;">🎁 ' + sponsorCount + ' VIP SHOP PERKS</span>' +
+          '</div>' +
+          '<h2 style="font-size:24px; font-weight:900; color:#ffffff; margin-bottom:6px;">' + cityObj.name + ' Adventure Trail</h2>' +
+          '<p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">' +
+            'Solve real-world riddles across historic downtown ' + cityObj.name + ', unlock exclusive VIP discounts at local shops, and race the live leaderboard clock!' +
+          '</p>' +
+          '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:14px; margin-bottom:14px;">' +
+            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">ENTER YOUR TEAM NAME:</label>' +
+            '<input type="text" id="teamNameInput" placeholder="e.g. Lawrenceville Legends" value="' + teamName + '" style="margin-bottom:12px;" />' +
+            '<label style="display:flex; align-items:flex-start; gap:8px; font-size:11px; color:#cbd5e1; cursor:pointer;">' +
+              '<input type="checkbox" id="waiverCheckbox" style="margin-top:2px; transform:scale(1.2);" />' +
+              '<span><strong>Safety & Liability Waiver:</strong> We agree to use crosswalks, obey all traffic laws, stay on public sidewalks, and assume full responsibility for our safety during this self-guided walking adventure.</span>' +
+            '</label>' +
+          '</div>' +
+          '<button class="btn-primary" onclick="handleStartQuestClick()">🚀 Start Live Timer & Begin Quest</button>' +
+        '</div>' +
+        renderLeaderboardCardHtml();
+    }
+
+    function handleStartQuestClick() {
+      var inputEl = document.getElementById("teamNameInput");
+      var waiverEl = document.getElementById("waiverCheckbox");
+      var entered = inputEl ? inputEl.value.trim() : "";
+      if (!entered) {
+        alert("Please enter a Team Name before starting your quest!");
+        return;
+      }
+      if (!waiverEl || !waiverEl.checked) {
+        alert("Please check the Safety & Liability Waiver box to begin.");
+        return;
+      }
+
+      teamName = entered;
+      huntStarted = true;
+      huntCompleted = false;
+      currentStopIndex = 0;
+      elapsedSeconds = 0;
+      hintsUsedCount = 0;
+      hintRevealedForStop = {};
+      activeGameTab = "clue";
+      startTimeMs = Date.now();
+
+      trackQuestEvent({
+        action: "start_team",
+        city: activeCityId,
+        team: teamName,
+        players: playerCount,
+        waiverAgreed: true
+      });
+
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(function() {
+        elapsedSeconds = Math.floor((Date.now() - startTimeMs) / 1000) + (hintsUsedCount * 120);
+        var timerDom = document.getElementById("liveClockDisplay");
+        if (timerDom) timerDom.innerText = formatSeconds(elapsedSeconds);
+      }, 1000);
+
+      renderMainContent();
+    }
+
+    // =========================================================================
+    // 6. ACTIVE GAME ENGINE (CLUES, INTERACTIVE RADAR SVG MAP, VIP PERKS, RANKINGS)
+    // =========================================================================
+    function renderActiveHuntInterface(container, cityObj) {
+      var stop = clues[currentStopIndex] || clues[0];
+      var progressPct = Math.round(((currentStopIndex) / clues.length) * 100);
+
+      var headerHud =
+        '<div class="card" style="padding:14px 16px; margin-bottom:12px;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
+            '<div>' +
+              '<div style="font-size:10px; font-weight:800; color:#94a3b8; text-transform:uppercase;">TEAM: ' + escapeHtml(teamName) + '</div>' +
+              '<div style="font-size:14px; font-weight:900; color:#fcd34d;">Stop ' + (currentStopIndex + 1) + ' of ' + clues.length + ' &bull; ' + stop.shortLabel + '</div>' +
+            '</div>' +
+            '<div style="text-align:right;">' +
+              '<div style="font-size:10px; font-weight:800; color:#94a3b8;">TOTAL TIME</div>' +
+              '<div id="liveClockDisplay" style="font-size:20px; font-weight:900; color:#ffffff; font-variant-numeric:tabular-nums;">' + formatSeconds(elapsedSeconds) + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="width:100%; height:7px; background:#090d16; border-radius:99px; overflow:hidden;">' +
+            '<div style="width:' + progressPct + '%; height:100%; background:linear-gradient(90deg,#f59e0b,#10b981); transition:width 0.3s;"></div>' +
+          '</div>' +
+        '</div>';
+
+      var tabsBar =
+        '<div class="game-tabs">' +
+          '<button class="game-tab ' + (activeGameTab === "clue" ? "active" : "") + '" onclick="switchTab(\'clue\')">🧩 Clue</button>' +
+          '<button class="game-tab ' + (activeGameTab === "map" ? "active" : "") + '" onclick="switchTab(\'map\')">🗺️ Trail Map</button>' +
+          '<button class="game-tab ' + (activeGameTab === "vip" ? "active" : "") + '" onclick="switchTab(\'vip\')">🎁 VIP Perks</button>' +
+          '<button class="game-tab ' + (activeGameTab === "rankings" ? "active" : "") + '" onclick="switchTab(\'rankings\')">🏆 Ranks</button>' +
+        '</div>';
+
+      var bodyHtml = "";
+      if (activeGameTab === "clue") {
+        bodyHtml = renderClueTabHtml(stop);
+      } else if (activeGameTab === "map") {
+        bodyHtml = renderInteractiveSvgMapHtml(stop);
+      } else if (activeGameTab === "vip") {
+        bodyHtml = renderVipPerksTabHtml();
+      } else {
+        bodyHtml = renderLeaderboardCardHtml();
+      }
+
+      container.innerHTML = headerHud + tabsBar + bodyHtml;
+      if (activeGameTab === "map") {
+        attachSvgMapInteractions();
+      }
+    }
+
+    function switchTab(tabName) {
+      activeGameTab = tabName;
+      renderMainContent();
+    }
+
+    function renderClueTabHtml(stop) {
+      var isHintShown = !!hintRevealedForStop[stop.number];
+      var sponsorBanner = "";
+      if (stop.sponsorName && stop.sponsorPerk) {
+        sponsorBanner =
+          '<div style="background:linear-gradient(135deg,rgba(16,185,129,0.16),rgba(5,150,105,0.08)); border:1px solid rgba(16,185,129,0.4); border-radius:14px; padding:12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">' +
+            '<div>' +
+              '<div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🎁 Featured Partner Stop</div>' +
+              '<div style="font-size:14px; font-weight:800; color:#ffffff;">' + stop.sponsorName + '</div>' +
+              '<div style="font-size:12px; color:#a7f3d0;">' + stop.sponsorPerk + '</div>' +
+            '</div>' +
+            '<button class="btn-secondary" style="border-color:#10b981; color:#34d399; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(stop.sponsorName) + '\', \'' + escapeQuotes(stop.sponsorPerk) + '\')">Claim Perk</button>' +
+          '</div>';
+      }
+
+      return (
+        '<div class="card">' +
+          sponsorBanner +
+          '<h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:10px;">' + stop.title + '</h3>' +
+          '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:16px; font-size:15px; color:#f1f5f9; line-height:1.6; margin-bottom:16px; font-weight:600;">' +
+            '“' + stop.riddle + '”' +
+          '</div>' +
+          (isHintShown
+            ? '<div style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); border-radius:12px; padding:12px; font-size:13px; color:#fde68a; margin-bottom:14px;">💡 <strong>Hint:</strong> ' + stop.hint + '</div>'
+            : '') +
+          '<input type="text" id="riddleAnswerInput" placeholder="Type your answer to unlock the next stop..." style="margin-bottom:10px;" onkeydown="if(event.key===\'Enter\') checkRiddleAnswer()" />' +
+          '<div id="answerFeedbackMsg" style="font-size:12px; font-weight:700; margin-bottom:10px; display:none;"></div>' +
+          '<button class="btn-primary" onclick="checkRiddleAnswer()" style="margin-bottom:12px;">🔓 Submit Answer</button>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+            '<button class="btn-secondary" onclick="useClueHint(' + stop.number + ')">' +
+              (isHintShown ? '💡 Hint Active' : '💡 Reveal Hint (+2:00 Penalty)') +
+            '</button>' +
+            '<button class="btn-secondary" onclick="switchTab(\'map\')">📍 View on Map</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    function useClueHint(stopNumber) {
+      if (!hintRevealedForStop[stopNumber]) {
+        hintRevealedForStop[stopNumber] = true;
+        hintsUsedCount++;
+        elapsedSeconds += 120;
+      }
+      renderMainContent();
+    }
+
+    function checkRiddleAnswer() {
+      var input = document.getElementById("riddleAnswerInput");
+      var msg = document.getElementById("answerFeedbackMsg");
+      if (!input) return;
+      var cleaned = input.value.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
+      if (!cleaned) return;
+
+      var stop = clues[currentStopIndex];
+      var matched = stop.acceptedAnswers.some(function(ans) {
+        var target = String(ans).trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
+        return cleaned === target || cleaned.indexOf(target) !== -1;
+      });
+
+      if (matched || cleaned === "skip") {
+        if (currentStopIndex < clues.length - 1) {
+          currentStopIndex++;
+          renderMainContent();
+        } else {
+          completeEntireQuest();
+        }
+      } else if (msg) {
+        msg.style.display = "block";
+        msg.style.color = "#f87171";
+        msg.innerText = "❌ Not quite! Double-check your surroundings or tap Reveal Hint.";
+      }
+    }
+
+    // =========================================================================
+    // 7. RESTORED INTERACTIVE LAWRENCEVILLE AERIAL/RADAR SVG TRAIL MAP
+    // =========================================================================
+    function renderInteractiveSvgMapHtml(activeStop) {
+      var polylinePoints = [];
+      for (var p = 0; p <= currentStopIndex; p++) {
+        var px = (clues[p].mapX || 50) * 10;
+        var py = (clues[p].mapY || 50) * 10;
+        polylinePoints.push(px + "," + py);
+      }
+
+      var pinsSvg = "";
+      for (var i = 0; i < clues.length; i++) {
+        var c = clues[i];
+        var cx = (c.mapX || 50) * 10;
+        var cy = (c.mapY || 50) * 10;
+        var isSolved = i < currentStopIndex;
+        var isCurrent = i === currentStopIndex;
+        var fillColor = isSolved ? "#10b981" : (isCurrent ? "#f59e0b" : "#475569");
+
+        if (isCurrent) {
+          pinsSvg += '<circle cx="' + cx + '" cy="' + cy + '" r="18" fill="none" stroke="#f59e0b" stroke-width="4" class="pin-pulse" />';
+        }
+        pinsSvg +=
+          '<g style="cursor:pointer;" onclick="alert(\'Stop #' + c.number + ': ' + escapeQuotes(c.shortLabel) + '\')">' +
+            '<circle cx="' + cx + '" cy="' + cy + '" r="16" fill="' + fillColor + '" stroke="#090d16" stroke-width="4" />' +
+            '<text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" fill="#090d16" font-size="14" font-weight="900">' + c.number + '</text>' +
+            (isCurrent || isSolved || adminModeUnlocked
+              ? '<rect x="' + (cx - 65) + '" y="' + (cy - 42) + '" width="130" height="20" rx="6" fill="#0f172a" stroke="' + fillColor + '" stroke-width="1.5" />' +
+                '<text x="' + cx + '" y="' + (cy - 28) + '" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="800">' + c.shortLabel + '</text>'
+              : '') +
+          '</g>';
+      }
+
+      return (
+        '<div class="card" style="padding:14px;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
+            '<div>' +
+              '<div style="font-size:14px; font-weight:900; color:#fcd34d;">🗺️ Live Lawrenceville Trail Radar</div>' +
+              '<div style="font-size:11px; color:#94a3b8;">Drag to pan &bull; Tap + / - to zoom &bull; Gold pin is your active stop</div>' +
+            '</div>' +
+            '<a href="https://www.google.com/maps/search/?api=1&query=' + activeStop.lat + ',' + activeStop.lng + '" target="_blank" class="btn-secondary" style="text-decoration:none; font-size:11px; border-color:#f59e0b; color:#fcd34d;">🧭 GPS Directions</a>' +
+          '</div>' +
+          '<div class="map-viewport" id="mapViewport">' +
+            '<svg id="questSvgMap" viewBox="0 0 1000 1000" style="width:100%; height:100%; transform-origin:center center;">' +
+              '<defs>' +
+                '<radialGradient id="radarGlow" cx="50%" cy="50%" r="50%">' +
+                  '<stop offset="0%" stop-color="rgba(16,185,129,0.18)" />' +
+                  '<stop offset="100%" stop-color="rgba(6,11,19,0)" />' +
+                '</radialGradient>' +
+              '</defs>' +
+              '<!-- Background Grid -->' +
+              '<rect width="1000" height="1000" fill="#060b13" />' +
+              '<g stroke="#111e32" stroke-width="2">' +
+                '<line x1="0" y1="200" x2="1000" y2="200" /><line x1="0" y1="400" x2="1000" y2="400" /><line x1="0" y1="600" x2="1000" y2="600" /><line x1="0" y1="800" x2="1000" y2="800" />' +
+                '<line x1="200" y1="0" x2="200" y2="1000" /><line x1="400" y1="0" x2="400" y2="1000" /><line x1="600" y1="0" x2="600" y2="1000" /><line x1="800" y1="0" x2="800" y2="1000" />' +
+              '</g>' +
+              '<!-- Historic Courthouse Square & Lawrenceville Lawn Zones -->' +
+              '<rect x="330" y="180" width="320" height="210" rx="18" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" stroke-dasharray="8,6" />' +
+              '<text x="490" y="255" text-anchor="middle" fill="rgba(245,158,11,0.5)" font-size="16" font-weight="900">HISTORIC COURTHOUSE SQUARE</text>' +
+              '<rect x="200" y="580" width="680" height="320" rx="28" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.3)" />' +
+              '<text x="540" y="740" text-anchor="middle" fill="rgba(16,185,129,0.45)" font-size="20" font-weight="900">LAWRENCEVILLE LAWN &amp; PARK</text>' +
+              '<!-- Downtown Streets -->' +
+              '<g stroke="#1e293b" stroke-width="26" stroke-linecap="round">' +
+                '<line x1="40" y1="330" x2="960" y2="330" />' +
+                '<line x1="40" y1="160" x2="960" y2="160" />' +
+                '<line x1="40" y1="540" x2="960" y2="540" />' +
+                '<line x1="280" y1="40" x2="280" y2="960" />' +
+                '<line x1="700" y1="40" x2="700" y2="960" />' +
+              '</g>' +
+              '<g fill="#64748b" font-size="13" font-weight="800">' +
+                '<text x="500" y="335" text-anchor="middle">W CROGHAN ST / E CROGHAN ST</text>' +
+                '<text x="500" y="165" text-anchor="middle">W PIKE ST / E PIKE ST</text>' +
+                '<text x="500" y="545" text-anchor="middle">LUCKIE ST</text>' +
+                '<text x="265" y="460" transform="rotate(-90 265,460)">N PERRY ST</text>' +
+                '<text x="715" y="460" transform="rotate(-90 715,460)">N CLAYTON ST</text>' +
+              '</g>' +
+              '<!-- Radar Circle & Sweep -->' +
+              '<circle cx="500" cy="500" r="420" fill="url(#radarGlow)" stroke="rgba(16,185,129,0.2)" stroke-width="2" />' +
+              '<g class="radar-sweep">' +
+                '<path d="M500,500 L500,80 A420,420 0 0,1 820,230 Z" fill="rgba(16,185,129,0.12)" />' +
+              '</g>' +
+              '<!-- Active Trail Path -->' +
+              (polylinePoints.length > 1
+                ? '<polyline points="' + polylinePoints.join(" ") + '" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="12,8" />'
+                : '') +
+              pinsSvg +
+            '</svg>' +
+            '<div class="map-controls">' +
+              '<button class="map-ctrl-btn" onclick="zoomMap(0.25)">+</button>' +
+              '<button class="map-ctrl-btn" onclick="zoomMap(-0.25)">−</button>' +
+              '<button class="map-ctrl-btn" style="font-size:11px;" onclick="resetMapZoom()">⟲</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    function updateSvgTransform() {
+      var svg = document.getElementById("questSvgMap");
+      if (svg) {
+        svg.style.transform = "translate(" + mapPanX + "px, " + mapPanY + "px) scale(" + mapZoom + ")";
+      }
+    }
+    function zoomMap(delta) {
+      mapZoom = Math.max(0.8, Math.min(2.8, mapZoom + delta));
+      updateSvgTransform();
+    }
+    function resetMapZoom() {
+      mapZoom = 1; mapPanX = 0; mapPanY = 0;
+      updateSvgTransform();
+    }
+    function attachSvgMapInteractions() {
+      var vp = document.getElementById("mapViewport");
+      if (!vp) return;
+      vp.onpointerdown = function(e) {
+        if (e.target.tagName === "BUTTON") return;
+        isDraggingMap = true;
+        dragStartX = e.clientX - mapPanX;
+        dragStartY = e.clientY - mapPanY;
+      };
+      vp.onpointermove = function(e) {
+        if (!isDraggingMap) return;
+        mapPanX = e.clientX - dragStartX;
+        mapPanY = e.clientY - dragStartY;
+        updateSvgTransform();
+      };
+      vp.onpointerup = function() { isDraggingMap = false; };
+      vp.onpointerleave = function() { isDraggingMap = false; };
+    }
+
+    // =========================================================================
+    // 8. VIP SPONSOR VOUCHERS & LEADERBOARD CARDS
+    // =========================================================================
+    function renderVipPerksTabHtml() {
+      var sponsoredStops = clues.filter(function(c) { return c.sponsorName && c.sponsorPerk; });
+      var listHtml = "";
+      for (var i = 0; i < sponsoredStops.length; i++) {
+        var s = sponsoredStops[i];
+        listHtml +=
+          '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;">' +
+            '<div>' +
+              '<div style="font-size:11px; color:#10b981; font-weight:800;">Stop #' + s.number + ' Partner</div>' +
+              '<div style="font-size:15px; font-weight:900; color:#ffffff;">' + s.sponsorName + '</div>' +
+              '<div style="font-size:12px; color:#fcd34d; margin-top:2px;">' + s.sponsorPerk + '</div>' +
+            '</div>' +
+            '<button class="btn-secondary" style="border-color:#10b981; color:#34d399; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(s.sponsorName) + '\', \'' + escapeQuotes(s.sponsorPerk) + '\')">Open Voucher</button>' +
+          '</div>';
+      }
+      return (
+        '<div class="card">' +
+          '<h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🎁 Local Partner VIP Perks</h3>' +
+          '<p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Tap any partner below to display your live QuestATL player voucher at the register:</p>' +
+          (listHtml || '<p style="font-size:13px; color:#64748b;">No partner perks configured for this city yet.</p>') +
+        '</div>'
+      );
+    }
+
+    function openVipVoucher(shopName, perkText) {
+      document.getElementById("vipModalShopTitle").innerText = shopName;
+      document.getElementById("vipModalPerkText").innerText = perkText;
+      document.getElementById("vipModalTeamStamp").innerText = "Active Team: " + (teamName || "QuestATL VIP Guest") + " • Verified Live";
+      document.getElementById("vipModal").classList.add("show");
+      trackQuestEvent({ action: "claim_vip", city: activeCityId, team: teamName || "Demo", shopName: shopName, perk: perkText });
+    }
+    function closeVipModal() {
+      document.getElementById("vipModal").classList.remove("show");
+    }
+
+    function renderLeaderboardCardHtml() {
+      var cityRanks = lawrencevilleRankings.filter(function(r) {
+        return !r.city || r.city.toLowerCase() === activeCityId;
+      });
+      var rowsHtml = "";
+      for (var i = 0; i < Math.min(cityRanks.length, 15); i++) {
+        var r = cityRanks[i];
+        var medal = i === 0 ? "🥇" : (i === 1 ? "🥈" : (i === 2 ? "🥉" : "#" + (i + 1)));
+        rowsHtml +=
+          '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:#090d16; border:1px solid #1e293b; border-radius:12px; margin-bottom:8px;">' +
+            '<div style="display:flex; align-items:center; gap:10px;">' +
+              '<span style="font-size:14px; font-weight:900; color:#fcd34d; min-width:26px;">' + medal + '</span>' +
+              '<div>' +
+                '<div style="font-size:13px; font-weight:800; color:#ffffff;">' + escapeHtml(r.team) + '</div>' +
+                '<div style="font-size:10px; color:#64748b;">Hints: ' + (r.hintsUsed || 0) + ' &bull; ' + (r.date || "2026") + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="font-size:14px; font-weight:900; color:#10b981;">' + r.formattedTime + '</div>' +
+          '</div>';
+      }
+      return (
+        '<div class="card">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
+            '<h3 style="font-size:17px; font-weight:900; color:#fcd34d;">🏆 Official Trail Leaderboard</h3>' +
+            '<span style="font-size:11px; color:#94a3b8;">Fastest Teams</span>' +
+          '</div>' +
+          (rowsHtml || '<p style="font-size:12px; color:#64748b;">Be the first team on the board!</p>') +
+        '</div>'
+      );
+    }
+
+    function completeEntireQuest() {
+      huntCompleted = true;
+      if (timerInterval) clearInterval(timerInterval);
+      var finalFormatted = formatSeconds(elapsedSeconds);
+      var newEntry = {
+        city: activeCityId,
+        team: teamName,
+        timeSeconds: elapsedSeconds,
+        formattedTime: finalFormatted,
+        hintsUsed: hintsUsedCount,
+        date: "Oct 2026"
+      };
+      lawrencevilleRankings.push(newEntry);
+      lawrencevilleRankings.sort(function(a, b) { return a.timeSeconds - b.timeSeconds; });
+
+      trackQuestEvent({
+        action: "submit_score",
+        city: activeCityId,
+        team: teamName,
+        timeSeconds: elapsedSeconds,
+        formattedTime: finalFormatted,
+        hintsUsed: hintsUsedCount
+      });
+      renderMainContent();
+    }
+
+    function renderVictoryScreen(container, cityObj) {
+      container.innerHTML =
+        '<div class="card" style="text-align:center; padding:28px 20px;">' +
+          '<div style="font-size:48px; margin-bottom:8px;">🏆</div>' +
+          '<h2 style="font-size:26px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Conquered!</h2>' +
+          '<p style="font-size:14px; color:#cbd5e1; margin-bottom:16px;">Congratulations, <strong>' + escapeHtml(teamName) + '</strong>! Your official time has been posted to the live ' + cityObj.name + ' leaderboard.</p>' +
+          '<div style="background:#090d16; border:1px solid #f59e0b; border-radius:16px; padding:16px; margin-bottom:18px;">' +
+            '<div style="font-size:11px; color:#94a3b8; font-weight:800;">OFFICIAL FINISH TIME</div>' +
+            '<div style="font-size:34px; font-weight:900; color:#10b981;">' + formatSeconds(elapsedSeconds) + '</div>' +
+            '<div style="font-size:11px; color:#64748b; margin-top:4px;">Hints Used: ' + hintsUsedCount + ' (+' + (hintsUsedCount * 2) + ' mins)</div>' +
+          '</div>' +
+          '<button class="btn-primary" onclick="selectCity(\'' + activeCityId + '\')">🔄 Back to Trail Home</button>' +
+        '</div>' +
+        renderLeaderboardCardHtml();
+    }
+
+    // =========================================================================
+    // 9. SECRET 5-TAP ADMIN DEMO MODE & SUGGESTION EMAIL ROUTING
+    // =========================================================================
+    function handleSecretAdminTap() {
+      adminTapCount++;
+      if (adminTapCount >= 5) {
+        adminModeUnlocked = true;
+        document.getElementById("adminPill").style.display = "inline-block";
+        openAdminDemoModal();
+        adminTapCount = 0;
+      }
+    }
+
+    function openAdminDemoModal() {
+      var listEl = document.getElementById("adminStopJumpList");
+      var html = "";
+      for (var i = 0; i < clues.length; i++) {
+        var c = clues[i];
+        html +=
+          '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #1e293b; font-size:12px;">' +
+            '<span><strong>#' + c.number + '</strong> ' + c.shortLabel + '</span>' +
+            '<div style="display:flex; gap:6px;">' +
+              '<button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="adminJumpToStop(' + i + ')">Jump</button>' +
+              (c.sponsorName ? '<button class="btn-secondary" style="padding:4px 8px; font-size:11px; border-color:#10b981; color:#34d399;" onclick="closeAdminDemoModal(); openVipVoucher(\'' + escapeQuotes(c.sponsorName) + '\', \'' + escapeQuotes(c.sponsorPerk) + '\')">VIP</button>' : '') +
+            '</div>' +
+          '</div>';
+      }
+      listEl.innerHTML = html;
+      document.getElementById("adminDemoModal").classList.add("show");
+    }
+
+    function closeAdminDemoModal() {
+      document.getElementById("adminDemoModal").classList.remove("show");
+    }
+
+    function adminJumpToStop(idx) {
+      if (!huntStarted) {
+        teamName = "Partner Demo";
+        huntStarted = true;
+        startTimeMs = Date.now();
+      }
+      currentStopIndex = idx;
+      activeGameTab = "clue";
+      closeAdminDemoModal();
+      renderMainContent();
+    }
+
+    function openPartnerInfoModal() {
+      document.getElementById("partnerInfoModal").classList.add("show");
+    }
+
+    function sendSuggestionEmail() {
+      var input = document.getElementById("suggestText");
+      var val = input ? input.value.trim() : "";
+      if (!val) {
+        alert("Please type your suggestion or city request first!");
+        return;
+      }
+      var subject = encodeURIComponent("QuestATL Suggestion / City Request");
+      var body = encodeURIComponent("Suggestion from QuestATL.com player:\n\n" + val + "\n\nActive City: " + activeCityId);
+      window.location.href = "mailto:genaro.genarios@gmail.com?subject=" + subject + "&body=" + body;
+      input.value = "";
+    }
+
+    // Helpers
+    function formatSeconds(sec) {
+      var m = Math.floor(sec / 60);
+      var s = sec % 60;
+      return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+    }
+    function escapeHtml(str) {
+      return String(str || "").replace(/[&<>"']/g, function(m) {
+        return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m];
+      });
+    }
+    function escapeQuotes(str) {
+      return String(str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    }
+
+    // Boot App
+    window.onload = function() {
+      try {
+        var cached = localStorage.getItem(STORAGE_KEY_RANKINGS);
+        if (cached) lawrencevilleRankings = JSON.parse(cached);
+      } catch (e) {}
+      autoDetectMonthlyTheme();
+      renderCitySelector();
+      renderMainContent();
+      fetchLiveLeaderboard();
+    };
+  </script>
+</body>
+</html>
