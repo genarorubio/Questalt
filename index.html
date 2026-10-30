@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
+      --bg-top: #172036;
       --bg-deep: #070b14;
       --bg-card: #111827;
       --primary: #f59e0b;
@@ -20,11 +21,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at top, #172036 0%, var(--bg-deep) 70%);
+      background: radial-gradient(circle at top, var(--bg-top) 0%, var(--bg-deep) 70%);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
       padding-bottom: 40px;
+      transition: background 0.4s ease;
     }
 
     @keyframes floatAcross {
@@ -84,7 +86,7 @@
       font-size: 19px;
       font-weight: 900;
       letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #ffffff, #fcd34d);
+      background: linear-gradient(90deg, #ffffff, var(--primary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -438,15 +440,15 @@
     <div class="modal-box">
       <h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">⚡ Partner &amp; Admin Demo Control</h3>
       <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">
-        Jump to any stop, preview VIP vouchers, or test monthly seasonal themes:
+        Tap any theme below to immediately preview it on screen, or jump to any stop:
       </p>
       <div style="text-align:left; margin-bottom:12px;">
-        <label style="font-size:11px; font-weight:800; color:#94a3b8;">PREVIEW MONTHLY THEME:</label>
+        <label style="font-size:11px; font-weight:800; color:#94a3b8;">PREVIEW MONTHLY THEME (AUTO-CLOSES TO SHOW PREVIEW):</label>
         <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">
-          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('october')">🎃 Oct</button>
-          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('november')">🦃 Nov</button>
-          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('december')">❄️ Dec</button>
-          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('default')">🧭 Default</button>
+          <button class="btn-secondary" style="font-size:11px; padding:7px 11px; border-color:#f97316; color:#fed7aa;" onclick="applyMonthlyTheme('october', true)">🎃 Oct (Ghost)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:7px 11px; border-color:#d97706; color:#fde68a;" onclick="applyMonthlyTheme('november', true)">🦃 Nov (Turkey)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:7px 11px; border-color:#10b981; color:#a7f3d0;" onclick="applyMonthlyTheme('december', true)">❄️ Dec (Holiday)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:7px 11px;" onclick="applyMonthlyTheme('default', true)">🧭 Default</button>
         </div>
       </div>
       <div style="text-align:left; max-height:180px; overflow-y:auto; margin-bottom:14px;" id="adminStopJumpList"></div>
@@ -458,7 +460,7 @@
     // =========================================================================
     // 1. MASTER GOOGLE SHEET API URL & CONFIGURATION
     // =========================================================================
-    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
+    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwYyY71tA_i6K1q8vF7Z5p8VwW5KqY8vF7Z5p8VwW5KqY8vF7Z5p8VwW5/exec";
     var STORAGE_KEY_RANKINGS = "questatl_lville_rankings_v1";
     var STORAGE_KEY_SESSION = "questatl_active_session_v2";
 
@@ -477,7 +479,6 @@
       { id: "decatur", name: "Decatur", status: "SOON", tagline: "Historic Decatur Square Adventure", distanceMiles: "1.2 Miles", estTime: "40–55 Mins", trailTags: "🐕 Dog Friendly", startLabel: "START: DECATUR SQUARE", startLat: 33.7748300, startLng: -84.2963100, startMapX: 50, startMapY: 50, mapStyle: "radar" }
     ];
 
-    // All sponsor fields are blank (null) by default so you manage partners 100% from Google Sheets
     var DEFAULT_LAWRENCEVILLE_CLUES = [
       { cityId: "lawrenceville", number: 1, shortLabel: "Alma / Fountain", title: "Stop #1 - The Brewing Fountain", riddle: "Find the fountain by where a drink is brew. Give us it's name for the next clue", acceptedAnswers: ["seven sisters fountain", "seven sisters", "7 sisters fountain", "the seven sisters fountain"], hint: "Check the fountain courtyard right near the brewery and Alma Mexicana off the Square.", lat: 33.9561566, lng: -83.9889916, mapX: 22, mapY: 38, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "The Seven Sisters Fountain is a signature gathering spot right off the historic Lawrenceville Square.", imageUrl: null },
       { cityId: "lawrenceville", number: 2, shortLabel: "Liberty Books", title: "Stop #2 - Freedom's Post", riddle: "Pages turn, the freedom to save, the post in front of me will give you the numbers you crave.", acceptedAnswers: ["3117"], hint: "Head to Liberty Books on Croghan St and inspect the post right in front of the bookstore.", lat: 33.9562511, lng: -83.9884994, mapX: 37, mapY: 33, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "Historic downtown storefronts along Croghan Street date back to the 19th and early 20th centuries.", imageUrl: null },
@@ -490,11 +491,12 @@
       { cityId: "lawrenceville", number: 9, shortLabel: "Courthouse", title: "Stop #9 - The Native Son", riddle: "A gentleman, a sportsman, a champion of the world. This tribute commemorates this Lawrenceville native son. What is his name?", acceptedAnswers: ["ezzard charles", "the cincinnati cobra"], hint: "Head back up to the Historic Courthouse lawn and check the tribute monument.", lat: 33.9571474, lng: -83.9893121, mapX: 20, mapY: 14, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "World Heavyweight Champion Ezzard Charles ('The Cincinnati Cobra') was born right here in Lawrenceville in 1921!", imageUrl: null }
     ];
 
+    // Protected Master Seasonal Presets (With Distinct Upper Sky Glows)
     var MONTHLY_THEMES = {
-      october:  { activeMonths: "10", primary: "#f97316", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
-      november: { activeMonths: "11", primary: "#d97706", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
-      december: { activeMonths: "12", primary: "#eab308", bgDeep: "#061a12", title: "QuestATL Holiday Lights", sub: "December Winter Wonderland Hunt", floater: "❄️", badge: "🎄" },
-      default:  { activeMonths: "1,2,3,4,5,6,7,8,9", primary: "#f59e0b", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" }
+      october:  { activeMonths: "10", primary: "#f97316", bgTop: "#2e1065", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
+      november: { activeMonths: "11", primary: "#d97706", bgTop: "#451a03", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
+      december: { activeMonths: "12", primary: "#eab308", bgTop: "#064e3b", bgDeep: "#061a12", title: "QuestATL Holiday Lights", sub: "December Winter Wonderland Hunt", floater: "❄️", badge: "🎄" },
+      default:  { activeMonths: "1,2,3,4,5,6,7,8,9", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" }
     };
 
     var lawrencevilleRankings = [
@@ -510,7 +512,7 @@
     var huntCompleted = false;
     var currentStopIndex = 0;
     var activeGameTab = "clue";
-    var leaderboardFilter = "month"; // 'month' or 'all'
+    var leaderboardFilter = "month";
     var teamName = "";
     var referralSource = "Direct";
     var playerCount = 2;
@@ -523,9 +525,9 @@
     var vipClockInterval = null;
     var adminTapCount = 0;
     var adminModeUnlocked = false;
+    var manualThemeOverride = null;
     var soundMuted = false;
 
-    // SVG Map Pan & Zoom State
     var mapZoom = 1;
     var mapPanX = 0;
     var mapPanY = 0;
@@ -534,7 +536,7 @@
     var dragStartY = 0;
 
     // =========================================================================
-    // 2. WEB AUDIO SOUND EFFECTS & HAPTICS (ZERO EXTERNAL FILES)
+    // 2. WEB AUDIO SOUND EFFECTS & HAPTICS
     // =========================================================================
     function playGameTone(type) {
       if (soundMuted) return;
@@ -602,7 +604,6 @@
         if (!raw) return;
         var s = JSON.parse(raw);
         if (!s || !s.teamName || !s.startTimeMs) return;
-        // Expire sessions older than 12 hours
         if (Date.now() - s.startTimeMs > 12 * 3600 * 1000) {
           localStorage.removeItem(STORAGE_KEY_SESSION);
           return;
@@ -632,28 +633,41 @@
     }
 
     // =========================================================================
-    // 4. MONTHLY THEME ENGINE & GOOGLE SHEET LIVE SYNC
+    // 4. MONTHLY THEME ENGINE & PROTECTED GOOGLE SHEET SYNC
     // =========================================================================
     function autoDetectMonthlyTheme() {
+      if (manualThemeOverride) {
+        applyMonthlyTheme(manualThemeOverride, false);
+        return;
+      }
       var m = new Date().getMonth() + 1;
       for (var key in MONTHLY_THEMES) {
         var months = String(MONTHLY_THEMES[key].activeMonths || "").split(",").map(function(x) { return parseInt(x.trim(), 10); });
         if (months.indexOf(m) !== -1) {
-          applyMonthlyTheme(key);
+          applyMonthlyTheme(key, false);
           return;
         }
       }
-      applyMonthlyTheme("default");
+      applyMonthlyTheme("default", false);
     }
 
-    function applyMonthlyTheme(themeKey) {
+    function applyMonthlyTheme(themeKey, isManualAdminPreview) {
+      if (isManualAdminPreview) {
+        manualThemeOverride = themeKey;
+        closeAdminDemoModal();
+      }
       var t = MONTHLY_THEMES[themeKey] || MONTHLY_THEMES.default;
-      document.documentElement.style.setProperty("--primary", t.primary);
-      document.documentElement.style.setProperty("--bg-deep", t.bgDeep);
-      document.getElementById("headerTitleText").innerText = t.title;
-      document.getElementById("headerSubText").innerText = t.sub;
-      document.getElementById("seasonalFloater").innerText = t.floater;
-      document.getElementById("brandEmojiIcon").innerText = t.badge;
+      var topGlow = t.bgTop || (themeKey === "october" ? "#2e1065" : (themeKey === "november" ? "#451a03" : (themeKey === "december" ? "#064e3b" : "#172036")));
+
+      document.documentElement.style.setProperty("--primary", t.primary || "#f59e0b");
+      document.documentElement.style.setProperty("--bg-top", topGlow);
+      document.documentElement.style.setProperty("--bg-deep", t.bgDeep || "#070b14");
+      document.body.style.background = "radial-gradient(circle at top, " + topGlow + " 0%, " + (t.bgDeep || "#070b14") + " 70%)";
+
+      document.getElementById("headerTitleText").innerText = t.title || "QuestATL.com";
+      document.getElementById("headerSubText").innerText = t.sub || "Live Outdoor City Quests";
+      document.getElementById("seasonalFloater").innerText = t.floater || "✨";
+      document.getElementById("brandEmojiIcon").innerText = t.badge || "🧭";
     }
 
     function fetchLiveLeaderboard() {
@@ -684,11 +698,25 @@
             }
           }
 
-          // 2. Sync Themes from Sheet
+          // 2. Smart-Merge Themes from Sheet (Never overwrites seasonal presets with generic fallback values!)
           if (json.themes && json.themes.length > 0) {
             for (var ti = 0; ti < json.themes.length; ti++) {
               var st = json.themes[ti];
-              MONTHLY_THEMES[st.themeId] = st;
+              var id = String(st.themeId || "").toLowerCase();
+              if (!id) continue;
+              var base = MONTHLY_THEMES[id] || { activeMonths: "", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" };
+
+              if (st.activeMonths) base.activeMonths = st.activeMonths;
+              if (st.primary && st.primary !== "#f59e0b" && st.primary !== "#0f172a") base.primary = st.primary;
+              if (st.bgDeep && st.bgDeep !== "#070b14") base.bgDeep = st.bgDeep;
+              if (st.title && st.title !== "QuestATL.com") base.title = st.title;
+              if (st.sub && st.sub !== "Live Outdoor City Quests") base.sub = st.sub;
+              if (st.floater && st.floater !== "✨") base.floater = st.floater;
+              if (st.badge && st.badge !== "🧭") base.badge = st.badge;
+              if (st.animationIcon && st.animationIcon !== "🔍") base.floater = st.animationIcon;
+              if (st.headerTitle && st.headerTitle !== "QuestATL.com") base.title = st.headerTitle;
+
+              MONTHLY_THEMES[id] = base;
             }
             autoDetectMonthlyTheme();
           }
@@ -988,7 +1016,6 @@
         ? '<img src="' + escapeQuotes(stop.imageUrl) + '" alt="Clue Visual" style="width:100%; max-height:200px; object-fit:cover; border-radius:12px; margin-bottom:12px; border:1px solid #334155;" />'
         : '';
 
-      // Skip Stop safety valve appears ONLY after the player has revealed the hint
       var skipButtonHtml = isHintShown
         ? '<button class="btn-secondary" style="width:100%; margin-top:10px; border-color:#f87171; color:#fca5a5;" onclick="handleSkipStopClick()">⏭️ Landmark Blocked? Skip Stop (+' + skipMin + ':00 Penalty)</button>'
         : '';
@@ -1033,7 +1060,6 @@
       advanceToNextStopOrFinish(true);
     }
 
-    // Levenshtein distance for 1-character typo tolerance on mobile keyboards
     function editDistance(a, b) {
       var matrix = [];
       for (var i = 0; i <= b.length; i++) matrix[i] = [i];
@@ -1061,7 +1087,6 @@
       var matched = stop.acceptedAnswers.some(function(ans) {
         var target = String(ans).trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
         if (cleaned === target || cleaned.indexOf(target) !== -1) return true;
-        // Allow 1 typo on words 5+ characters long (never on short numbers like 13 or 37)
         if (target.length >= 5 && isNaN(target) && editDistance(cleaned, target) <= 1) return true;
         return false;
       });
@@ -1589,7 +1614,6 @@
       renderMainContent();
     }
 
-    // Helpers
     function formatSeconds(sec) {
       var m = Math.floor(sec / 60);
       var s = sec % 60;
@@ -1604,7 +1628,6 @@
       return String(str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
     }
 
-    // Boot App
     window.onload = function() {
       try {
         var cached = localStorage.getItem(STORAGE_KEY_RANKINGS);
