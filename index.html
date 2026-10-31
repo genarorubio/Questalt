@@ -339,7 +339,7 @@
   <!-- Main Content -->
   <main class="container" id="mainContent"></main>
 
-  <!-- Anonymous Suggestion & City Request Form (No Email Exposed) -->
+  <!-- Anonymous Suggestion & City Request Form (100% Private) -->
   <section class="container" style="margin-top:6px;">
     <div class="card" style="padding:18px;">
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
@@ -404,17 +404,17 @@
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-box">
       <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:10px;">🧭 How QuestATL Works</h3>
-      <div id="rulesModalText" style="font-size:13px; color:#cbd5e1; line-height:1.6; text-align:left; margin-bottom:16px; background:#090d16; padding:14px; border-radius:12px; border:1px solid #1e293b;">
-        1. Head to the Starting Star pin on the trail map.<br><br>
-        2. Read each riddle and explore the downtown landmarks.<br><br>
-        3. Type the correct answer to unlock the map pin, local history facts, and VIP discounts at partner shops!<br><br>
-        4. Stuck? Tap <strong>Reveal Hint (+2:00)</strong>, or use the <strong>Skip Stop (+5:00)</strong> safety button if a landmark is blocked.
+      <div id="rulesModalText" style="font-size:13px; color:#cbd5e1; line-height:1.6; text-align:left; margin-bottom:16px; background:#090d16; padding:14px; border-radius:12px; border:1px solid #1e293b; white-space:pre-line;">
+        1. Head to the Starting Star pin on the trail map.
+        2. Read each riddle and explore the downtown landmarks.
+        3. Type the correct answer to unlock the map pin, local history facts, and VIP discounts at partner shops!
+        4. Stuck? Tap Reveal Hint (+2:00), or use the Skip Stop (+5:00) safety button if a landmark is blocked.
       </div>
       <button class="btn-primary" onclick="document.getElementById('rulesModal').classList.remove('show')">Got It!</button>
     </div>
   </div>
 
-  <!-- Anonymous Partner Inquiry Form Modal (No Email Exposed) -->
+  <!-- Anonymous Partner Inquiry Form Modal -->
   <div class="modal-overlay" id="partnerInfoModal">
     <div class="modal-box">
       <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🤝 Local Business Partners</h3>
@@ -440,7 +440,7 @@
     <div class="modal-box">
       <h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">⚡ Partner &amp; Admin Demo Control</h3>
       <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">
-        Tap any theme below to immediately preview it on screen, or jump to any stop:
+        Tap any theme below to immediately preview it on screen, or jump to any stop pulled from your Google Sheet:
       </p>
       <div style="text-align:left; margin-bottom:12px;">
         <label style="font-size:11px; font-weight:800; color:#94a3b8;">PREVIEW MONTHLY THEME (AUTO-CLOSES TO SHOW PREVIEW):</label>
@@ -458,11 +458,10 @@
 
   <script>
     // =========================================================================
-    // 1. MASTER GOOGLE SHEET API URL & CONFIGURATION
+    // 1. MASTER GOOGLE SHEET API URL (100% DATABASE-DRIVEN — NO HARDCODED CLUES)
     // =========================================================================
-    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwYyY71tA_i6K1q8vF7Z5p8VwW5KqY8vF7Z5p8VwW5KqY8vF7Z5p8VwW5/exec";
-    var STORAGE_KEY_RANKINGS = "questatl_lville_rankings_v1";
-    var STORAGE_KEY_SESSION = "questatl_active_session_v2";
+    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
+    var STORAGE_KEY_SESSION = "questatl_active_session_v3";
 
     var GLOBAL_CONFIG = {
       hintPenaltySeconds: 120,
@@ -472,26 +471,6 @@
       rulesText: ""
     };
 
-    var CITIES = [
-      { id: "lawrenceville", name: "Lawrenceville", status: "LIVE", tagline: "Historic Downtown Square & Lawn Trail", distanceMiles: "1.1 Miles", estTime: "35–50 Mins", trailTags: "🐕 Dog & Stroller Friendly", startLabel: "START: COURTHOUSE", startLat: 33.9567500, startLng: -83.9879500, startMapX: 49, startMapY: 26, mapStyle: "lawrenceville" },
-      { id: "duluth", name: "Duluth", status: "SOON", tagline: "Downtown Town Green & Parsons Alley", distanceMiles: "1.0 Miles", estTime: "35–45 Mins", trailTags: "🐕 Dog Friendly", startLabel: "START: TOWN GREEN", startLat: 34.0028900, startLng: -84.1446400, startMapX: 50, startMapY: 50, mapStyle: "radar" },
-      { id: "suwanee", name: "Suwanee", status: "SOON", tagline: "Suwanee Town Center Park Quest", distanceMiles: "1.0 Miles", estTime: "30–45 Mins", trailTags: "🐕 Dog Friendly", startLabel: "START: TOWN CENTER", startLat: 34.0512200, startLng: -84.0713500, startMapX: 50, startMapY: 50, mapStyle: "radar" },
-      { id: "decatur", name: "Decatur", status: "SOON", tagline: "Historic Decatur Square Adventure", distanceMiles: "1.2 Miles", estTime: "40–55 Mins", trailTags: "🐕 Dog Friendly", startLabel: "START: DECATUR SQUARE", startLat: 33.7748300, startLng: -84.2963100, startMapX: 50, startMapY: 50, mapStyle: "radar" }
-    ];
-
-    var DEFAULT_LAWRENCEVILLE_CLUES = [
-      { cityId: "lawrenceville", number: 1, shortLabel: "Alma / Fountain", title: "Stop #1 - The Brewing Fountain", riddle: "Find the fountain by where a drink is brew. Give us it's name for the next clue", acceptedAnswers: ["seven sisters fountain", "seven sisters", "7 sisters fountain", "the seven sisters fountain"], hint: "Check the fountain courtyard right near the brewery and Alma Mexicana off the Square.", lat: 33.9561566, lng: -83.9889916, mapX: 22, mapY: 38, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "The Seven Sisters Fountain is a signature gathering spot right off the historic Lawrenceville Square.", imageUrl: null },
-      { cityId: "lawrenceville", number: 2, shortLabel: "Liberty Books", title: "Stop #2 - Freedom's Post", riddle: "Pages turn, the freedom to save, the post in front of me will give you the numbers you crave.", acceptedAnswers: ["3117"], hint: "Head to Liberty Books on Croghan St and inspect the post right in front of the bookstore.", lat: 33.9562511, lng: -83.9884994, mapX: 37, mapY: 33, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "Historic downtown storefronts along Croghan Street date back to the 19th and early 20th centuries.", imageUrl: null },
-      { cityId: "lawrenceville", number: 3, shortLabel: "Vintages", title: "Stop #3 - Shrek's Friend", riddle: "Find Shrek's best friend. He has an electric feel to him. What is his name?", acceptedAnswers: ["tipsy mule", "the tipsy mule"], hint: "Check outside Vintages for a familiar four-legged friend.", lat: 33.9563479, lng: -83.9872978, mapX: 63, mapY: 30, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "You found the Tipsy Mule! Moving east along the Square brings you toward the historic coffee corner.", imageUrl: null },
-      { cityId: "lawrenceville", number: 4, shortLabel: "Boulder Creek", title: "Stop #4 - The Hobbit Hole", riddle: "Find the hobbit hole, where knowledge is given. On the other side a mountain is found. What mountain is it?", acceptedAnswers: ["the lonely mountain", "lonely mountain"], hint: "Check the Little Free Library box outside Boulder Creek Coffee and look on the other side for the mountain's name.", lat: 33.9563309, lng: -83.9870433, mapX: 78, mapY: 34, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "Tolkien's Lonely Mountain is hidden right on the Little Free Library box! Next, head south toward the Lawrenceville Lawn.", imageUrl: null },
-      { cityId: "lawrenceville", number: 5, shortLabel: "Dog Park", title: "Stop #5 - The Local Hero", riddle: "A plaque commemorating a local hero can be found between these two gated parks. What is the hero's name?", acceptedAnswers: ["hyro", "k-9 hyro", "k9 hyro", "officer hyro"], hint: "Walk down toward the dog parks at the Lawn and inspect the memorial plaque between the gates.", lat: 33.9548075, lng: -83.9862316, mapX: 80, mapY: 64, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "K-9 Hyro served the Gwinnett County Police Department heroically and is honored here at the Lawn dog parks.", imageUrl: null },
-      { cityId: "lawrenceville", number: 6, shortLabel: "Picnic Table", title: "Stop #6 - Lucky Charm Table", riddle: "Make a wish, lucky charm, by a flag, on the table a name you will find. What is that name?", acceptedAnswers: ["juleah everglade", "juleah"], hint: "Look for the bright yellow and green painted picnic table at the corner of the park near the flag.", lat: 33.9542958, lng: -83.9859201, mapX: 85, mapY: 82, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "The painted community tables around the Lawrenceville Lawn showcase local public artwork.", imageUrl: null },
-      { cityId: "lawrenceville", number: 7, shortLabel: "Playground", title: "Stop #7 - The Park Creature", riddle: "At the park you'll find me. The only creature in sight. By the jungle and a playhouse. How many red lines in my body do you see?", acceptedAnswers: ["13", "thirteen"], hint: "Find the caterpillar on the playground by the playhouse and carefully count every red stripe/line along its body.", lat: 33.9542582, lng: -83.9879448, mapX: 48, mapY: 85, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "13 stripes! Only two stops remain as you loop back toward the Historic Courthouse.", imageUrl: null },
-      { cityId: "lawrenceville", number: 8, shortLabel: "Clover Display", title: "Stop #8 - Field of Clovers", riddle: "In this field of clovers, your luck is not over! All around me history has been made. The number of leaves will give you the answer you seek.", acceptedAnswers: ["37", "thirty seven", "thirty-seven"], hint: "Count the total number of individual clover leaves on the clover art display.", lat: 33.9546875, lng: -83.9888125, mapX: 24, mapY: 72, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "Sharp eyes counting all 37 clover leaves! Time for the final sprint up to the Courthouse lawn.", imageUrl: null },
-      { cityId: "lawrenceville", number: 9, shortLabel: "Courthouse", title: "Stop #9 - The Native Son", riddle: "A gentleman, a sportsman, a champion of the world. This tribute commemorates this Lawrenceville native son. What is his name?", acceptedAnswers: ["ezzard charles", "the cincinnati cobra"], hint: "Head back up to the Historic Courthouse lawn and check the tribute monument.", lat: 33.9571474, lng: -83.9893121, mapX: 20, mapY: 14, sponsorName: null, sponsorPerk: null, maxClaims: 0, unlockFact: "World Heavyweight Champion Ezzard Charles ('The Cincinnati Cobra') was born right here in Lawrenceville in 1921!", imageUrl: null }
-    ];
-
-    // Protected Master Seasonal Presets (With Distinct Upper Sky Glows)
     var MONTHLY_THEMES = {
       october:  { activeMonths: "10", primary: "#f97316", bgTop: "#2e1065", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
       november: { activeMonths: "11", primary: "#d97706", bgTop: "#451a03", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
@@ -499,15 +478,16 @@
       default:  { activeMonths: "1,2,3,4,5,6,7,8,9", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" }
     };
 
-    var lawrencevilleRankings = [
-      { city: "lawrenceville", team: "Square Sprinters", timeSeconds: 1940, formattedTime: "32:20", hintsUsed: 0, skipsUsed: 0, date: "Oct 2026" },
-      { city: "lawrenceville", team: "Gwinnett Ghouls", timeSeconds: 2315, formattedTime: "38:35", hintsUsed: 1, skipsUsed: 0, date: "Oct 2026" },
-      { city: "lawrenceville", team: "Croghan Cruisers", timeSeconds: 2680, formattedTime: "44:40", hintsUsed: 1, skipsUsed: 0, date: "Oct 2026" }
-    ];
-
+    // Pure database state arrays — populated 100% from Google Sheets
+    var CITIES = [];
+    var ALL_DATABASE_CLUES = [];
+    var clues = [];
+    var liveRankings = [];
     var vipClaimCounts = {};
+
+    var isLoadingDatabase = true;
+    var databaseErrorMsg = "";
     var activeCityId = "lawrenceville";
-    var clues = DEFAULT_LAWRENCEVILLE_CLUES.slice();
     var huntStarted = false;
     var huntCompleted = false;
     var currentStopIndex = 0;
@@ -633,7 +613,7 @@
     }
 
     // =========================================================================
-    // 4. MONTHLY THEME ENGINE & PROTECTED GOOGLE SHEET SYNC
+    // 4. MONTHLY THEME ENGINE & 100% LIVE DATABASE FETCH
     // =========================================================================
     function autoDetectMonthlyTheme() {
       if (manualThemeOverride) {
@@ -670,94 +650,106 @@
       document.getElementById("brandEmojiIcon").innerText = t.badge || "🧭";
     }
 
-    function fetchLiveLeaderboard() {
-      if (!GOOGLE_SHEET_API_URL) return;
+    function fetchLiveDatabase() {
+      isLoadingDatabase = true;
+      databaseErrorMsg = "";
+      renderMainContent();
+
       fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
-        .then(function(res) { return res.json(); })
+        .then(function(res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
         .then(function(json) {
-          if (!json) return;
+          if (!json || json.status !== "ok") {
+            throw new Error("Invalid JSON payload from Google Sheet.");
+          }
 
           // 1. Sync Config
           if (json.config) {
-            if (json.config.hint_penalty_seconds) GLOBAL_CONFIG.hintPenaltySeconds = Number(json.config.hint_penalty_seconds) || 120;
-            if (json.config.skip_penalty_seconds) GLOBAL_CONFIG.skipPenaltySeconds = Number(json.config.skip_penalty_seconds) || 300;
-            if (json.config.announcement_banner !== undefined) {
-              var bannerEl = document.getElementById("announcementBanner");
-              var txt = String(json.config.announcement_banner || "").trim();
-              if (txt && bannerEl) {
+            if (json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) {
+              GLOBAL_CONFIG.hintPenaltySeconds = Number(json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) || 120;
+            }
+            if (json.config.skippenaltyseconds || json.config.skip_penalty_seconds) {
+              GLOBAL_CONFIG.skipPenaltySeconds = Number(json.config.skippenaltyseconds || json.config.skip_penalty_seconds) || 300;
+            }
+            var bannerTxt = String(json.config.announcementbanner || json.config.announcement_banner || "").trim();
+            var bannerEl = document.getElementById("announcementBanner");
+            if (bannerEl) {
+              if (bannerTxt) {
                 bannerEl.style.display = "block";
-                bannerEl.innerText = "📣 " + txt;
-                bannerEl.href = json.config.banner_url ? String(json.config.banner_url) : "#";
-              } else if (bannerEl) {
+                bannerEl.innerText = "📣 " + bannerTxt;
+                bannerEl.href = String(json.config.bannerurl || json.config.banner_url || "#");
+              } else {
                 bannerEl.style.display = "none";
               }
             }
-            if (json.config.rules_text) {
+            var rTxt = String(json.config.rulestext || json.config.rules_text || "").trim();
+            if (rTxt) {
               var rEl = document.getElementById("rulesModalText");
-              if (rEl) rEl.innerText = String(json.config.rules_text);
+              if (rEl) rEl.innerText = rTxt;
             }
           }
 
-          // 2. Smart-Merge Themes from Sheet (Never overwrites seasonal presets with generic fallback values!)
+          // 2. Sync Themes
           if (json.themes && json.themes.length > 0) {
             for (var ti = 0; ti < json.themes.length; ti++) {
               var st = json.themes[ti];
               var id = String(st.themeId || "").toLowerCase();
               if (!id) continue;
               var base = MONTHLY_THEMES[id] || { activeMonths: "", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" };
-
               if (st.activeMonths) base.activeMonths = st.activeMonths;
-              if (st.primary && st.primary !== "#f59e0b" && st.primary !== "#0f172a") base.primary = st.primary;
+              if (st.primary && st.primary !== "#f59e0b") base.primary = st.primary;
+              if (st.bgTop) base.bgTop = st.bgTop;
               if (st.bgDeep && st.bgDeep !== "#070b14") base.bgDeep = st.bgDeep;
               if (st.title && st.title !== "QuestATL.com") base.title = st.title;
               if (st.sub && st.sub !== "Live Outdoor City Quests") base.sub = st.sub;
               if (st.floater && st.floater !== "✨") base.floater = st.floater;
               if (st.badge && st.badge !== "🧭") base.badge = st.badge;
-              if (st.animationIcon && st.animationIcon !== "🔍") base.floater = st.animationIcon;
-              if (st.headerTitle && st.headerTitle !== "QuestATL.com") base.title = st.headerTitle;
-
               MONTHLY_THEMES[id] = base;
             }
             autoDetectMonthlyTheme();
           }
 
           // 3. Sync VIP Monthly Claim Counts
-          if (json.vipClaimCounts) {
-            vipClaimCounts = json.vipClaimCounts;
-          }
+          vipClaimCounts = json.vipClaimCounts || {};
 
           // 4. Sync Rankings
-          if (json.rankings && json.rankings.length > 0) {
-            lawrencevilleRankings = json.rankings;
-            try { localStorage.setItem(STORAGE_KEY_RANKINGS, JSON.stringify(lawrencevilleRankings)); } catch (e) {}
-          }
+          liveRankings = Array.isArray(json.rankings) ? json.rankings : [];
 
-          // 5. Sync Cities
-          if (json.cities && json.cities.length > 0) {
+          // 5. Sync Clues (100% from Google Sheets)
+          ALL_DATABASE_CLUES = Array.isArray(json.clues) ? json.clues : [];
+
+          // 6. Sync Cities (or auto-build from Clues if Cities tab wasn't created yet)
+          if (Array.isArray(json.cities) && json.cities.length > 0) {
             CITIES = json.cities;
+          } else {
+            CITIES = [
+              { id: "lawrenceville", name: "Lawrenceville", status: "LIVE", tagline: "Historic Downtown Square & Lawn Trail", distanceMiles: "1.1 Miles", estTime: "35–50 Mins", trailTags: "🐕 Dog & Stroller Friendly", startLabel: "START: COURTHOUSE", startLat: 33.95675, startLng: -83.98795, startMapX: 49, startMapY: 26, mapStyle: "lawrenceville" }
+            ];
           }
 
-          // 6. Sync Clues
-          if (json.clues && json.clues.length > 0) {
-            window.MASTER_SHEET_CLUES = json.clues;
-            for (var c = 0; c < CITIES.length; c++) {
-              var hasClues = json.clues.some(function(item) {
-                return (item.cityId || "lawrenceville") === CITIES[c].id;
-              });
-              if (hasClues) CITIES[c].status = "LIVE";
-            }
-            var activeCityClues = json.clues.filter(function(item) {
-              return (item.cityId || "lawrenceville") === activeCityId;
+          // Ensure any city with active clues in the sheet is marked LIVE
+          for (var c = 0; c < CITIES.length; c++) {
+            var hasClues = ALL_DATABASE_CLUES.some(function(item) {
+              return (item.cityId || "lawrenceville") === CITIES[c].id;
             });
-            if (activeCityClues.length > 0) {
-              clues = activeCityClues;
-            }
+            if (hasClues) CITIES[c].status = "LIVE";
           }
 
+          clues = ALL_DATABASE_CLUES.filter(function(item) {
+            return (item.cityId || "lawrenceville") === activeCityId;
+          });
+
+          isLoadingDatabase = false;
           renderCitySelector();
           renderMainContent();
         })
-        .catch(function() {});
+        .catch(function(err) {
+          isLoadingDatabase = false;
+          databaseErrorMsg = err ? String(err.message || err) : "Could not reach Google Sheet Web App URL.";
+          renderMainContent();
+        });
     }
 
     function trackQuestEvent(payload) {
@@ -771,7 +763,7 @@
     }
 
     // =========================================================================
-    // 5. CITY SELECTOR & LOBBY SCREEN (WITH UNIVERSAL QR PARTNER DROPDOWN)
+    // 5. CITY SELECTOR & LOBBY SCREEN
     // =========================================================================
     function renderCitySelector() {
       var bar = document.getElementById("citySelectorBar");
@@ -799,21 +791,45 @@
       if (timerInterval) clearInterval(timerInterval);
       try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
 
-      if (window.MASTER_SHEET_CLUES) {
-        var filtered = window.MASTER_SHEET_CLUES.filter(function(c) { return (c.cityId || "lawrenceville") === cityId; });
-        if (filtered.length > 0) clues = filtered;
-      } else if (cityId === "lawrenceville") {
-        clues = DEFAULT_LAWRENCEVILLE_CLUES;
-      }
+      clues = ALL_DATABASE_CLUES.filter(function(c) {
+        return (c.cityId || "lawrenceville") === cityId;
+      });
+
       renderCitySelector();
       renderMainContent();
     }
 
     function renderMainContent() {
       var container = document.getElementById("mainContent");
+
+      if (isLoadingDatabase) {
+        container.innerHTML =
+          '<div class="card" style="text-align:center; padding:36px 20px;">' +
+            '<div style="font-size:38px; margin-bottom:10px;">⏳</div>' +
+            '<h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Syncing Live Trail Database...</h2>' +
+            '<p style="font-size:13px; color:#94a3b8;">Loading live riddles, VIP shop perks, and rankings from Google Sheets.</p>' +
+          '</div>';
+        return;
+      }
+
+      if (databaseErrorMsg || ALL_DATABASE_CLUES.length === 0) {
+        container.innerHTML =
+          '<div class="card" style="text-align:center; padding:28px 20px; border-color:#ef4444;">' +
+            '<div style="font-size:38px; margin-bottom:10px;">⚠️</div>' +
+            '<h2 style="font-size:19px; font-weight:900; color:#fca5a5; margin-bottom:8px;">Database Sync Needed</h2>' +
+            '<p style="font-size:13px; color:#cbd5e1; margin-bottom:14px; line-height:1.5;">' +
+              (databaseErrorMsg
+                ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure Line 257 has your exact <strong>/exec</strong> URL and your deployment access is set to <strong>Anyone</strong>.'
+                : 'Connected to your Google Sheet, but 0 clues were returned! Make sure your tab is named <strong>Clues</strong> or run <strong>setupDatabaseTabs</strong> in Apps Script.') +
+            '</p>' +
+            '<button class="btn-primary" onclick="fetchLiveDatabase()">🔄 Retry Database Sync</button>' +
+          '</div>';
+        return;
+      }
+
       var cityObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
 
-      if (cityObj.status !== "LIVE") {
+      if (cityObj.status !== "LIVE" || clues.length === 0) {
         container.innerHTML =
           '<div class="card" style="text-align:center; padding:32px 20px;">' +
             '<div style="font-size:42px; margin-bottom:10px;">🚧</div>' +
@@ -1351,7 +1367,7 @@
           '<p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Solve riddles along the trail to unlock exclusive VIP vouchers you can show at local partner registers:</p>' +
           (totalPartnerCount > 0
             ? listHtml
-            : '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:18px; text-align:center; font-size:13px; color:#94a3b8;">Local partner VIP perks for this trail will appear here as you unlock stops!</div>') +
+            : '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:18px; text-align:center; font-size:13px; color:#94a3b8;">No partner perks are currently active on this trail in Google Sheets. Add a shop name &amp; perk to any row in your <strong>Clues</strong> tab!</div>') +
         '</div>'
       );
     }
@@ -1386,7 +1402,7 @@
 
     function renderLeaderboardCardHtml() {
       var nowMonth = new Date().toLocaleString("en-US", { month: "short", year: "numeric" });
-      var cityRanks = lawrencevilleRankings.filter(function(r) {
+      var cityRanks = liveRankings.filter(function(r) {
         var sameCity = !r.city || r.city.toLowerCase() === activeCityId;
         if (!sameCity) return false;
         if (leaderboardFilter === "month") {
@@ -1420,7 +1436,7 @@
               '<button onclick="switchLeaderboardFilter(\'all\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "all" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "all" ? "#090d16" : "#94a3b8") + ';">👑 All-Time</button>' +
             '</div>' +
           '</div>' +
-          (rowsHtml || '<p style="font-size:12px; color:#64748b;">No teams recorded for this filter yet—be the first!</p>') +
+          (rowsHtml || '<p style="font-size:12px; color:#64748b;">No teams recorded in Google Sheets for this filter yet—be the first!</p>') +
         '</div>'
       );
     }
@@ -1442,8 +1458,8 @@
         skipsUsed: skipsUsedCount,
         date: nowMonth
       };
-      lawrencevilleRankings.push(newEntry);
-      lawrencevilleRankings.sort(function(a, b) { return a.timeSeconds - b.timeSeconds; });
+      liveRankings.push(newEntry);
+      liveRankings.sort(function(a, b) { return a.timeSeconds - b.timeSeconds; });
 
       trackQuestEvent({
         action: "submit_score",
@@ -1586,14 +1602,14 @@
         var c = clues[i];
         html +=
           '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #1e293b; font-size:12px;">' +
-            '<span><strong>#' + c.number + '</strong> ' + escapeHtml(c.shortLabel) + '</span>' +
+            '<span><strong>#' + c.number + '</strong> ' + escapeHtml(c.shortLabel) + (c.sponsorName ? ' <span style="color:#10b981;">(' + escapeHtml(c.sponsorName) + ')</span>' : '') + '</span>' +
             '<div style="display:flex; gap:6px;">' +
               '<button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="adminJumpToStop(' + i + ')">Jump</button>' +
               (c.sponsorName ? '<button class="btn-secondary" style="padding:4px 8px; font-size:11px; border-color:#10b981; color:#34d399;" onclick="closeAdminDemoModal(); openVipVoucher(\'' + escapeQuotes(c.sponsorName) + '\', \'' + escapeQuotes(c.sponsorPerk) + '\')">VIP</button>' : '') +
             '</div>' +
           '</div>';
       }
-      listEl.innerHTML = html;
+      listEl.innerHTML = html || '<div style="font-size:12px; color:#94a3b8; padding:8px;">No clues loaded from Google Sheets yet.</div>';
       document.getElementById("adminDemoModal").classList.add("show");
     }
 
@@ -1629,15 +1645,9 @@
     }
 
     window.onload = function() {
-      try {
-        var cached = localStorage.getItem(STORAGE_KEY_RANKINGS);
-        if (cached) lawrencevilleRankings = JSON.parse(cached);
-      } catch (e) {}
       autoDetectMonthlyTheme();
       restoreSavedSession();
-      renderCitySelector();
-      renderMainContent();
-      fetchLiveLeaderboard();
+      fetchLiveDatabase();
     };
   </script>
 </body>
