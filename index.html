@@ -6,122 +6,48 @@
   <title>QuestATL.com — Interactive City Scavenger Hunts</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-top: #172036; --bg-deep: #070b14; --bg-card: #111827;
-      --primary: #f59e0b; --primary-glow: rgba(245, 158, 11, 0.35);
-      --accent: #10b981; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: #1e293b;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at top, var(--bg-top) 0%, var(--bg-deep) 70%);
-      color: var(--text-main); min-height: 100vh; overflow-x: hidden; padding-bottom: 40px; transition: background 0.4s ease;
-    }
-    @keyframes floatAcross {
-      0% { transform: translateX(-10vw) translateY(0px) rotate(-5deg); opacity: 0; }
-      15% { opacity: 0.85; }
-      50% { transform: translateX(45vw) translateY(-6px) rotate(6deg); opacity: 0.95; }
-      85% { opacity: 0.85; }
-      100% { transform: translateX(105vw) translateY(2px) rotate(-5deg); opacity: 0; }
-    }
-    .seasonal-floater {
-      position: fixed; top: 10px; left: 0; font-size: 24px; pointer-events: none; z-index: 999;
-      animation: floatAcross 14s linear infinite; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
-    }
-    .top-banner {
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 17, 32, 0.88) 100%);
-      border-bottom: 1px solid rgba(245, 158, 11, 0.25); padding: 14px 16px 12px;
-      position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px);
-    }
-    .header-row { max-width: 640px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
-    .brand-icon {
-      width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(135deg, var(--primary), #ea580c);
-      display: flex; align-items: center; justify-content: center; font-size: 19px; box-shadow: 0 0 16px var(--primary-glow);
-    }
-    .brand-title {
-      font-size: 19px; font-weight: 900; letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #ffffff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .brand-sub { font-size: 10px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
-    .city-bar { max-width: 640px; margin: 12px auto 0; display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-    .city-bar::-webkit-scrollbar { display: none; }
-    .city-pill {
-      flex-shrink: 0; padding: 7px 13px; border-radius: 999px; font-size: 12px; font-weight: 700;
-      border: 1px solid var(--border-color); background: rgba(30, 41, 59, 0.6); color: var(--text-muted);
-      display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s ease;
-    }
-    .city-pill.active {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(234, 88, 12, 0.25));
-      border-color: var(--primary); color: #ffffff; box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
-    }
-    .badge-live { background: #10b981; color: #052e16; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 99px; }
-    .badge-soon { background: #334155; color: #94a3b8; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 99px; }
-    .trail-selector-box { background: #090d16; border: 1px solid #1e293b; border-radius: 14px; padding: 12px; margin-bottom: 14px; }
-    .trail-option-btn {
-      width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid #1e293b;
-      background: rgba(30, 41, 59, 0.45); color: #cbd5e1; cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px; transition: all 0.2s ease;
-    }
-    .trail-option-btn.active {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(16, 185, 129, 0.15));
-      border-color: var(--primary); color: #ffffff; box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
-    }
-    .container { max-width: 640px; margin: 16px auto; padding: 0 14px; }
-    .card {
-      background: linear-gradient(180deg, rgba(30, 41, 59, 0.78) 0%, rgba(15, 23, 42, 0.94) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45); margin-bottom: 16px; position: relative; overflow: hidden;
-    }
-    .btn-primary {
-      width: 100%; padding: 14px 18px; border-radius: 14px; border: none;
-      background: linear-gradient(135deg, var(--primary) 0%, #ea580c 100%); color: #090d16;
-      font-size: 15px; font-weight: 900; letter-spacing: 0.3px; cursor: pointer;
-      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35); transition: transform 0.15s ease;
-    }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-secondary {
-      padding: 9px 12px; border-radius: 11px; border: 1px solid #334155;
-      background: rgba(30, 41, 59, 0.85); color: #e2e8f0; font-size: 12px; font-weight: 700; cursor: pointer;
-    }
-    .game-tabs { display: flex; gap: 6px; background: #090d16; padding: 5px; border-radius: 14px; border: 1px solid #1e293b; margin-bottom: 14px; }
-    .game-tab {
-      flex: 1; text-align: center; padding: 10px 6px; border-radius: 10px; font-size: 12px;
-      font-weight: 800; color: #94a3b8; cursor: pointer; border: none; background: transparent; transition: all 0.2s;
-    }
-    .game-tab.active { background: linear-gradient(135deg, var(--primary), #ea580c); color: #090d16; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3); }
-    .map-viewport {
-      width: 100%; height: 360px; background: #060b13; border-radius: 16px;
-      border: 1px solid rgba(245, 158, 11, 0.3); position: relative; overflow: hidden; touch-action: none; user-select: none;
-    }
-    .map-controls { position: absolute; bottom: 12px; right: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 20; }
-    .map-ctrl-btn {
-      width: 34px; height: 34px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(15, 23, 42, 0.9); color: #fff; font-weight: 900; font-size: 16px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-    }
-    @keyframes radarSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .radar-sweep { transform-origin: 500px 500px; animation: radarSpin 8s linear infinite; }
-    @keyframes pulsePin { 0% { r: 14; opacity: 0.9; } 100% { r: 34; opacity: 0; } }
-    .pin-pulse { animation: pulsePin 1.8s ease-out infinite; }
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(3, 7, 18, 0.86); backdrop-filter: blur(6px);
-      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 200;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal-box {
-      background: #111827; border: 1px solid var(--primary); border-radius: 20px;
-      max-width: 440px; width: 100%; padding: 22px; box-shadow: 0 20px 50px rgba(0,0,0,0.85); text-align: center;
-    }
-    input[type="text"], input[type="email"], select, textarea {
-      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid #334155;
-      background: #090d16; color: #ffffff; font-size: 14px; font-family: inherit; outline: none;
-    }
-    input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
+    :root { --bg-top:#172036; --bg-deep:#070b14; --bg-card:#111827; --primary:#f59e0b; --primary-glow:rgba(245,158,11,0.35); --accent:#10b981; --text-main:#f8fafc; --text-muted:#94a3b8; --border-color:#1e293b; }
+    * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+    body { font-family:'Inter',-apple-system,sans-serif; background:radial-gradient(circle at top,var(--bg-top) 0%,var(--bg-deep) 70%); color:var(--text-main); min-height:100vh; overflow-x:hidden; padding-bottom:40px; transition:background 0.4s ease; }
+    @keyframes floatAcross { 0%{transform:translateX(-10vw) translateY(0) rotate(-5deg);opacity:0;} 15%{opacity:0.85;} 50%{transform:translateX(45vw) translateY(-6px) rotate(6deg);opacity:0.95;} 85%{opacity:0.85;} 100%{transform:translateX(105vw) translateY(2px) rotate(-5deg);opacity:0;} }
+    .seasonal-floater { position:fixed; top:10px; left:0; font-size:24px; pointer-events:none; z-index:999; animation:floatAcross 14s linear infinite; filter:drop-shadow(0 0 8px rgba(255,255,255,0.4)); }
+    .top-banner { background:linear-gradient(180deg,rgba(15,23,42,0.95) 0%,rgba(11,17,32,0.88) 100%); border-bottom:1px solid rgba(245,158,11,0.25); padding:14px 16px 12px; position:sticky; top:0; z-index:50; backdrop-filter:blur(12px); }
+    .header-row { max-width:640px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .brand-box { display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; }
+    .brand-icon { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,var(--primary),#ea580c); display:flex; align-items:center; justify-content:center; font-size:19px; box-shadow:0 0 16px var(--primary-glow); }
+    .brand-title { font-size:19px; font-weight:900; letter-spacing:-0.5px; background:linear-gradient(90deg,#fff,var(--primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .brand-sub { font-size:10px; color:var(--text-muted); font-weight:700; letter-spacing:0.4px; text-transform:uppercase; }
+    .city-bar { max-width:640px; margin:12px auto 0; display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+    .city-bar::-webkit-scrollbar { display:none; }
+    .city-pill { flex-shrink:0; padding:7px 13px; border-radius:999px; font-size:12px; font-weight:700; border:1px solid var(--border-color); background:rgba(30,41,59,0.6); color:var(--text-muted); display:flex; align-items:center; gap:6px; cursor:pointer; transition:all 0.2s ease; }
+    .city-pill.active { background:linear-gradient(135deg,rgba(245,158,11,0.22),rgba(234,88,12,0.25)); border-color:var(--primary); color:#fff; box-shadow:0 0 14px rgba(245,158,11,0.25); }
+    .badge-live { background:#10b981; color:#052e16; font-size:9px; font-weight:900; padding:2px 6px; border-radius:99px; }
+    .badge-soon { background:#334155; color:#94a3b8; font-size:9px; font-weight:800; padding:2px 6px; border-radius:99px; }
+    .trail-selector-box { background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:12px; margin-bottom:14px; }
+    .trail-option-btn { width:100%; text-align:left; padding:10px 12px; border-radius:10px; border:1px solid #1e293b; background:rgba(30,41,59,0.45); color:#cbd5e1; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:6px; transition:all 0.2s ease; }
+    .trail-option-btn.active { background:linear-gradient(135deg,rgba(245,158,11,0.18),rgba(16,185,129,0.15)); border-color:var(--primary); color:#fff; box-shadow:0 0 12px rgba(245,158,11,0.2); }
+    .container { max-width:640px; margin:16px auto; padding:0 14px; }
+    .card { background:linear-gradient(180deg,rgba(30,41,59,0.78) 0%,rgba(15,23,42,0.94) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:20px; box-shadow:0 16px 40px rgba(0,0,0,0.45); margin-bottom:16px; position:relative; overflow:hidden; }
+    .btn-primary { width:100%; padding:14px 18px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--primary) 0%,#ea580c 100%); color:#090d16; font-size:15px; font-weight:900; letter-spacing:0.3px; cursor:pointer; box-shadow:0 6px 20px rgba(245,158,11,0.35); }
+    .btn-secondary { padding:9px 12px; border-radius:11px; border:1px solid #334155; background:rgba(30,41,59,0.85); color:#e2e8f0; font-size:12px; font-weight:700; cursor:pointer; }
+    .game-tabs { display:flex; gap:6px; background:#090d16; padding:5px; border-radius:14px; border:1px solid #1e293b; margin-bottom:14px; }
+    .game-tab { flex:1; text-align:center; padding:10px 6px; border-radius:10px; font-size:12px; font-weight:800; color:#94a3b8; cursor:pointer; border:none; background:transparent; }
+    .game-tab.active { background:linear-gradient(135deg,var(--primary),#ea580c); color:#090d16; box-shadow:0 2px 10px rgba(245,158,11,0.3); }
+    .map-viewport { width:100%; height:360px; background:#060b13; border-radius:16px; border:1px solid rgba(245,158,11,0.3); position:relative; overflow:hidden; touch-action:none; user-select:none; }
+    .map-controls { position:absolute; bottom:12px; right:12px; display:flex; flex-direction:column; gap:6px; z-index:20; }
+    .map-ctrl-btn { width:34px; height:34px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:rgba(15,23,42,0.9); color:#fff; font-weight:900; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    @keyframes radarSpin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+    .radar-sweep { transform-origin:500px 500px; animation:radarSpin 8s linear infinite; }
+    @keyframes pulsePin { 0%{r:14;opacity:0.9;} 100%{r:34;opacity:0;} }
+    .pin-pulse { animation:pulsePin 1.8s ease-out infinite; }
+    .modal-overlay { position:fixed; inset:0; background:rgba(3,7,18,0.86); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; padding:16px; z-index:200; }
+    .modal-overlay.show { display:flex; }
+    .modal-box { background:#111827; border:1px solid var(--primary); border-radius:20px; max-width:440px; width:100%; padding:22px; box-shadow:0 20px 50px rgba(0,0,0,0.85); text-align:center; }
+    input[type="text"],input[type="email"],select,textarea { width:100%; padding:12px 14px; border-radius:12px; border:1px solid #334155; background:#090d16; color:#fff; font-size:14px; font-family:inherit; outline:none; }
+    input[type="text"]:focus,select:focus,textarea:focus { border-color:var(--primary); box-shadow:0 0 0 2px rgba(245,158,11,0.2); }
   </style>
 </head>
 <body>
-
   <div id="seasonalFloater" class="seasonal-floater">👻</div>
 
   <header class="top-banner" id="appHeader">
@@ -135,7 +61,7 @@
       </div>
       <div style="display:flex; gap:6px; align-items:center;">
         <span id="adminPill" style="display:none; background:#ef4444; color:#fff; font-size:10px; font-weight:900; padding:4px 8px; border-radius:99px; cursor:pointer;" onclick="openAdminDemoModal()">ADMIN</span>
-        <button class="btn-secondary" style="padding:7px 9px; font-size:12px;" onclick="toggleSoundMute()" id="soundToggleBtn" title="Toggle Sound">🔊</button>
+        <button class="btn-secondary" style="padding:7px 9px; font-size:12px;" onclick="toggleSoundMute()" id="soundToggleBtn">🔊</button>
         <button class="btn-secondary" style="padding:7px 10px; font-size:11px;" onclick="openRulesModal()">❓ Rules</button>
         <button class="btn-secondary" style="padding:7px 10px; font-size:11px; border-color:#f59e0b; color:#fcd34d;" onclick="openPartnerInfoModal()">🤝 Partners</button>
       </div>
@@ -153,35 +79,26 @@
         <span style="font-size:18px;">💡</span>
         <h3 style="font-size:15px; font-weight:800; color:#f8fafc;">Anonymous Suggestion &amp; City Request Box</h3>
       </div>
-      <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">
-        Want QuestATL in your city next, or know a local shop that should be a VIP stop? Send an anonymous note straight to our team:
-      </p>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Want QuestATL in your city next, or know a local shop that should be a VIP stop? Send an anonymous note straight to our team:</p>
       <input type="text" id="suggestText" placeholder="Suggest a city, riddle idea, or local business..." style="margin-bottom:10px;" onkeydown="if(event.key==='Enter') submitAnonymousSuggestion()" />
-      <button class="btn-secondary" id="suggestSubmitBtn" style="width:100%; border-color:#f59e0b; color:#fcd34d; padding:11px;" onclick="submitAnonymousSuggestion()">
-        🚀 Submit Anonymous Suggestion
-      </button>
-      <div id="suggestStatusMsg" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-top:10px; text-align:center;">
-        ✅ Thank you! Your suggestion has been sent to the QuestATL team.
-      </div>
+      <button class="btn-secondary" id="suggestSubmitBtn" style="width:100%; border-color:#f59e0b; color:#fcd34d; padding:11px;" onclick="submitAnonymousSuggestion()">🚀 Submit Anonymous Suggestion</button>
+      <div id="suggestStatusMsg" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-top:10px; text-align:center;">✅ Thank you! Your suggestion has been sent to the QuestATL team.</div>
     </div>
-    <div style="text-align:center; font-size:11px; color:#64748b; margin-top:10px;">
-      &copy; 2026 QuestATL.com &bull; Interactive City Scavenger Hunts
-    </div>
+    <div style="text-align:center; font-size:11px; color:#64748b; margin-top:10px;">&copy; 2026 QuestATL.com &bull; Interactive City Scavenger Hunts</div>
   </section>
 
-  <!-- Post-Clue Celebration, Optional History Trivia & VIP Perk Modal -->
   <div class="modal-overlay" id="clueSolvedModal">
     <div class="modal-box" style="border-color:#10b981;">
       <div style="font-size:40px; margin-bottom:6px;">🎉</div>
       <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:8px;" id="solvedStopBadge">STOP UNLOCKED</div>
-      <h3 style="font-size:21px; font-weight:900; color:#ffffff; margin-bottom:10px;" id="solvedStopTitle">Correct Answer!</h3>
+      <h3 style="font-size:21px; font-weight:900; color:#fff; margin-bottom:10px;" id="solvedStopTitle">Correct Answer!</h3>
       <div id="solvedStopTriviaBox" style="display:none; background:#090d16; border:1px solid rgba(245,158,11,0.4); border-radius:14px; padding:12px 14px; margin-bottom:14px; text-align:left;">
-        <div style="font-size:10px; font-weight:900; color:#fcd34d; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px;">📜 Local History &amp; Trivia</div>
+        <div style="font-size:10px; font-weight:900; color:#fcd34d; text-transform:uppercase; margin-bottom:4px;">📜 Local History &amp; Trivia</div>
         <div style="font-size:13px; color:#e2e8f0; line-height:1.5;" id="solvedStopTriviaText"></div>
       </div>
       <div id="solvedStopVipBox" style="display:none; background:rgba(16,185,129,0.12); border:1px solid #10b981; border-radius:14px; padding:12px; margin-bottom:14px;">
         <div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🎁 Partner VIP Perk Unlocked!</div>
-        <div style="font-size:15px; font-weight:900; color:#ffffff; margin-top:2px;" id="solvedVipShop"></div>
+        <div style="font-size:15px; font-weight:900; color:#fff; margin-top:2px;" id="solvedVipShop"></div>
         <div style="font-size:12px; color:#fcd34d; margin-bottom:10px;" id="solvedVipPerk"></div>
         <button class="btn-secondary" style="width:100%; border-color:#10b981; color:#34d399;" id="solvedVipBtn">Open Live VIP Voucher</button>
       </div>
@@ -189,11 +106,10 @@
     </div>
   </div>
 
-  <!-- VIP Sponsor Voucher Modal (With Countdown & Race Clock Pause) -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box" style="border-color:#10b981;">
       <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:10px;">🎁 OFFICIAL QUESTATL VIP VOUCHER</div>
-      <h3 style="font-size:22px; font-weight:900; color:#ffffff; margin-bottom:6px;" id="vipModalShopTitle">Partner Shop</h3>
+      <h3 style="font-size:22px; font-weight:900; color:#fff; margin-bottom:6px;" id="vipModalShopTitle">Partner Shop</h3>
       <p style="font-size:15px; font-weight:700; color:#fcd34d; margin-bottom:14px;" id="vipModalPerkText">Special Offer</p>
       <div style="background:#090d16; border:1px dashed #10b981; border-radius:12px; padding:12px; margin-bottom:16px; font-size:12px; color:#cbd5e1;">
         Show this live screen to the cashier at checkout!<br/>
@@ -205,7 +121,6 @@
     </div>
   </div>
 
-  <!-- Rules Modal -->
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-box">
       <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:10px;">🧭 How QuestATL Works</h3>
@@ -217,7 +132,6 @@
     </div>
   </div>
 
-  <!-- Partner Inquiry Modal -->
   <div class="modal-overlay" id="partnerInfoModal">
     <div class="modal-box">
       <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🤝 Local Business Partners</h3>
@@ -234,11 +148,10 @@
     </div>
   </div>
 
-  <!-- Secret 5-Tap Admin Demo Modal -->
   <div class="modal-overlay" id="adminDemoModal">
     <div class="modal-box">
       <h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">⚡ Partner &amp; Admin Demo Control</h3>
-      <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Tap any theme below to immediately preview it on screen, or jump to any stop pulled from your Google Sheet:</p>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Tap any theme below to preview it on screen, or jump to any stop pulled from your Google Sheet:</p>
       <div style="text-align:left; margin-bottom:12px;">
         <label style="font-size:11px; font-weight:800; color:#94a3b8;">PREVIEW MONTHLY THEME:</label>
         <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">
@@ -257,17 +170,9 @@
     // ⬇️ PASTE YOUR LIVE GOOGLE APPS SCRIPT /exec URL RIGHT HERE ⬇️
     var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
 
-    var STORAGE_KEY_SESSION = "questatl_active_session_v6";
+    var STORAGE_KEY_SESSION = "questatl_active_session_v7";
     var STORAGE_KEY_DEVICE = "questatl_device_id_v1";
-
-    var GLOBAL_CONFIG = {
-      hintPenaltySeconds: 120,
-      skipPenaltySeconds: 300,
-      vipVoucherTimerMinutes: 5,
-      announcementBanner: "",
-      bannerUrl: "",
-      rulesText: ""
-    };
+    var GLOBAL_CONFIG = { hintPenaltySeconds: 120, skipPenaltySeconds: 300, vipVoucherTimerMinutes: 5, announcementBanner: "", bannerUrl: "", rulesText: "" };
 
     var MONTHLY_THEMES = {
       october:  { activeMonths: "10", primary: "#f97316", bgTop: "#2e1065", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
@@ -276,50 +181,22 @@
       default:  { activeMonths: "1,2,3,4,5,6,7,8,9", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" }
     };
 
-    var CITIES = [];
-    var ALL_DATABASE_CLUES = [];
-    var clues = [];
-    var liveRankings = [];
-    var vipClaimCounts = {};
-
-    var isLoadingDatabase = true;
-    var databaseErrorMsg = "";
-    var activeCityId = "lawrenceville";
-    var huntStarted = false;
-    var huntCompleted = false;
-    var currentStopIndex = 0;
-    var activeGameTab = "clue";
-    var leaderboardFilter = "month";
-    var teamName = "";
-    var referralSource = "Direct";
-    var startTimeMs = 0;
-    var lastStopTimestampMs = 0;
-    var elapsedSeconds = 0;
-    var hintsUsedCount = 0;
-    var skipsUsedCount = 0;
-    var hintRevealedForStop = {};
-    var vipPauseUsedForShop = {};
-    var isTimerPausedForVip = false;
-    var vipPauseStartedMs = 0;
-    var stopSplitLogs = [];
-    var gpsVerifiedCount = 0;
-    var victoryClaimCode = "";
-    var timerInterval = null;
-    var vipClockInterval = null;
-    var adminTapCount = 0;
-    var adminModeUnlocked = false;
-    var manualThemeOverride = null;
-    var soundMuted = false;
-
+    var CITIES = [], ALL_DATABASE_CLUES = [], clues = [], liveRankings = [], vipClaimCounts = {};
+    var isLoadingDatabase = true, databaseErrorMsg = "", activeCityId = "lawrenceville";
+    var huntStarted = false, huntCompleted = false, currentStopIndex = 0, activeGameTab = "clue", leaderboardFilter = "month";
+    var teamName = "", referralSource = "Direct", startTimeMs = 0, lastStopTimestampMs = 0, elapsedSeconds = 0;
+    var hintsUsedCount = 0, skipsUsedCount = 0, hintRevealedForStop = {}, vipPauseUsedForShop = {};
+    var isTimerPausedForVip = false, vipPauseStartedMs = 0, stopSplitLogs = [], gpsVerifiedCount = 0, victoryClaimCode = "";
+    var timerInterval = null, vipClockInterval = null, adminTapCount = 0, adminModeUnlocked = false, manualThemeOverride = null, soundMuted = false;
     var mapZoom = 1, mapPanX = 0, mapPanY = 0, isDraggingMap = false, dragStartX = 0, dragStartY = 0;
 
     function getOrCreateDeviceId() {
       try {
-        var existing = localStorage.getItem(STORAGE_KEY_DEVICE);
-        if (existing) return existing;
-        var created = "QDEV-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-        localStorage.setItem(STORAGE_KEY_DEVICE, created);
-        return created;
+        var ex = localStorage.getItem(STORAGE_KEY_DEVICE);
+        if (ex) return ex;
+        var id = "QDEV-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+        localStorage.setItem(STORAGE_KEY_DEVICE, id);
+        return id;
       } catch (e) { return "QDEV-ANON"; }
     }
 
@@ -330,45 +207,39 @@
       });
     }
 
+    function isTrailPublicLive(trailObj) {
+      if (!trailObj) return false;
+      var hasClues = getCluesForTrail(trailObj.id).length > 0;
+      if (!hasClues) return false;
+      var st = String(trailObj.status || trailObj.status_default || trailObj.statusdefault || "LIVE").trim().toUpperCase();
+      // If it's the primary city row (e.g. 'lawrenceville') and has clues, or status is LIVE, mark it live!
+      var isPrimaryCityRow = String(trailObj.id || "").indexOf("_") === -1;
+      return st === "LIVE" || isPrimaryCityRow;
+    }
+
     function isTrailPlayable(trailObj) {
       if (!trailObj) return false;
       if (getCluesForTrail(trailObj.id).length === 0) return false;
-      return String(trailObj.status || "").toUpperCase() === "LIVE" || adminModeUnlocked;
-    }
-
-    function isTrailPublicLive(trailObj) {
-      if (!trailObj) return false;
-      return String(trailObj.status || "").toUpperCase() === "LIVE" && getCluesForTrail(trailObj.id).length > 0;
+      return isTrailPublicLive(trailObj) || adminModeUnlocked;
     }
 
     function playGameTone(type) {
       if (soundMuted) return;
       try {
         var ctx = new (window.AudioContext || window.webkitAudioContext)();
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
+        var osc = ctx.createOscillator(), gain = ctx.createGain();
         osc.connect(gain); gain.connect(ctx.destination);
         var now = ctx.currentTime;
         if (type === "solve") {
-          osc.frequency.setValueAtTime(523.25, now);
-          osc.frequency.setValueAtTime(659.25, now + 0.1);
-          osc.frequency.setValueAtTime(783.99, now + 0.2);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2);
+          gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
           osc.start(now); osc.stop(now + 0.45);
         } else if (type === "victory") {
-          osc.frequency.setValueAtTime(440, now);
-          osc.frequency.setValueAtTime(554.37, now + 0.12);
-          osc.frequency.setValueAtTime(659.25, now + 0.24);
-          osc.frequency.setValueAtTime(880, now + 0.36);
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+          osc.frequency.setValueAtTime(440, now); osc.frequency.setValueAtTime(554.37, now + 0.12); osc.frequency.setValueAtTime(659.25, now + 0.24); osc.frequency.setValueAtTime(880, now + 0.36);
+          gain.gain.setValueAtTime(0.18, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
           osc.start(now); osc.stop(now + 0.7);
         }
       } catch (e) {}
-      if (navigator.vibrate) {
-        try { navigator.vibrate(type === "victory" ? [100, 50, 150] : 80); } catch (e) {}
-      }
     }
 
     function toggleSoundMute() {
@@ -378,17 +249,15 @@
     }
 
     function saveActiveSession() {
-      if (!huntStarted || huntCompleted) {
-        try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
-        return;
-      }
-      var state = {
-        activeCityId: activeCityId, teamName: teamName, referralSource: referralSource,
-        currentStopIndex: currentStopIndex, startTimeMs: startTimeMs, lastStopTimestampMs: lastStopTimestampMs,
-        hintsUsedCount: hintsUsedCount, skipsUsedCount: skipsUsedCount, hintRevealedForStop: hintRevealedForStop,
-        vipPauseUsedForShop: vipPauseUsedForShop, stopSplitLogs: stopSplitLogs, gpsVerifiedCount: gpsVerifiedCount
-      };
-      try { localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(state)); } catch (e) {}
+      if (!huntStarted || huntCompleted) { try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {} return; }
+      try {
+        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify({
+          activeCityId: activeCityId, teamName: teamName, referralSource: referralSource, currentStopIndex: currentStopIndex,
+          startTimeMs: startTimeMs, lastStopTimestampMs: lastStopTimestampMs, hintsUsedCount: hintsUsedCount,
+          skipsUsedCount: skipsUsedCount, hintRevealedForStop: hintRevealedForStop, vipPauseUsedForShop: vipPauseUsedForShop,
+          stopSplitLogs: stopSplitLogs, gpsVerifiedCount: gpsVerifiedCount
+        }));
+      } catch (e) {}
     }
 
     function restoreSavedSession() {
@@ -396,23 +265,15 @@
         var raw = localStorage.getItem(STORAGE_KEY_SESSION);
         if (!raw) return;
         var s = JSON.parse(raw);
-        if (!s || !s.teamName || !s.startTimeMs) return;
-        if (Date.now() - s.startTimeMs > 12 * 3600 * 1000) {
-          localStorage.removeItem(STORAGE_KEY_SESSION);
-          return;
+        if (!s || !s.teamName || !s.startTimeMs || (Date.now() - s.startTimeMs > 12 * 3600 * 1000)) {
+          localStorage.removeItem(STORAGE_KEY_SESSION); return;
         }
-        activeCityId = s.activeCityId || "lawrenceville";
-        teamName = s.teamName;
-        referralSource = s.referralSource || "Direct";
-        currentStopIndex = Number(s.currentStopIndex) || 0;
-        startTimeMs = Number(s.startTimeMs);
+        activeCityId = s.activeCityId || "lawrenceville"; teamName = s.teamName; referralSource = s.referralSource || "Direct";
+        currentStopIndex = Number(s.currentStopIndex) || 0; startTimeMs = Number(s.startTimeMs);
         lastStopTimestampMs = Number(s.lastStopTimestampMs) || startTimeMs;
-        hintsUsedCount = Number(s.hintsUsedCount) || 0;
-        skipsUsedCount = Number(s.skipsUsedCount) || 0;
-        hintRevealedForStop = s.hintRevealedForStop || {};
-        vipPauseUsedForShop = s.vipPauseUsedForShop || {};
-        stopSplitLogs = Array.isArray(s.stopSplitLogs) ? s.stopSplitLogs : [];
-        gpsVerifiedCount = Number(s.gpsVerifiedCount) || 0;
+        hintsUsedCount = Number(s.hintsUsedCount) || 0; skipsUsedCount = Number(s.skipsUsedCount) || 0;
+        hintRevealedForStop = s.hintRevealedForStop || {}; vipPauseUsedForShop = s.vipPauseUsedForShop || {};
+        stopSplitLogs = Array.isArray(s.stopSplitLogs) ? s.stopSplitLogs : []; gpsVerifiedCount = Number(s.gpsVerifiedCount) || 0;
         huntStarted = true; huntCompleted = false;
         startLiveTimerLoop();
       } catch (e) {}
@@ -430,18 +291,13 @@
       if (!navigator.geolocation || !stop || !stop.lat || !stop.lng) return;
       try {
         navigator.geolocation.getCurrentPosition(function(pos) {
-          var dMeters = computeHaversineMeters(pos.coords.latitude, pos.coords.longitude, stop.lat, stop.lng);
+          var R = 6371000, toRad = Math.PI / 180;
+          var dLat = (stop.lat - pos.coords.latitude) * toRad, dLon = (stop.lng - pos.coords.longitude) * toRad;
+          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(pos.coords.latitude * toRad) * Math.cos(stop.lat * toRad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          var dMeters = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           if (dMeters <= 160) { gpsVerifiedCount++; saveActiveSession(); }
         }, function() {}, { timeout: 4000, maximumAge: 60000 });
       } catch (e) {}
-    }
-
-    function computeHaversineMeters(lat1, lon1, lat2, lon2) {
-      var R = 6371000, toRad = Math.PI / 180;
-      var dLat = (lat2 - lat1) * toRad, dLon = (lon2 - lon1) * toRad;
-      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
     function autoDetectMonthlyTheme() {
@@ -473,43 +329,27 @@
       renderMainContent();
 
       fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
-        .then(function(res) {
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          return res.json();
-        })
+        .then(function(res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
         .then(function(json) {
           if (!json || json.status !== "ok") throw new Error("Invalid JSON payload from Google Sheet.");
 
           if (json.config) {
-            if (json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) {
-              GLOBAL_CONFIG.hintPenaltySeconds = Number(json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) || 120;
-            }
-            if (json.config.skippenaltyseconds || json.config.skip_penalty_seconds) {
-              GLOBAL_CONFIG.skipPenaltySeconds = Number(json.config.skippenaltyseconds || json.config.skip_penalty_seconds) || 300;
-            }
-            if (json.config.vipvouchertimerminutes || json.config.vip_voucher_timer_minutes) {
-              GLOBAL_CONFIG.vipVoucherTimerMinutes = Number(json.config.vipvouchertimerminutes || json.config.vip_voucher_timer_minutes) || 5;
-            }
+            if (json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) GLOBAL_CONFIG.hintPenaltySeconds = Number(json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) || 120;
+            if (json.config.skippenaltyseconds || json.config.skip_penalty_seconds) GLOBAL_CONFIG.skipPenaltySeconds = Number(json.config.skippenaltyseconds || json.config.skip_penalty_seconds) || 300;
+            if (json.config.vipvouchertimerminutes || json.config.vip_voucher_timer_minutes) GLOBAL_CONFIG.vipVoucherTimerMinutes = Number(json.config.vipvouchertimerminutes || json.config.vip_voucher_timer_minutes) || 5;
             var bannerTxt = String(json.config.announcementbanner || json.config.announcement_banner || "").trim();
             var bannerEl = document.getElementById("announcementBanner");
             if (bannerEl) {
-              if (bannerTxt) {
-                bannerEl.style.display = "block";
-                bannerEl.innerText = "📣 " + bannerTxt;
-                bannerEl.href = String(json.config.bannerurl || json.config.banner_url || "#");
-              } else { bannerEl.style.display = "none"; }
+              if (bannerTxt) { bannerEl.style.display = "block"; bannerEl.innerText = "📣 " + bannerTxt; bannerEl.href = String(json.config.bannerurl || json.config.banner_url || "#"); }
+              else { bannerEl.style.display = "none"; }
             }
             var rTxt = String(json.config.rulestext || json.config.rules_text || "").trim();
-            if (rTxt) {
-              var rEl = document.getElementById("rulesModalText");
-              if (rEl) rEl.innerText = rTxt;
-            }
+            if (rTxt && document.getElementById("rulesModalText")) document.getElementById("rulesModalText").innerText = rTxt;
           }
 
           if (json.themes && json.themes.length > 0) {
             for (var ti = 0; ti < json.themes.length; ti++) {
-              var st = json.themes[ti];
-              var id = String(st.themeId || "").toLowerCase();
+              var st = json.themes[ti], id = String(st.themeId || "").toLowerCase();
               if (!id) continue;
               var base = MONTHLY_THEMES[id] || { activeMonths: "", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" };
               if (st.activeMonths) base.activeMonths = st.activeMonths;
@@ -532,9 +372,7 @@
           if (Array.isArray(json.cities) && json.cities.length > 0) {
             CITIES = json.cities;
           } else {
-            CITIES = [
-              { id: "lawrenceville", name: "Lawrenceville", status: "LIVE", tagline: "Historic Downtown Square & Lawn Trail", distanceMiles: "1.1 Miles", estTime: "35–50 Mins", trailTags: "🐕 Dog & Stroller Friendly", startLabel: "START: COURTHOUSE", startLat: 33.95675, startLng: -83.98795, startMapX: 49, startMapY: 26, mapStyle: "lawrenceville" }
-            ];
+            CITIES = [{ id: "lawrenceville", name: "Lawrenceville", status: "LIVE", tagline: "Historic Downtown Square & Lawn Trail", distanceMiles: "1.1 Miles", estTime: "35–50 Mins", trailTags: "🐕 Dog & Stroller Friendly", startLabel: "START: COURTHOUSE", startLat: 33.95675, startLng: -83.98795, startMapX: 49, startMapY: 26, mapStyle: "lawrenceville" }];
           }
 
           var currentTrailObj = CITIES.find(function(c) { return c.id === activeCityId; });
@@ -554,12 +392,9 @@
 
     function trackQuestEvent(payload) {
       if (!GOOGLE_SHEET_API_URL) return;
-      fetch(GOOGLE_SHEET_API_URL, {
-        method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(payload)
-      }).catch(function() {});
+      fetch(GOOGLE_SHEET_API_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(payload) }).catch(function() {});
     }
 
-    // Group trails by City Name so multiple hunts in the same city share ONE top tab
     function renderCitySelector() {
       var bar = document.getElementById("citySelectorBar");
       var activeTrailObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
@@ -567,8 +402,7 @@
 
       var cityGroups = [], groupMap = {};
       for (var i = 0; i < CITIES.length; i++) {
-        var c = CITIES[i];
-        var key = String(c.name || c.id).trim().toLowerCase();
+        var c = CITIES[i], key = String(c.name || c.id).trim().toLowerCase();
         if (!groupMap[key]) {
           groupMap[key] = { cityName: c.name, normName: key, trails: [], hasPublicLiveTrail: false };
           cityGroups.push(groupMap[key]);
@@ -583,10 +417,7 @@
         var isCurrentCityGroup = grp.normName === activeCityNameNorm ? "active" : "";
         var badge = grp.hasPublicLiveTrail ? '<span class="badge-live">LIVE</span>' : '<span class="badge-soon">SOON</span>';
         var targetTrail = grp.trails.find(function(t) { return isTrailPlayable(t); }) || grp.trails[0];
-
-        html += '<button class="city-pill ' + isCurrentCityGroup + '" onclick="selectCityGroup(\'' + escapeQuotes(grp.normName) + '\', \'' + escapeQuotes(targetTrail.id) + '\')">' +
-                  '<span>📍 ' + escapeHtml(grp.cityName) + '</span>' + badge +
-                '</button>';
+        html += '<button class="city-pill ' + isCurrentCityGroup + '" onclick="selectCityGroup(\'' + escapeQuotes(grp.normName) + '\', \'' + escapeQuotes(targetTrail.id) + '\')"><span>📍 ' + escapeHtml(grp.cityName) + '</span>' + badge + '</button>';
       }
       bar.innerHTML = html;
     }
@@ -602,65 +433,33 @@
       if (huntStarted && !huntCompleted && trailId !== activeCityId) {
         if (!confirm("Switch trails and reset your current quest timer?")) return;
       }
-      activeCityId = trailId;
-      huntStarted = false; huntCompleted = false;
+      activeCityId = trailId; huntStarted = false; huntCompleted = false;
       if (timerInterval) clearInterval(timerInterval);
       try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
       clues = getCluesForTrail(trailId);
-      renderCitySelector();
-      renderMainContent();
+      renderCitySelector(); renderMainContent();
     }
 
     function renderMainContent() {
       var container = document.getElementById("mainContent");
-
       if (isLoadingDatabase) {
-        container.innerHTML =
-          '<div class="card" style="text-align:center; padding:36px 20px;">' +
-            '<div style="font-size:38px; margin-bottom:10px;">⏳</div>' +
-            '<h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Syncing Live Trail Database...</h2>' +
-            '<p style="font-size:13px; color:#94a3b8;">Loading live riddles, VIP shop perks, and rankings from Google Sheets.</p>' +
-          '</div>';
+        container.innerHTML = '<div class="card" style="text-align:center; padding:36px 20px;"><div style="font-size:38px; margin-bottom:10px;">⏳</div><h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Syncing Live Trail Database...</h2><p style="font-size:13px; color:#94a3b8;">Loading live riddles, VIP shop perks, and rankings from Google Sheets.</p></div>';
         return;
       }
-
       if (databaseErrorMsg || ALL_DATABASE_CLUES.length === 0) {
-        container.innerHTML =
-          '<div class="card" style="text-align:center; padding:28px 20px; border-color:#ef4444;">' +
-            '<div style="font-size:38px; margin-bottom:10px;">⚠️</div>' +
-            '<h2 style="font-size:19px; font-weight:900; color:#fca5a5; margin-bottom:8px;">Database Sync Needed</h2>' +
-            '<p style="font-size:13px; color:#cbd5e1; margin-bottom:14px; line-height:1.5;">' +
-              (databaseErrorMsg
-                ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure GOOGLE_SHEET_API_URL has your exact <strong>/exec</strong> URL and deployment access is set to <strong>Anyone</strong>.'
-                : 'Connected to your Google Sheet, but 0 clues were returned! Make sure your tab is named <strong>Clues</strong> or run <strong>setupDatabaseTabs</strong> in Apps Script.') +
-            '</p>' +
-            '<button class="btn-primary" onclick="fetchLiveDatabase()">🔄 Retry Database Sync</button>' +
-          '</div>';
+        container.innerHTML = '<div class="card" style="text-align:center; padding:28px 20px; border-color:#ef4444;"><div style="font-size:38px; margin-bottom:10px;">⚠️</div><h2 style="font-size:19px; font-weight:900; color:#fca5a5; margin-bottom:8px;">Database Sync Needed</h2><p style="font-size:13px; color:#cbd5e1; margin-bottom:14px; line-height:1.5;">' + (databaseErrorMsg ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure GOOGLE_SHEET_API_URL has your exact <strong>/exec</strong> URL.' : 'Connected to your Google Sheet, but 0 clues were returned!') + '</p><button class="btn-primary" onclick="fetchLiveDatabase()">🔄 Retry Database Sync</button></div>';
         return;
       }
 
       var cityObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
-
       if (!isTrailPlayable(cityObj)) {
-        var siblingLive = CITIES.find(function(c) {
-          return String(c.name || "").trim().toLowerCase() === String(cityObj.name || "").trim().toLowerCase() && isTrailPlayable(c);
-        });
-        if (siblingLive) {
-          activeCityId = siblingLive.id;
-          cityObj = siblingLive;
-          clues = getCluesForTrail(activeCityId);
-        }
+        var siblingLive = CITIES.find(function(c) { return String(c.name || "").trim().toLowerCase() === String(cityObj.name || "").trim().toLowerCase() && isTrailPlayable(c); });
+        if (siblingLive) { activeCityId = siblingLive.id; cityObj = siblingLive; clues = getCluesForTrail(activeCityId); }
       }
 
       if (!isTrailPlayable(cityObj)) {
         var firstLiveAnyCity = CITIES.find(function(c) { return isTrailPlayable(c); }) || CITIES[0];
-        container.innerHTML =
-          '<div class="card" style="text-align:center; padding:32px 20px;">' +
-            '<div style="font-size:42px; margin-bottom:10px;">🚧</div>' +
-            '<h2 style="font-size:22px; font-weight:900; color:#fcd34d; margin-bottom:8px;">' + escapeHtml(cityObj.name) + ' Trail Coming Soon!</h2>' +
-            '<p style="font-size:13px; color:#94a3b8; margin-bottom:18px;">We are currently mapping out riddles and partnering with local businesses in ' + escapeHtml(cityObj.name) + '.</p>' +
-            '<button class="btn-primary" onclick="selectCity(\'' + escapeQuotes(firstLiveAnyCity.id) + '\')">Play Live ' + escapeHtml(firstLiveAnyCity.name) + ' Trail Now</button>' +
-          '</div>';
+        container.innerHTML = '<div class="card" style="text-align:center; padding:32px 20px;"><div style="font-size:42px; margin-bottom:10px;">🚧</div><h2 style="font-size:22px; font-weight:900; color:#fcd34d; margin-bottom:8px;">' + escapeHtml(cityObj.name) + ' Trail Coming Soon!</h2><p style="font-size:13px; color:#94a3b8; margin-bottom:18px;">We are currently mapping out riddles and partnering with local businesses in ' + escapeHtml(cityObj.name) + '.</p><button class="btn-primary" onclick="selectCity(\'' + escapeQuotes(firstLiveAnyCity.id) + '\')">Play Live ' + escapeHtml(firstLiveAnyCity.name) + ' Trail Now</button></div>';
         return;
       }
 
@@ -671,45 +470,23 @@
 
     function renderStartLobby(container, cityObj) {
       var normCityName = String(cityObj.name || "").trim().toLowerCase();
-      var sameCityTrails = CITIES.filter(function(c) {
-        return String(c.name || "").trim().toLowerCase() === normCityName && isTrailPlayable(c);
-      });
+      var sameCityTrails = CITIES.filter(function(c) { return String(c.name || "").trim().toLowerCase() === normCityName && isTrailPlayable(c); });
 
       var multiTrailSelectorHtml = "";
       if (sameCityTrails.length > 1) {
         var trailButtons = "";
         for (var t = 0; t < sameCityTrails.length; t++) {
-          var tr = sameCityTrails[t];
-          var isSelected = tr.id === cityObj.id ? "active" : "";
+          var tr = sameCityTrails[t], isSelected = tr.id === cityObj.id ? "active" : "";
           var trClueCount = getCluesForTrail(tr.id).length;
-          var soonAdminBadge = String(tr.status || "").toUpperCase() !== "LIVE"
-            ? ' <span style="background:#ef4444; color:#fff; font-size:9px; padding:2px 6px; border-radius:99px; font-weight:900;">ADMIN PREVIEW (SOON)</span>'
-            : '';
-
-          trailButtons +=
-            '<button class="trail-option-btn ' + isSelected + '" onclick="selectCity(\'' + escapeQuotes(tr.id) + '\')">' +
-              '<div>' +
-                '<div style="font-size:13px; font-weight:900; color:' + (isSelected ? '#fcd34d' : '#f8fafc') + ';">' +
-                  (isSelected ? '🔘 ' : '⚪ ') + escapeHtml(tr.tagline || ("Trail #" + (t + 1))) + soonAdminBadge +
-                '</div>' +
-                '<div style="font-size:11px; color:#94a3b8; margin-top:2px;">' +
-                  trClueCount + ' Stops &bull; ' + escapeHtml(tr.distanceMiles || "1.1 Miles") + ' &bull; ' + escapeHtml(tr.estTime || "35–50 Mins") +
-                '</div>' +
-              '</div>' +
-              '<span style="font-size:11px; font-weight:800; color:' + (isSelected ? '#10b981' : '#64748b') + ';">' + (isSelected ? 'ACTIVE' : 'Select ➔') + '</span>' +
-            '</button>';
+          var soonBadge = !isTrailPublicLive(tr) ? ' <span style="background:#ef4444; color:#fff; font-size:9px; padding:2px 6px; border-radius:99px; font-weight:900;">ADMIN PREVIEW</span>' : '';
+          trailButtons += '<button class="trail-option-btn ' + isSelected + '" onclick="selectCity(\'' + escapeQuotes(tr.id) + '\')"><div><div style="font-size:13px; font-weight:900; color:' + (isSelected ? '#fcd34d' : '#f8fafc') + ';">' + (isSelected ? '🔘 ' : '⚪ ') + escapeHtml(tr.tagline || ("Trail #" + (t + 1))) + soonBadge + '</div><div style="font-size:11px; color:#94a3b8; margin-top:2px;">' + trClueCount + ' Stops &bull; ' + escapeHtml(tr.distanceMiles || "1.1 Miles") + ' &bull; ' + escapeHtml(tr.estTime || "35–50 Mins") + '</div></div><span style="font-size:11px; font-weight:800; color:' + (isSelected ? '#10b981' : '#64748b') + ';">' + (isSelected ? 'ACTIVE' : 'Select ➔') + '</span></button>';
         }
-        multiTrailSelectorHtml =
-          '<div class="trail-selector-box">' +
-            '<div style="font-size:11px; font-weight:900; color:#fcd34d; text-transform:uppercase; letter-spacing:0.4px;">🗺️ Choose Your ' + escapeHtml(cityObj.name) + ' Trail (' + sameCityTrails.length + ' Available):</div>' +
-            trailButtons +
-          '</div>';
+        multiTrailSelectorHtml = '<div class="trail-selector-box"><div style="font-size:11px; font-weight:900; color:#fcd34d; text-transform:uppercase;">🗺️ Choose Your ' + escapeHtml(cityObj.name) + ' Trail (' + sameCityTrails.length + ' Available):</div>' + trailButtons + '</div>';
       }
 
       var partnerShops = [];
       for (var i = 0; i < clues.length; i++) {
-        var sName = clues[i].sponsorName;
-        if (sName && partnerShops.indexOf(sName) === -1) partnerShops.push(sName);
+        if (clues[i].sponsorName && partnerShops.indexOf(clues[i].sponsorName) === -1) partnerShops.push(clues[i].sponsorName);
       }
 
       var sponsorPill = partnerShops.length > 0
@@ -719,12 +496,8 @@
       var partnerDropdownHtml = "";
       if (partnerShops.length > 0) {
         var opts = '<option value="Direct">Historic Courthouse / General QR</option>';
-        for (var p = 0; p < partnerShops.length; p++) {
-          opts += '<option value="' + escapeQuotes(partnerShops[p]) + '">📍 ' + escapeHtml(partnerShops[p]) + ' Window QR</option>';
-        }
-        partnerDropdownHtml =
-          '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">STARTING AT A PARTNER SHOP WINDOW? (OPTIONAL):</label>' +
-          '<select id="referralSelectInput" style="margin-bottom:12px;">' + opts + '</select>';
+        for (var p = 0; p < partnerShops.length; p++) opts += '<option value="' + escapeQuotes(partnerShops[p]) + '">📍 ' + escapeHtml(partnerShops[p]) + ' Window QR</option>';
+        partnerDropdownHtml = '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">STARTING AT A PARTNER SHOP WINDOW? (OPTIONAL):</label><select id="referralSelectInput" style="margin-bottom:12px;">' + opts + '</select>';
       }
 
       container.innerHTML =
@@ -734,16 +507,14 @@
             '<span style="background:rgba(245,158,11,0.18); color:#fcd34d; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px;">🔥 ' + clues.length + ' INTERACTIVE STOPS</span>' +
             sponsorPill +
           '</div>' +
-          '<h2 style="font-size:24px; font-weight:900; color:#ffffff; margin-bottom:3px;">' + escapeHtml(cityObj.name) + ' Adventure Trail</h2>' +
+          '<h2 style="font-size:24px; font-weight:900; color:#fff; margin-bottom:3px;">' + escapeHtml(cityObj.name) + ' Adventure Trail</h2>' +
           '<div style="font-size:13px; font-weight:800; color:#fcd34d; margin-bottom:10px;">🧭 ' + escapeHtml(cityObj.tagline || "Interactive Downtown Trail") + '</div>' +
           '<div style="display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color:#fcd34d; font-weight:700; margin-bottom:12px;">' +
             '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">👟 ' + escapeHtml(cityObj.distanceMiles || "1.1 Miles") + '</span>' +
             '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">⏱️ ' + escapeHtml(cityObj.estTime || "35–50 Mins") + '</span>' +
             '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">' + escapeHtml(cityObj.trailTags || "🐕 Dog Friendly") + '</span>' +
           '</div>' +
-          '<p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">' +
-            'Solve real-world riddles across downtown ' + escapeHtml(cityObj.name) + ', unlock map pins and secret VIP perks as you solve each clue, and race the live leaderboard clock!' +
-          '</p>' +
+          '<p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">Solve real-world riddles across downtown ' + escapeHtml(cityObj.name) + ', unlock map pins and secret VIP perks as you solve each clue, and race the live leaderboard clock!</p>' +
           '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:14px; margin-bottom:14px;">' +
             '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">ENTER A UNIQUE TEAM NAME:</label>' +
             '<input type="text" id="teamNameInput" placeholder="e.g. Lawrenceville Legends" value="' + escapeQuotes(teamName) + '" style="margin-bottom:12px;" />' +
@@ -759,46 +530,37 @@
     }
 
     function containsProfanity(text) {
-      var badWords = ["fuck", "shit", "bitch", "asshole", "cunt", "dick", "pussy", "nigger", "faggot", "slut", "whore"];
-      var lower = String(text || "").toLowerCase();
-      for (var i = 0; i < badWords.length; i++) {
-        if (lower.indexOf(badWords[i]) !== -1) return true;
-      }
+      var bad = ["fuck", "shit", "bitch", "asshole", "cunt", "dick", "pussy", "nigger", "faggot", "slut", "whore"];
+      var low = String(text || "").toLowerCase();
+      for (var i = 0; i < bad.length; i++) if (low.indexOf(bad[i]) !== -1) return true;
       return false;
     }
 
     function isDuplicateTeamName(nameToCheck) {
       var clean = String(nameToCheck || "").trim().toLowerCase();
       return liveRankings.some(function(r) {
-        var sameCity = !r.city || r.city.toLowerCase() === activeCityId;
-        return sameCity && String(r.team || "").trim().toLowerCase() === clean;
+        return (!r.city || r.city.toLowerCase() === activeCityId) && String(r.team || "").trim().toLowerCase() === clean;
       });
     }
 
     function handleStartQuestClick() {
-      var inputEl = document.getElementById("teamNameInput");
-      var waiverEl = document.getElementById("waiverCheckbox");
-      var refEl = document.getElementById("referralSelectInput");
+      var inputEl = document.getElementById("teamNameInput"), waiverEl = document.getElementById("waiverCheckbox"), refEl = document.getElementById("referralSelectInput");
       var entered = inputEl ? inputEl.value.trim() : "";
-
       if (!entered) { alert("Please enter a Team Name before starting your quest!"); return; }
-      if (containsProfanity(entered)) { alert("Please choose a family-friendly Team Name for the public leaderboard!"); return; }
+      if (containsProfanity(entered)) { alert("Please choose a family-friendly Team Name!"); return; }
       if (isDuplicateTeamName(entered)) { alert("That Team Name is already on the leaderboard! Please choose a unique Team Name."); return; }
       if (!waiverEl || !waiverEl.checked) { alert("Please check the Safety & Fair Play Agreement box to begin."); return; }
 
-      teamName = entered;
-      referralSource = refEl ? refEl.value : "Direct";
+      teamName = entered; referralSource = refEl ? refEl.value : "Direct";
       huntStarted = true; huntCompleted = false; currentStopIndex = 0; elapsedSeconds = 0;
       hintsUsedCount = 0; skipsUsedCount = 0; hintRevealedForStop = {};
       vipPauseUsedForShop = {}; isTimerPausedForVip = false;
       stopSplitLogs = []; gpsVerifiedCount = 0; victoryClaimCode = "";
-      activeGameTab = "clue";
-      startTimeMs = Date.now(); lastStopTimestampMs = startTimeMs;
+      activeGameTab = "clue"; startTimeMs = Date.now(); lastStopTimestampMs = startTimeMs;
 
       saveActiveSession();
       trackQuestEvent({ action: "start_team", city: activeCityId, team: teamName, referral: referralSource, deviceId: getOrCreateDeviceId() });
-      startLiveTimerLoop();
-      renderMainContent();
+      startLiveTimerLoop(); renderMainContent();
     }
 
     function startLiveTimerLoop() {
@@ -814,27 +576,17 @@
 
     function renderActiveHuntInterface(container, cityObj) {
       var stop = clues[currentStopIndex] || clues[0];
-      var progressPct = Math.round(((currentStopIndex) / clues.length) * 100);
+      var progressPct = Math.round((currentStopIndex / clues.length) * 100);
       var unlockedVipCount = 0;
-      for (var v = 0; v < currentStopIndex; v++) {
-        if (clues[v] && clues[v].sponsorName && clues[v].sponsorPerk) unlockedVipCount++;
-      }
+      for (var v = 0; v < currentStopIndex; v++) if (clues[v] && clues[v].sponsorName && clues[v].sponsorPerk) unlockedVipCount++;
 
       var headerHud =
         '<div class="card" style="padding:14px 16px; margin-bottom:12px;">' +
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
-            '<div>' +
-              '<div style="font-size:10px; font-weight:800; color:#94a3b8; text-transform:uppercase;">TEAM: ' + escapeHtml(teamName) + ' &bull; <span style="color:#f87171; cursor:pointer; text-decoration:underline;" onclick="abandonActiveSession()">Reset</span></div>' +
-              '<div style="font-size:14px; font-weight:900; color:#fcd34d;">Stop ' + (currentStopIndex + 1) + ' of ' + clues.length + '</div>' +
-            '</div>' +
-            '<div style="text-align:right;">' +
-              '<div style="font-size:10px; font-weight:800; color:#94a3b8;">TOTAL TIME</div>' +
-              '<div id="liveClockDisplay" style="font-size:20px; font-weight:900; color:#ffffff; font-variant-numeric:tabular-nums;">' + formatSeconds(elapsedSeconds) + '</div>' +
-            '</div>' +
+            '<div><div style="font-size:10px; font-weight:800; color:#94a3b8; text-transform:uppercase;">TEAM: ' + escapeHtml(teamName) + ' &bull; <span style="color:#f87171; cursor:pointer; text-decoration:underline;" onclick="abandonActiveSession()">Reset</span></div><div style="font-size:14px; font-weight:900; color:#fcd34d;">Stop ' + (currentStopIndex + 1) + ' of ' + clues.length + '</div></div>' +
+            '<div style="text-align:right;"><div style="font-size:10px; font-weight:800; color:#94a3b8;">TOTAL TIME</div><div id="liveClockDisplay" style="font-size:20px; font-weight:900; color:#fff; font-variant-numeric:tabular-nums;">' + formatSeconds(elapsedSeconds) + '</div></div>' +
           '</div>' +
-          '<div style="width:100%; height:7px; background:#090d16; border-radius:99px; overflow:hidden;">' +
-            '<div style="width:' + progressPct + '%; height:100%; background:linear-gradient(90deg,#f59e0b,#10b981); transition:width 0.3s;"></div>' +
-          '</div>' +
+          '<div style="width:100%; height:7px; background:#090d16; border-radius:99px; overflow:hidden;"><div style="width:' + progressPct + '%; height:100%; background:linear-gradient(90deg,#f59e0b,#10b981); transition:width 0.3s;"></div></div>' +
         '</div>';
 
       var tabsBar =
@@ -845,12 +597,7 @@
           '<button class="game-tab ' + (activeGameTab === "rankings" ? "active" : "") + '" onclick="switchTab(\'rankings\')">🏆 Ranks</button>' +
         '</div>';
 
-      var bodyHtml = "";
-      if (activeGameTab === "clue") bodyHtml = renderClueTabHtml(stop);
-      else if (activeGameTab === "map") bodyHtml = renderInteractiveSvgMapHtml(stop);
-      else if (activeGameTab === "vip") bodyHtml = renderVipPerksTabHtml();
-      else bodyHtml = renderLeaderboardCardHtml();
-
+      var bodyHtml = activeGameTab === "clue" ? renderClueTabHtml(stop) : (activeGameTab === "map" ? renderInteractiveSvgMapHtml(stop) : (activeGameTab === "vip" ? renderVipPerksTabHtml() : renderLeaderboardCardHtml()));
       container.innerHTML = headerHud + tabsBar + bodyHtml;
       if (activeGameTab === "map") attachSvgMapInteractions();
     }
@@ -859,14 +606,9 @@
 
     function renderClueTabHtml(stop) {
       var isHintShown = !!hintRevealedForStop[stop.number];
-      var hintMin = Math.round(GLOBAL_CONFIG.hintPenaltySeconds / 60);
-      var skipMin = Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60);
-      var optionalImageHtml = stop.imageUrl
-        ? '<img src="' + escapeQuotes(stop.imageUrl) + '" alt="Clue Visual" style="width:100%; max-height:200px; object-fit:cover; border-radius:12px; margin-bottom:12px; border:1px solid #334155;" />'
-        : '';
-      var skipButtonHtml = isHintShown
-        ? '<button class="btn-secondary" style="width:100%; margin-top:10px; border-color:#f87171; color:#fca5a5;" onclick="handleSkipStopClick()">⏭️ Landmark Blocked? Skip Stop (+' + skipMin + ':00 Penalty)</button>'
-        : '';
+      var hintMin = Math.round(GLOBAL_CONFIG.hintPenaltySeconds / 60), skipMin = Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60);
+      var optionalImageHtml = stop.imageUrl ? '<img src="' + escapeQuotes(stop.imageUrl) + '" alt="Clue Visual" style="width:100%; max-height:200px; object-fit:cover; border-radius:12px; margin-bottom:12px; border:1px solid #334155;" />' : '';
+      var skipButtonHtml = isHintShown ? '<button class="btn-secondary" style="width:100%; margin-top:10px; border-color:#f87171; color:#fca5a5;" onclick="handleSkipStopClick()">⏭️ Landmark Blocked? Skip Stop (+' + skipMin + ':00 Penalty)</button>' : '';
 
       return (
         '<div class="card">' +
@@ -887,27 +629,21 @@
     }
 
     function useClueHint(stopNumber) {
-      if (!hintRevealedForStop[stopNumber]) {
-        hintRevealedForStop[stopNumber] = true; hintsUsedCount++; saveActiveSession();
-      }
+      if (!hintRevealedForStop[stopNumber]) { hintRevealedForStop[stopNumber] = true; hintsUsedCount++; saveActiveSession(); }
       renderMainContent();
     }
 
     function handleSkipStopClick() {
       var skipMin = Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60);
       if (!confirm("Skip this stop and add a +" + skipMin + ":00 penalty to your timer?")) return;
-      skipsUsedCount++;
-      recordStopSplitTime(clues[currentStopIndex], true);
-      advanceToNextStopOrFinish(true);
+      skipsUsedCount++; recordStopSplitTime(clues[currentStopIndex], true); advanceToNextStopOrFinish(true);
     }
 
     function recordStopSplitTime(stop, wasSkipped) {
-      var now = Date.now();
-      var baseRef = lastStopTimestampMs || startTimeMs || now;
+      var now = Date.now(), baseRef = lastStopTimestampMs || startTimeMs || now;
       var splitSec = Math.max(1, Math.round((now - baseRef) / 1000));
       lastStopTimestampMs = now;
-      var stopNum = stop ? stop.number : (currentStopIndex + 1);
-      stopSplitLogs.push("S" + stopNum + ":" + splitSec + "s" + (wasSkipped ? "(skip)" : ""));
+      stopSplitLogs.push("S" + (stop ? stop.number : (currentStopIndex + 1)) + ":" + splitSec + "s" + (wasSkipped ? "(skip)" : ""));
       if (!wasSkipped) verifyStopGpsSilently(stop);
     }
 
@@ -925,12 +661,10 @@
     }
 
     function checkRiddleAnswer() {
-      var input = document.getElementById("riddleAnswerInput");
-      var msg = document.getElementById("answerFeedbackMsg");
+      var input = document.getElementById("riddleAnswerInput"), msg = document.getElementById("answerFeedbackMsg");
       if (!input) return;
       var cleaned = input.value.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
       if (!cleaned) return;
-
       var stop = clues[currentStopIndex];
       var matched = stop.acceptedAnswers.some(function(ans) {
         var target = String(ans).trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
@@ -938,64 +672,42 @@
         if (target.length >= 5 && isNaN(target) && editDistance(cleaned, target) <= 1) return true;
         return false;
       });
-
-      if (matched) {
-        playGameTone("solve");
-        recordStopSplitTime(stop, false);
-        showClueSolvedCelebrationModal(stop);
-      } else if (msg) {
-        msg.style.display = "block"; msg.style.color = "#f87171";
-        msg.innerText = "❌ Not quite! Double-check your surroundings or tap Reveal Hint.";
-      }
+      if (matched) { playGameTone("solve"); recordStopSplitTime(stop, false); showClueSolvedCelebrationModal(stop); }
+      else if (msg) { msg.style.display = "block"; msg.style.color = "#f87171"; msg.innerText = "❌ Not quite! Double-check your surroundings or tap Reveal Hint."; }
     }
 
     function showClueSolvedCelebrationModal(stop) {
       document.getElementById("solvedStopBadge").innerText = "✅ STOP #" + stop.number + " UNLOCKED ON MAP";
       document.getElementById("solvedStopTitle").innerText = stop.shortLabel + " Conquered!";
-
-      var triviaBox = document.getElementById("solvedStopTriviaBox");
-      var triviaText = document.getElementById("solvedStopTriviaText");
+      var triviaBox = document.getElementById("solvedStopTriviaBox"), triviaText = document.getElementById("solvedStopTriviaText");
       if (stop.historyTrivia && String(stop.historyTrivia).trim() !== "") {
-        triviaBox.style.display = "block";
-        triviaText.innerText = String(stop.historyTrivia).trim();
-      } else {
-        triviaBox.style.display = "none"; triviaText.innerText = "";
-      }
+        triviaBox.style.display = "block"; triviaText.innerText = String(stop.historyTrivia).trim();
+      } else { triviaBox.style.display = "none"; triviaText.innerText = ""; }
 
       var vipBox = document.getElementById("solvedStopVipBox");
       if (stop.sponsorName && stop.sponsorPerk && !isPartnerCapReached(stop)) {
         vipBox.style.display = "block";
         document.getElementById("solvedVipShop").innerText = stop.sponsorName;
         document.getElementById("solvedVipPerk").innerText = stop.sponsorPerk;
-        document.getElementById("solvedVipBtn").onclick = function() {
-          openVipVoucher(stop.sponsorName, stop.sponsorPerk, stop.sponsorTimerMinutes);
-        };
+        document.getElementById("solvedVipBtn").onclick = function() { openVipVoucher(stop.sponsorName, stop.sponsorPerk, stop.sponsorTimerMinutes); };
       } else { vipBox.style.display = "none"; }
-
       document.getElementById("clueSolvedModal").classList.add("show");
     }
 
-    function closeSolvedModal() {
-      document.getElementById("clueSolvedModal").classList.remove("show");
-      advanceToNextStopOrFinish(false);
-    }
-
+    function closeSolvedModal() { document.getElementById("clueSolvedModal").classList.remove("show"); advanceToNextStopOrFinish(false); }
     function advanceToNextStopOrFinish(wasSkipped) {
-      if (currentStopIndex < clues.length - 1) {
-        currentStopIndex++; saveActiveSession(); renderMainContent();
-      } else { completeEntireQuest(); }
+      if (currentStopIndex < clues.length - 1) { currentStopIndex++; saveActiveSession(); renderMainContent(); }
+      else { completeEntireQuest(); }
     }
 
     function renderInteractiveSvgMapHtml(activeStop) {
       var cityObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
       var startX = (cityObj.startMapX || 49) * 10, startY = (cityObj.startMapY || 26) * 10;
       var startLabel = cityObj.startLabel || ("START: " + cityObj.name.toUpperCase());
-      var startLat = cityObj.startLat || 33.9567500, startLng = cityObj.startLng || -83.9879500;
+      var startLat = cityObj.startLat || 33.95675, startLng = cityObj.startLng || -83.98795;
 
       var polylinePoints = [startX + "," + startY];
-      for (var p = 0; p < currentStopIndex; p++) {
-        polylinePoints.push(((clues[p].mapX || 50) * 10) + "," + ((clues[p].mapY || 50) * 10));
-      }
+      for (var p = 0; p < currentStopIndex; p++) polylinePoints.push(((clues[p].mapX || 50) * 10) + "," + ((clues[p].mapY || 50) * 10));
 
       var lastKnownX = currentStopIndex === 0 ? startX : ((clues[currentStopIndex - 1].mapX || 50) * 10);
       var lastKnownY = currentStopIndex === 0 ? startY : ((clues[currentStopIndex - 1].mapY || 50) * 10);
@@ -1004,89 +716,37 @@
 
       var pinsSvg =
         '<circle cx="' + lastKnownX + '" cy="' + lastKnownY + '" r="20" fill="none" stroke="#f59e0b" stroke-width="4" class="pin-pulse" />' +
-        '<g style="cursor:pointer;" onclick="alert(\'Starting Point: ' + escapeQuotes(startLabel) + '\')">' +
-          '<circle cx="' + startX + '" cy="' + startY + '" r="18" fill="#f59e0b" stroke="#090d16" stroke-width="4" />' +
-          '<text x="' + startX + '" y="' + (startY + 6) + '" text-anchor="middle" fill="#090d16" font-size="16" font-weight="900">★</text>' +
-          '<rect x="' + (startX - 80) + '" y="' + (startY - 44) + '" width="160" height="20" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" />' +
-          '<text x="' + startX + '" y="' + (startY - 30) + '" text-anchor="middle" fill="#fcd34d" font-size="10" font-weight="900">' + escapeHtml(startLabel) + '</text>' +
-        '</g>';
+        '<g style="cursor:pointer;" onclick="alert(\'Starting Point: ' + escapeQuotes(startLabel) + '\')"><circle cx="' + startX + '" cy="' + startY + '" r="18" fill="#f59e0b" stroke="#090d16" stroke-width="4" /><text x="' + startX + '" y="' + (startY + 6) + '" text-anchor="middle" fill="#090d16" font-size="16" font-weight="900">★</text><rect x="' + (startX - 80) + '" y="' + (startY - 44) + '" width="160" height="20" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" /><text x="' + startX + '" y="' + (startY - 30) + '" text-anchor="middle" fill="#fcd34d" font-size="10" font-weight="900">' + escapeHtml(startLabel) + '</text></g>';
 
       for (var i = 0; i < clues.length; i++) {
         var c = clues[i], cx = (c.mapX || 50) * 10, cy = (c.mapY || 50) * 10, isSolved = i < currentStopIndex;
         if (isSolved || adminModeUnlocked) {
           var fillColor = isSolved ? "#10b981" : "#f59e0b";
-          pinsSvg +=
-            '<g style="cursor:pointer;" onclick="alert(\'Unlocked Stop #' + c.number + ': ' + escapeQuotes(c.shortLabel) + '\')">' +
-              '<circle cx="' + cx + '" cy="' + cy + '" r="16" fill="' + fillColor + '" stroke="#090d16" stroke-width="4" />' +
-              '<text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" fill="#090d16" font-size="14" font-weight="900">' + c.number + '</text>' +
-              '<rect x="' + (cx - 65) + '" y="' + (cy - 42) + '" width="130" height="20" rx="6" fill="#0f172a" stroke="' + fillColor + '" stroke-width="1.5" />' +
-              '<text x="' + cx + '" y="' + (cy - 28) + '" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="800">' + escapeHtml(c.shortLabel) + '</text>' +
-            '</g>';
+          pinsSvg += '<g style="cursor:pointer;" onclick="alert(\'Unlocked Stop #' + c.number + ': ' + escapeQuotes(c.shortLabel) + '\')"><circle cx="' + cx + '" cy="' + cy + '" r="16" fill="' + fillColor + '" stroke="#090d16" stroke-width="4" /><text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" fill="#090d16" font-size="14" font-weight="900">' + c.number + '</text><rect x="' + (cx - 65) + '" y="' + (cy - 42) + '" width="130" height="20" rx="6" fill="#0f172a" stroke="' + fillColor + '" stroke-width="1.5" /><text x="' + cx + '" y="' + (cy - 28) + '" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="800">' + escapeHtml(c.shortLabel) + '</text></g>';
         }
       }
 
       var useLvilleGrid = (cityObj.mapStyle === "lawrenceville" || String(cityObj.name || "").trim().toLowerCase() === "lawrenceville");
       var cityBackgroundSvg = useLvilleGrid
-        ? '<rect x="330" y="180" width="320" height="210" rx="18" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" stroke-dasharray="8,6" />' +
-          '<text x="490" y="255" text-anchor="middle" fill="rgba(245,158,11,0.5)" font-size="16" font-weight="900">HISTORIC COURTHOUSE SQUARE</text>' +
-          '<rect x="200" y="580" width="680" height="320" rx="28" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.3)" />' +
-          '<text x="540" y="740" text-anchor="middle" fill="rgba(16,185,129,0.45)" font-size="20" font-weight="900">LAWRENCEVILLE LAWN &amp; PARK</text>' +
-          '<g stroke="#1e293b" stroke-width="26" stroke-linecap="round"><line x1="40" y1="330" x2="960" y2="330" /><line x1="40" y1="160" x2="960" y2="160" /><line x1="40" y1="540" x2="960" y2="540" /><line x1="280" y1="40" x2="280" y2="960" /><line x1="700" y1="40" x2="700" y2="960" /></g>' +
-          '<g fill="#64748b" font-size="13" font-weight="800"><text x="500" y="335" text-anchor="middle">W CROGHAN ST / E CROGHAN ST</text><text x="500" y="165" text-anchor="middle">W PIKE ST / E PIKE ST</text><text x="500" y="545" text-anchor="middle">LUCKIE ST</text><text x="265" y="460" transform="rotate(-90 265,460)">N PERRY ST</text><text x="715" y="460" transform="rotate(-90 715,460)">N CLAYTON ST</text></g>'
-        : '<circle cx="500" cy="500" r="180" fill="none" stroke="rgba(245,158,11,0.2)" stroke-width="2" stroke-dasharray="8,8" />' +
-          '<circle cx="500" cy="500" r="310" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="2" stroke-dasharray="10,8" />' +
-          '<g stroke="#1e293b" stroke-width="22" stroke-linecap="round"><line x1="60" y1="500" x2="940" y2="500" /><line x1="500" y1="60" x2="500" y2="940" /><line x1="200" y1="200" x2="800" y2="800" /><line x1="800" y1="200" x2="200" y2="800" /></g>' +
-          '<text x="500" y="470" text-anchor="middle" fill="rgba(245,158,11,0.45)" font-size="22" font-weight="900">DOWNTOWN ' + escapeHtml(cityObj.name.toUpperCase()) + ' TRAIL ZONE</text>';
+        ? '<rect x="330" y="180" width="320" height="210" rx="18" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" stroke-dasharray="8,6" /><text x="490" y="255" text-anchor="middle" fill="rgba(245,158,11,0.5)" font-size="16" font-weight="900">HISTORIC COURTHOUSE SQUARE</text><rect x="200" y="580" width="680" height="320" rx="28" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.3)" /><text x="540" y="740" text-anchor="middle" fill="rgba(16,185,129,0.45)" font-size="20" font-weight="900">LAWRENCEVILLE LAWN &amp; PARK</text><g stroke="#1e293b" stroke-width="26" stroke-linecap="round"><line x1="40" y1="330" x2="960" y2="330" /><line x1="40" y1="160" x2="960" y2="160" /><line x1="40" y1="540" x2="960" y2="540" /><line x1="280" y1="40" x2="280" y2="960" /><line x1="700" y1="40" x2="700" y2="960" /></g><g fill="#64748b" font-size="13" font-weight="800"><text x="500" y="335" text-anchor="middle">W CROGHAN ST / E CROGHAN ST</text><text x="500" y="165" text-anchor="middle">W PIKE ST / E PIKE ST</text><text x="500" y="545" text-anchor="middle">LUCKIE ST</text><text x="265" y="460" transform="rotate(-90 265,460)">N PERRY ST</text><text x="715" y="460" transform="rotate(-90 715,460)">N CLAYTON ST</text></g>'
+        : '<circle cx="500" cy="500" r="180" fill="none" stroke="rgba(245,158,11,0.2)" stroke-width="2" stroke-dasharray="8,8" /><circle cx="500" cy="500" r="310" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="2" stroke-dasharray="10,8" /><g stroke="#1e293b" stroke-width="22" stroke-linecap="round"><line x1="60" y1="500" x2="940" y2="500" /><line x1="500" y1="60" x2="500" y2="940" /><line x1="200" y1="200" x2="800" y2="800" /><line x1="800" y1="200" x2="200" y2="800" /></g><text x="500" y="470" text-anchor="middle" fill="rgba(245,158,11,0.45)" font-size="22" font-weight="900">DOWNTOWN ' + escapeHtml(cityObj.name.toUpperCase()) + ' TRAIL ZONE</text>';
 
       return (
         '<div class="card" style="padding:14px;">' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
-            '<div>' +
-              '<div style="font-size:14px; font-weight:900; color:#fcd34d;">🗺️ Live ' + escapeHtml(cityObj.name) + ' Trail Radar</div>' +
-              '<div style="font-size:11px; color:#94a3b8;">★ Start Pin &bull; Solve riddles to unlock &amp; connect stops!</div>' +
-            '</div>' +
-            '<a href="https://www.google.com/maps/search/?api=1&query=' + gpsTargetLat + ',' + gpsTargetLng + '" target="_blank" class="btn-secondary" style="text-decoration:none; font-size:11px; border-color:#f59e0b; color:#fcd34d;">🧭 GPS Last Pin</a>' +
-          '</div>' +
-          '<div class="map-viewport" id="mapViewport">' +
-            '<svg id="questSvgMap" viewBox="0 0 1000 1000" style="width:100%; height:100%; transform-origin:center center;">' +
-              '<defs><radialGradient id="radarGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(16,185,129,0.18)" /><stop offset="100%" stop-color="rgba(6,11,19,0)" /></radialGradient></defs>' +
-              '<rect width="1000" height="1000" fill="#060b13" />' +
-              '<g stroke="#111e32" stroke-width="2"><line x1="0" y1="200" x2="1000" y2="200" /><line x1="0" y1="400" x2="1000" y2="400" /><line x1="0" y1="600" x2="1000" y2="600" /><line x1="0" y1="800" x2="1000" y2="800" /><line x1="200" y1="0" x2="200" y2="1000" /><line x1="400" y1="0" x2="400" y2="1000" /><line x1="600" y1="0" x2="600" y2="1000" /><line x1="800" y1="0" x2="800" y2="1000" /></g>' +
-              cityBackgroundSvg +
-              '<circle cx="500" cy="500" r="420" fill="url(#radarGlow)" stroke="rgba(16,185,129,0.2)" stroke-width="2" />' +
-              '<g class="radar-sweep"><path d="M500,500 L500,80 A420,420 0 0,1 820,230 Z" fill="rgba(16,185,129,0.12)" /></g>' +
-              (polylinePoints.length > 1 ? '<polyline points="' + polylinePoints.join(" ") + '" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="12,8" />' : '') +
-              pinsSvg +
-            '</svg>' +
-            '<div class="map-controls">' +
-              '<button class="map-ctrl-btn" onclick="zoomMap(0.25)">+</button>' +
-              '<button class="map-ctrl-btn" onclick="zoomMap(-0.25)">−</button>' +
-              '<button class="map-ctrl-btn" style="font-size:11px;" onclick="resetMapZoom()">⟲</button>' +
-            '</div>' +
-          '</div>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><div><div style="font-size:14px; font-weight:900; color:#fcd34d;">🗺️ Live ' + escapeHtml(cityObj.name) + ' Trail Radar</div><div style="font-size:11px; color:#94a3b8;">★ Start Pin &bull; Solve riddles to unlock &amp; connect stops!</div></div><a href="https://www.google.com/maps/search/?api=1&query=' + gpsTargetLat + ',' + gpsTargetLng + '" target="_blank" class="btn-secondary" style="text-decoration:none; font-size:11px; border-color:#f59e0b; color:#fcd34d;">🧭 GPS Last Pin</a></div>' +
+          '<div class="map-viewport" id="mapViewport"><svg id="questSvgMap" viewBox="0 0 1000 1000" style="width:100%; height:100%; transform-origin:center center;"><defs><radialGradient id="radarGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(16,185,129,0.18)" /><stop offset="100%" stop-color="rgba(6,11,19,0)" /></radialGradient></defs><rect width="1000" height="1000" fill="#060b13" /><g stroke="#111e32" stroke-width="2"><line x1="0" y1="200" x2="1000" y2="200" /><line x1="0" y1="400" x2="1000" y2="400" /><line x1="0" y1="600" x2="1000" y2="600" /><line x1="0" y1="800" x2="1000" y2="800" /><line x1="200" y1="0" x2="200" y2="1000" /><line x1="400" y1="0" x2="400" y2="1000" /><line x1="600" y1="0" x2="600" y2="1000" /><line x1="800" y1="0" x2="800" y2="1000" /></g>' + cityBackgroundSvg + '<circle cx="500" cy="500" r="420" fill="url(#radarGlow)" stroke="rgba(16,185,129,0.2)" stroke-width="2" /><g class="radar-sweep"><path d="M500,500 L500,80 A420,420 0 0,1 820,230 Z" fill="rgba(16,185,129,0.12)" /></g>' + (polylinePoints.length > 1 ? '<polyline points="' + polylinePoints.join(" ") + '" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="12,8" />' : '') + pinsSvg + '</svg><div class="map-controls"><button class="map-ctrl-btn" onclick="zoomMap(0.25)">+</button><button class="map-ctrl-btn" onclick="zoomMap(-0.25)">−</button><button class="map-ctrl-btn" style="font-size:11px;" onclick="resetMapZoom()">⟲</button></div></div>' +
         '</div>'
       );
     }
 
-    function updateSvgTransform() {
-      var svg = document.getElementById("questSvgMap");
-      if (svg) svg.style.transform = "translate(" + mapPanX + "px, " + mapPanY + "px) scale(" + mapZoom + ")";
-    }
-    function zoomMap(delta) { mapZoom = Math.max(0.8, Math.min(2.8, mapZoom + delta)); updateSvgTransform(); }
+    function updateSvgTransform() { var svg = document.getElementById("questSvgMap"); if (svg) svg.style.transform = "translate(" + mapPanX + "px, " + mapPanY + "px) scale(" + mapZoom + ")"; }
+    function zoomMap(d) { mapZoom = Math.max(0.8, Math.min(2.8, mapZoom + d)); updateSvgTransform(); }
     function resetMapZoom() { mapZoom = 1; mapPanX = 0; mapPanY = 0; updateSvgTransform(); }
     function attachSvgMapInteractions() {
-      var vp = document.getElementById("mapViewport");
-      if (!vp) return;
-      vp.onpointerdown = function(e) {
-        if (e.target.tagName === "BUTTON") return;
-        isDraggingMap = true; dragStartX = e.clientX - mapPanX; dragStartY = e.clientY - mapPanY;
-      };
-      vp.onpointermove = function(e) {
-        if (!isDraggingMap) return;
-        mapPanX = e.clientX - dragStartX; mapPanY = e.clientY - dragStartY; updateSvgTransform();
-      };
-      vp.onpointerup = function() { isDraggingMap = false; };
-      vp.onpointerleave = function() { isDraggingMap = false; };
+      var vp = document.getElementById("mapViewport"); if (!vp) return;
+      vp.onpointerdown = function(e) { if (e.target.tagName === "BUTTON") return; isDraggingMap = true; dragStartX = e.clientX - mapPanX; dragStartY = e.clientY - mapPanY; };
+      vp.onpointermove = function(e) { if (!isDraggingMap) return; mapPanX = e.clientX - dragStartX; mapPanY = e.clientY - dragStartY; updateSvgTransform(); };
+      vp.onpointerup = function() { isDraggingMap = false; }; vp.onpointerleave = function() { isDraggingMap = false; };
     }
 
     function isPartnerCapReached(stop) {
@@ -1105,42 +765,14 @@
         var customMin = s.sponsorTimerMinutes || GLOBAL_CONFIG.vipVoucherTimerMinutes || 5;
 
         if (isUnlocked && !capReached) {
-          listHtml +=
-            '<div style="background:#090d16; border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;">' +
-              '<div>' +
-                '<div style="font-size:11px; color:#10b981; font-weight:800;">✅ Stop #' + s.number + ' Unlocked Partner (' + customMin + 'm Timer)</div>' +
-                '<div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.sponsorName) + '</div>' +
-                '<div style="font-size:12px; color:#fcd34d; margin-top:2px;">' + escapeHtml(s.sponsorPerk) + '</div>' +
-              '</div>' +
-              '<button class="btn-secondary" style="border-color:#10b981; color:#34d399; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(s.sponsorName) + '\', \'' + escapeQuotes(s.sponsorPerk) + '\', ' + customMin + ')">Open Voucher</button>' +
-            '</div>';
+          listHtml += '<div style="background:#090d16; border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#10b981; font-weight:800;">✅ Stop #' + s.number + ' Unlocked Partner (' + customMin + 'm Timer)</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#fcd34d; margin-top:2px;">' + escapeHtml(s.sponsorPerk) + '</div></div><button class="btn-secondary" style="border-color:#10b981; color:#34d399; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(s.sponsorName) + '\', \'' + escapeQuotes(s.sponsorPerk) + '\', ' + customMin + ')">Open Voucher</button></div>';
         } else if (isUnlocked && capReached) {
-          listHtml +=
-            '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-bottom:10px; opacity:0.65;">' +
-              '<div style="font-size:11px; color:#f87171; font-weight:800;">Monthly Partner Cap Reached</div>' +
-              '<div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.sponsorName) + '</div>' +
-              '<div style="font-size:11px; color:#94a3b8;">All monthly VIP vouchers for this shop have been claimed!</div>' +
-            '</div>';
+          listHtml += '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-bottom:10px; opacity:0.65;"><div style="font-size:11px; color:#f87171; font-weight:800;">Monthly Partner Cap Reached</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:11px; color:#94a3b8;">All monthly VIP vouchers for this shop have been claimed!</div></div>';
         } else {
-          listHtml +=
-            '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; opacity:0.75;">' +
-              '<div>' +
-                '<div style="font-size:11px; color:#94a3b8; font-weight:800;">🔒 Mystery Partner Stop #' + s.number + '</div>' +
-                '<div style="font-size:14px; font-weight:800; color:#cbd5e1;">Solve Stop #' + s.number + ' Riddle to Unlock</div>' +
-                '<div style="font-size:11px; color:#64748b; margin-top:2px;">Exclusive VIP discount waiting inside!</div>' +
-              '</div>' +
-              '<span style="font-size:18px;">🔒</span>' +
-            '</div>';
+          listHtml += '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; opacity:0.75;"><div><div style="font-size:11px; color:#94a3b8; font-weight:800;">🔒 Mystery Partner Stop #' + s.number + '</div><div style="font-size:14px; font-weight:800; color:#cbd5e1;">Solve Stop #' + s.number + ' Riddle to Unlock</div><div style="font-size:11px; color:#64748b; margin-top:2px;">Exclusive VIP discount waiting inside!</div></div><span style="font-size:18px;">🔒</span></div>';
         }
       }
-
-      return (
-        '<div class="card">' +
-          '<h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🎁 Local Partner VIP Perks</h3>' +
-          '<p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Solve riddles along the trail to unlock exclusive VIP vouchers you can show at local partner registers:</p>' +
-          (totalPartnerCount > 0 ? listHtml : '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:18px; text-align:center; font-size:13px; color:#94a3b8;">No partner perks are currently active on this trail in Google Sheets.</div>') +
-        '</div>'
-      );
+      return '<div class="card"><h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🎁 Local Partner VIP Perks</h3><p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Solve riddles along the trail to unlock exclusive VIP vouchers you can show at local partner registers:</p>' + (totalPartnerCount > 0 ? listHtml : '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:18px; text-align:center; font-size:13px; color:#94a3b8;">No partner perks are currently active on this trail in Google Sheets.</div>') + '</div>';
     }
 
     function openVipVoucher(shopName, perkText, customTimerMinutes) {
@@ -1150,16 +782,10 @@
 
       var voucherMinutes = Number(customTimerMinutes) || Number(GLOBAL_CONFIG.vipVoucherTimerMinutes) || 5;
       var remainingSec = voucherMinutes * 60;
-
       var pauseNoticeEl = document.getElementById("vipPauseNoticeStamp");
       if (huntStarted && !huntCompleted && !vipPauseUsedForShop[shopName]) {
-        vipPauseUsedForShop[shopName] = true;
-        isTimerPausedForVip = true;
-        vipPauseStartedMs = Date.now();
-        if (pauseNoticeEl) {
-          pauseNoticeEl.style.display = "block";
-          pauseNoticeEl.innerText = "⏸️ Race timer paused for up to " + voucherMinutes + " mins while you redeem!";
-        }
+        vipPauseUsedForShop[shopName] = true; isTimerPausedForVip = true; vipPauseStartedMs = Date.now();
+        if (pauseNoticeEl) { pauseNoticeEl.style.display = "block"; pauseNoticeEl.innerText = "⏸️ Race timer paused for up to " + voucherMinutes + " mins while you redeem!"; }
       } else if (pauseNoticeEl) { pauseNoticeEl.style.display = "none"; }
 
       function updateLiveStamp() {
@@ -1172,7 +798,6 @@
       updateLiveStamp();
       if (vipClockInterval) clearInterval(vipClockInterval);
       vipClockInterval = setInterval(updateLiveStamp, 1000);
-
       document.getElementById("vipModal").classList.add("show");
       vipClaimCounts[shopName] = (vipClaimCounts[shopName] || 0) + 1;
       trackQuestEvent({ action: "claim_vip", city: activeCityId, team: teamName || "Demo", shopName: shopName, perk: perkText });
@@ -1181,12 +806,9 @@
     function closeVipModal() {
       if (vipClockInterval) clearInterval(vipClockInterval);
       if (isTimerPausedForVip && vipPauseStartedMs > 0) {
-        var pausedDurationMs = Date.now() - vipPauseStartedMs;
-        startTimeMs += pausedDurationMs;
-        lastStopTimestampMs += pausedDurationMs;
-        isTimerPausedForVip = false;
-        vipPauseStartedMs = 0;
-        saveActiveSession();
+        var pausedMs = Date.now() - vipPauseStartedMs;
+        startTimeMs += pausedMs; lastStopTimestampMs += pausedMs;
+        isTimerPausedForVip = false; vipPauseStartedMs = 0; saveActiveSession();
       }
       document.getElementById("vipModal").classList.remove("show");
     }
@@ -1198,101 +820,41 @@
       var cityRanks = liveRankings.filter(function(r) {
         var sameCity = !r.city || r.city.toLowerCase() === activeCityId;
         if (!sameCity) return false;
-        if (leaderboardFilter === "month") return !r.date || r.date === nowMonth;
-        return true;
+        return leaderboardFilter === "month" ? (!r.date || r.date === nowMonth) : true;
       });
-
       var rowsHtml = "";
       for (var i = 0; i < Math.min(cityRanks.length, 15); i++) {
-        var r = cityRanks[i];
-        var medal = i === 0 ? "🥇" : (i === 1 ? "🥈" : (i === 2 ? "🥉" : "#" + (i + 1)));
-        rowsHtml +=
-          '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:#090d16; border:1px solid #1e293b; border-radius:12px; margin-bottom:8px;">' +
-            '<div style="display:flex; align-items:center; gap:10px;">' +
-              '<span style="font-size:14px; font-weight:900; color:#fcd34d; min-width:26px;">' + medal + '</span>' +
-              '<div>' +
-                '<div style="font-size:13px; font-weight:800; color:#ffffff;">' + escapeHtml(r.team) + '</div>' +
-                '<div style="font-size:10px; color:#64748b;">Hints: ' + (r.hintsUsed || 0) + ' &bull; ' + escapeHtml(r.date || nowMonth) + '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div style="font-size:14px; font-weight:900; color:#10b981;">' + escapeHtml(r.formattedTime) + '</div>' +
-          '</div>';
+        var r = cityRanks[i], medal = i === 0 ? "🥇" : (i === 1 ? "🥈" : (i === 2 ? "🥉" : "#" + (i + 1)));
+        rowsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:#090d16; border:1px solid #1e293b; border-radius:12px; margin-bottom:8px;"><div style="display:flex; align-items:center; gap:10px;"><span style="font-size:14px; font-weight:900; color:#fcd34d; min-width:26px;">' + medal + '</span><div><div style="font-size:13px; font-weight:800; color:#fff;">' + escapeHtml(r.team) + '</div><div style="font-size:10px; color:#64748b;">Hints: ' + (r.hintsUsed || 0) + ' &bull; ' + escapeHtml(r.date || nowMonth) + '</div></div></div><div style="font-size:14px; font-weight:900; color:#10b981;">' + escapeHtml(r.formattedTime) + '</div></div>';
       }
-      return (
-        '<div class="card">' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">' +
-            '<h3 style="font-size:17px; font-weight:900; color:#fcd34d;">🏆 Official Trail Leaderboard</h3>' +
-            '<div style="display:flex; gap:4px; background:#090d16; padding:3px; border-radius:9px; border:1px solid #1e293b;">' +
-              '<button onclick="switchLeaderboardFilter(\'month\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "month" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "month" ? "#090d16" : "#94a3b8") + ';">🔥 This Month</button>' +
-              '<button onclick="switchLeaderboardFilter(\'all\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "all" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "all" ? "#090d16" : "#94a3b8") + ';">👑 All-Time</button>' +
-            '</div>' +
-          '</div>' +
-          (rowsHtml || '<p style="font-size:12px; color:#64748b;">No teams recorded for this trail yet—be the first!</p>') +
-        '</div>'
-      );
+      return '<div class="card"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;"><h3 style="font-size:17px; font-weight:900; color:#fcd34d;">🏆 Official Trail Leaderboard</h3><div style="display:flex; gap:4px; background:#090d16; padding:3px; border-radius:9px; border:1px solid #1e293b;"><button onclick="switchLeaderboardFilter(\'month\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "month" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "month" ? "#090d16" : "#94a3b8") + ';">🔥 This Month</button><button onclick="switchLeaderboardFilter(\'all\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "all" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "all" ? "#090d16" : "#94a3b8") + ';">👑 All-Time</button></div></div>' + (rowsHtml || '<p style="font-size:12px; color:#64748b;">No teams recorded for this trail yet—be the first!</p>') + '</div>';
     }
 
     function completeEntireQuest() {
-      huntCompleted = true;
-      if (timerInterval) clearInterval(timerInterval);
+      huntCompleted = true; if (timerInterval) clearInterval(timerInterval);
       try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
       playGameTone("victory");
-
       victoryClaimCode = "QATL-" + Math.floor(1000 + Math.random() * 9000);
       var finalFormatted = formatSeconds(elapsedSeconds);
       var nowMonth = new Date().toLocaleString("en-US", { month: "short", year: "numeric" });
       var telemetryStr = "Device:" + getOrCreateDeviceId() + " | GPS:" + gpsVerifiedCount + "/" + clues.length + " | Splits:" + stopSplitLogs.join(",");
-
-      liveRankings.push({
-        city: activeCityId, team: teamName, timeSeconds: elapsedSeconds,
-        formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, date: nowMonth
-      });
+      liveRankings.push({ city: activeCityId, team: teamName, timeSeconds: elapsedSeconds, formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, date: nowMonth });
       liveRankings.sort(function(a, b) { return a.timeSeconds - b.timeSeconds; });
-
-      trackQuestEvent({
-        action: "submit_score", city: activeCityId, team: teamName, timeSeconds: elapsedSeconds,
-        formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount,
-        referral: referralSource, claimCode: victoryClaimCode, telemetry: telemetryStr
-      });
+      trackQuestEvent({ action: "submit_score", city: activeCityId, team: teamName, timeSeconds: elapsedSeconds, formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, referral: referralSource, claimCode: victoryClaimCode, telemetry: telemetryStr });
       renderMainContent();
     }
 
     function renderVictoryScreen(container, cityObj) {
-      container.innerHTML =
-        '<div class="card" style="text-align:center; padding:28px 20px;">' +
-          '<div style="font-size:48px; margin-bottom:8px;">🏆</div>' +
-          '<h2 style="font-size:26px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Conquered!</h2>' +
-          '<p style="font-size:14px; color:#cbd5e1; margin-bottom:16px;">Congratulations, <strong>' + escapeHtml(teamName) + '</strong>! Your official time has been posted to the live ' + escapeHtml(cityObj.name) + ' leaderboard.</p>' +
-          '<div style="background:#090d16; border:1px solid #f59e0b; border-radius:16px; padding:16px; margin-bottom:14px;">' +
-            '<div style="font-size:11px; color:#94a3b8; font-weight:800;">OFFICIAL FINISH TIME</div>' +
-            '<div style="font-size:34px; font-weight:900; color:#10b981;">' + formatSeconds(elapsedSeconds) + '</div>' +
-            '<div style="font-size:11px; color:#64748b; margin-top:4px;">Hints Used: ' + hintsUsedCount + ' &bull; Skips: ' + skipsUsedCount + '</div>' +
-          '</div>' +
-          '<div style="background:rgba(16,185,129,0.1); border:1px dashed #10b981; border-radius:14px; padding:12px; margin-bottom:16px;">' +
-            '<div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🔒 Official Prize Verification Code</div>' +
-            '<div style="font-size:20px; font-weight:900; color:#ffffff; letter-spacing:1px; margin:4px 0;">#' + escapeHtml(victoryClaimCode || "QATL-VERIFIED") + '</div>' +
-            '<div style="font-size:11px; color:#94a3b8;">Screenshot this screen + your trail selfies to claim contest prizes!</div>' +
-          '</div>' +
-          '<button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#052e16; margin-bottom:10px;" onclick="shareVictoryPost(\'' + escapeQuotes(cityObj.name) + '\')">📲 Share Our Time on Social Media</button>' +
-          '<div id="shareCopyFeedback" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-bottom:10px;">✅ Copied to clipboard! Paste it on your Story or post!</div>' +
-          '<button class="btn-secondary" style="width:100%;" onclick="selectCity(\'' + activeCityId + '\')">🔄 Back to Trail Home</button>' +
-        '</div>' +
-        renderVipPerksTabHtml() +
-        renderLeaderboardCardHtml();
+      container.innerHTML = '<div class="card" style="text-align:center; padding:28px 20px;"><div style="font-size:48px; margin-bottom:8px;">🏆</div><h2 style="font-size:26px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Conquered!</h2><p style="font-size:14px; color:#cbd5e1; margin-bottom:16px;">Congratulations, <strong>' + escapeHtml(teamName) + '</strong>! Your official time has been posted to the live ' + escapeHtml(cityObj.name) + ' leaderboard.</p><div style="background:#090d16; border:1px solid #f59e0b; border-radius:16px; padding:16px; margin-bottom:14px;"><div style="font-size:11px; color:#94a3b8; font-weight:800;">OFFICIAL FINISH TIME</div><div style="font-size:34px; font-weight:900; color:#10b981;">' + formatSeconds(elapsedSeconds) + '</div><div style="font-size:11px; color:#64748b; margin-top:4px;">Hints Used: ' + hintsUsedCount + ' &bull; Skips: ' + skipsUsedCount + '</div></div><div style="background:rgba(16,185,129,0.1); border:1px dashed #10b981; border-radius:14px; padding:12px; margin-bottom:16px;"><div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🔒 Official Prize Verification Code</div><div style="font-size:20px; font-weight:900; color:#fff; letter-spacing:1px; margin:4px 0;">#' + escapeHtml(victoryClaimCode || "QATL-VERIFIED") + '</div><div style="font-size:11px; color:#94a3b8;">Screenshot this screen + your trail selfies to claim contest prizes!</div></div><button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#052e16; margin-bottom:10px;" onclick="shareVictoryPost(\'' + escapeQuotes(cityObj.name) + '\')">📲 Share Our Time on Social Media</button><div id="shareCopyFeedback" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-bottom:10px;">✅ Copied to clipboard! Paste it on your Story or post!</div><button class="btn-secondary" style="width:100%;" onclick="selectCity(\'' + activeCityId + '\')">🔄 Back to Trail Home</button></div>' + renderVipPerksTabHtml() + renderLeaderboardCardHtml();
     }
 
     function shareVictoryPost(cityName) {
       var timeStr = formatSeconds(elapsedSeconds);
-      var shareMessage = "🏆 Team \"" + (teamName || "Explorer") + "\" just conquered the " + cityName + " Scavenger Hunt on QuestATL.com in " + timeStr + "! Think you can beat our time? 🧭🔥 https://QuestATL.com";
+      var msg = "🏆 Team \"" + (teamName || "Explorer") + "\" just conquered the " + cityName + " Scavenger Hunt on QuestATL.com in " + timeStr + "! Think you can beat our time? 🧭🔥 https://QuestATL.com";
       trackQuestEvent({ action: "social_share", city: activeCityId, team: teamName || "Explorer", claimCode: victoryClaimCode, formattedTime: timeStr });
-      if (navigator.share) {
-        navigator.share({ title: "We Conquered QuestATL!", text: shareMessage, url: "https://QuestATL.com" }).catch(function() {});
-      } else if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareMessage).then(function() {
-          var fb = document.getElementById("shareCopyFeedback");
-          if (fb) fb.style.display = "block";
-        });
-      } else { prompt("Copy your official finish brag below:", shareMessage); }
+      if (navigator.share) navigator.share({ title: "We Conquered QuestATL!", text: msg, url: "https://QuestATL.com" }).catch(function() {});
+      else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(msg).then(function() { var fb = document.getElementById("shareCopyFeedback"); if (fb) fb.style.display = "block"; });
+      else prompt("Copy your official finish brag below:", msg);
     }
 
     function submitAnonymousSuggestion() {
@@ -1305,35 +867,22 @@
     }
 
     function submitPartnerInquiryForm() {
-      var shop = document.getElementById("partnerShopInput").value.trim();
-      var person = document.getElementById("partnerPersonInput").value.trim();
-      var contact = document.getElementById("partnerContactInput").value.trim();
-      var note = document.getElementById("partnerNoteInput").value.trim();
+      var shop = document.getElementById("partnerShopInput").value.trim(), person = document.getElementById("partnerPersonInput").value.trim(), contact = document.getElementById("partnerContactInput").value.trim(), note = document.getElementById("partnerNoteInput").value.trim();
       if (!shop || !contact) { alert("Please enter your Business Name and best Email or Phone Number."); return; }
       trackQuestEvent({ action: "submit_partner_inquiry", city: activeCityId, shopName: shop, contactName: person, contactInfo: contact, message: note });
-      document.getElementById("partnerShopInput").value = "";
-      document.getElementById("partnerPersonInput").value = "";
-      document.getElementById("partnerContactInput").value = "";
-      document.getElementById("partnerNoteInput").value = "";
-      var fb = document.getElementById("partnerFormFeedback");
-      if (fb) fb.style.display = "block";
+      document.getElementById("partnerShopInput").value = ""; document.getElementById("partnerPersonInput").value = ""; document.getElementById("partnerContactInput").value = ""; document.getElementById("partnerNoteInput").value = "";
+      var fb = document.getElementById("partnerFormFeedback"); if (fb) fb.style.display = "block";
     }
 
     function openRulesModal() { document.getElementById("rulesModal").classList.add("show"); }
-    function openPartnerInfoModal() {
-      var fb = document.getElementById("partnerFormFeedback");
-      if (fb) fb.style.display = "none";
-      document.getElementById("partnerInfoModal").classList.add("show");
-    }
+    function openPartnerInfoModal() { var fb = document.getElementById("partnerFormFeedback"); if (fb) fb.style.display = "none"; document.getElementById("partnerInfoModal").classList.add("show"); }
 
     function handleSecretAdminTap() {
       adminTapCount++;
       if (adminTapCount >= 5) {
         adminModeUnlocked = true;
         document.getElementById("adminPill").style.display = "inline-block";
-        renderCitySelector();
-        renderMainContent();
-        openAdminDemoModal();
+        renderCitySelector(); renderMainContent(); openAdminDemoModal();
         adminTapCount = 0;
       }
     }
@@ -1341,49 +890,24 @@
     function openAdminDemoModal() {
       var listEl = document.getElementById("adminStopJumpList"), html = "";
       for (var i = 0; i < clues.length; i++) {
-        var c = clues[i];
-        var customMin = c.sponsorTimerMinutes || GLOBAL_CONFIG.vipVoucherTimerMinutes || 5;
-        html +=
-          '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #1e293b; font-size:12px;">' +
-            '<span><strong>#' + c.number + '</strong> ' + escapeHtml(c.shortLabel) + (c.sponsorName ? ' <span style="color:#10b981;">(' + escapeHtml(c.sponsorName) + ')</span>' : '') + '</span>' +
-            '<div style="display:flex; gap:6px;">' +
-              '<button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="adminJumpToStop(' + i + ')">Jump</button>' +
-              (c.sponsorName ? '<button class="btn-secondary" style="padding:4px 8px; font-size:11px; border-color:#10b981; color:#34d399;" onclick="closeAdminDemoModal(); openVipVoucher(\'' + escapeQuotes(c.sponsorName) + '\', \'' + escapeQuotes(c.sponsorPerk) + '\', ' + customMin + ')">VIP</button>' : '') +
-            '</div>' +
-          '</div>';
+        var c = clues[i], customMin = c.sponsorTimerMinutes || GLOBAL_CONFIG.vipVoucherTimerMinutes || 5;
+        html += '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #1e293b; font-size:12px;"><span><strong>#' + c.number + '</strong> ' + escapeHtml(c.shortLabel) + (c.sponsorName ? ' <span style="color:#10b981;">(' + escapeHtml(c.sponsorName) + ')</span>' : '') + '</span><div style="display:flex; gap:6px;"><button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="adminJumpToStop(' + i + ')">Jump</button>' + (c.sponsorName ? '<button class="btn-secondary" style="padding:4px 8px; font-size:11px; border-color:#10b981; color:#34d399;" onclick="closeAdminDemoModal(); openVipVoucher(\'' + escapeQuotes(c.sponsorName) + '\', \'' + escapeQuotes(c.sponsorPerk) + '\', ' + customMin + ')">VIP</button>' : '') + '</div></div>';
       }
       listEl.innerHTML = html || '<div style="font-size:12px; color:#94a3b8; padding:8px;">No clues loaded from Google Sheets yet.</div>';
       document.getElementById("adminDemoModal").classList.add("show");
     }
 
     function closeAdminDemoModal() { document.getElementById("adminDemoModal").classList.remove("show"); }
-
     function adminJumpToStop(idx) {
-      if (!huntStarted) {
-        teamName = "Partner Demo"; huntStarted = true;
-        startTimeMs = Date.now(); lastStopTimestampMs = startTimeMs;
-        startLiveTimerLoop();
-      }
-      currentStopIndex = idx; activeGameTab = "clue";
-      closeAdminDemoModal(); renderMainContent();
+      if (!huntStarted) { teamName = "Partner Demo"; huntStarted = true; startTimeMs = Date.now(); lastStopTimestampMs = startTimeMs; startLiveTimerLoop(); }
+      currentStopIndex = idx; activeGameTab = "clue"; closeAdminDemoModal(); renderMainContent();
     }
 
-    function formatSeconds(sec) {
-      var m = Math.floor(sec / 60), s = sec % 60;
-      return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-    }
-    function escapeHtml(str) {
-      return String(str || "").replace(/[&<>"']/g, function(m) {
-        return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m];
-      });
-    }
+    function formatSeconds(sec) { var m = Math.floor(sec / 60), s = sec % 60; return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s); }
+    function escapeHtml(str) { return String(str || "").replace(/[&<>"']/g, function(m) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]; }); }
     function escapeQuotes(str) { return String(str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;"); }
 
-    window.onload = function() {
-      autoDetectMonthlyTheme();
-      restoreSavedSession();
-      fetchLiveDatabase();
-    };
+    window.onload = function() { autoDetectMonthlyTheme(); restoreSavedSession(); fetchLiveDatabase(); };
   </script>
 </body>
 </html>
