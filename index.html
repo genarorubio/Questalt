@@ -146,6 +146,36 @@
       border-radius: 99px;
     }
 
+    .trail-selector-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .trail-option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      background: rgba(30, 41, 59, 0.45);
+      color: #cbd5e1;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      transition: all 0.2s ease;
+    }
+    .trail-option-btn.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(16, 185, 129, 0.15));
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+    }
+
     .container {
       max-width: 640px;
       margin: 16px auto;
@@ -469,8 +499,8 @@
     // =========================================================================
     // 1. MASTER GOOGLE SHEET API URL (100% DATABASE-DRIVEN)
     // =========================================================================
-    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
-    var STORAGE_KEY_SESSION = "questatl_active_session_v5";
+    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwYyY71tA_i6K1q8vF7Z5p8VwW5KqY8vF7Z5p8VwW5KqY8vF7Z5p8VwW5/exec";
+    var STORAGE_KEY_SESSION = "questatl_active_session_v6";
     var STORAGE_KEY_DEVICE = "questatl_device_id_v1";
 
     var GLOBAL_CONFIG = {
@@ -541,6 +571,25 @@
       } catch (e) {
         return "QDEV-ANON";
       }
+    }
+
+    function getCluesForTrail(trailId) {
+      var clean = String(trailId || "lawrenceville").trim().toLowerCase();
+      return ALL_DATABASE_CLUES.filter(function(item) {
+        return String(item.cityId || "lawrenceville").trim().toLowerCase() === clean;
+      });
+    }
+
+    function isTrailPlayable(trailObj) {
+      if (!trailObj) return false;
+      var trailClues = getCluesForTrail(trailObj.id);
+      if (trailClues.length === 0) return false;
+      return String(trailObj.status || "").toUpperCase() === "LIVE" || adminModeUnlocked;
+    }
+
+    function isTrailPublicLive(trailObj) {
+      if (!trailObj) return false;
+      return String(trailObj.status || "").toUpperCase() === "LIVE" && getCluesForTrail(trailObj.id).length > 0;
     }
 
     // =========================================================================
@@ -725,7 +774,7 @@
             throw new Error("Invalid JSON payload from Google Sheet.");
           }
 
-          // 1. Sync Config (Including vip_voucher_timer_minutes)
+          // 1. Sync Config
           if (json.config) {
             if (json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) {
               GLOBAL_CONFIG.hintPenaltySeconds = Number(json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) || 120;
@@ -783,7 +832,7 @@
           // 5. Sync Clues
           ALL_DATABASE_CLUES = Array.isArray(json.clues) ? json.clues : [];
 
-          // 6. Sync Cities
+          // 6. Sync Cities (Respects LIVE vs SOON status in Cities sheet!)
           if (Array.isArray(json.cities) && json.cities.length > 0) {
             CITIES = json.cities;
           } else {
@@ -792,16 +841,13 @@
             ];
           }
 
-          for (var c = 0; c < CITIES.length; c++) {
-            var hasClues = ALL_DATABASE_CLUES.some(function(item) {
-              return (item.cityId || "lawrenceville") === CITIES[c].id;
-            });
-            if (hasClues) CITIES[c].status = "LIVE";
+          // Ensure activeCityId points to a valid trail
+          var currentTrailObj = CITIES.find(function(c) { return c.id === activeCityId; });
+          if (!currentTrailObj && CITIES.length > 0) {
+            activeCityId = CITIES[0].id;
           }
 
-          clues = ALL_DATABASE_CLUES.filter(function(item) {
-            return (item.cityId || "lawrenceville") === activeCityId;
-          });
+          clues = getCluesForTrail(activeCityId);
 
           isLoadingDatabase = false;
           renderCitySelector();
@@ -825,37 +871,73 @@
     }
 
     // =========================================================================
-    // 5. CITY SELECTOR & LOBBY SCREEN
+    // 5. DE-DUPLICATED CITY SELECTOR & MULTI-TRAIL LOBBY SCREEN
     // =========================================================================
     function renderCitySelector() {
       var bar = document.getElementById("citySelectorBar");
-      var html = "";
+      var activeTrailObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
+      var activeCityNameNorm = activeTrailObj ? String(activeTrailObj.name || "").trim().toLowerCase() : "";
+
+      // Group trails by City Name so multiple trails in the same city share ONE top tab
+      var cityGroups = [];
+      var groupMap = {};
+
       for (var i = 0; i < CITIES.length; i++) {
-        var city = CITIES[i];
-        var isActive = city.id === activeCityId ? "active" : "";
-        var badge = city.status === "LIVE"
+        var c = CITIES[i];
+        var key = String(c.name || c.id).trim().toLowerCase();
+        if (!groupMap[key]) {
+          groupMap[key] = {
+            cityName: c.name,
+            normName: key,
+            trails: [],
+            hasPublicLiveTrail: false
+          };
+          cityGroups.push(groupMap[key]);
+        }
+        groupMap[key].trails.push(c);
+        if (isTrailPublicLive(c)) {
+          groupMap[key].hasPublicLiveTrail = true;
+        }
+      }
+
+      var html = "";
+      for (var g = 0; g < cityGroups.length; g++) {
+        var grp = cityGroups[g];
+        var isCurrentCityGroup = grp.normName === activeCityNameNorm ? "active" : "";
+        var badge = grp.hasPublicLiveTrail
           ? '<span class="badge-live">LIVE</span>'
           : '<span class="badge-soon">SOON</span>';
-        html += '<button class="city-pill ' + isActive + '" onclick="selectCity(\'' + city.id + '\')">' +
-                  '<span>📍 ' + escapeHtml(city.name) + '</span>' + badge +
+
+        // Pick the first LIVE trail in this city (or first trail if none are live yet)
+        var targetTrail = grp.trails.find(function(t) { return isTrailPlayable(t); }) || grp.trails[0];
+
+        html += '<button class="city-pill ' + isCurrentCityGroup + '" onclick="selectCityGroup(\'' + escapeQuotes(grp.normName) + '\', \'' + escapeQuotes(targetTrail.id) + '\')">' +
+                  '<span>📍 ' + escapeHtml(grp.cityName) + '</span>' + badge +
                 '</button>';
       }
       bar.innerHTML = html;
     }
 
-    function selectCity(cityId) {
-      if (huntStarted && !huntCompleted && cityId !== activeCityId) {
-        if (!confirm("Switch cities and reset your current quest timer?")) return;
+    function selectCityGroup(normCityName, defaultTrailId) {
+      var currentTrailObj = CITIES.find(function(c) { return c.id === activeCityId; });
+      var currentNormName = currentTrailObj ? String(currentTrailObj.name || "").trim().toLowerCase() : "";
+      if (currentNormName === normCityName && !huntCompleted) {
+        return;
       }
-      activeCityId = cityId;
+      selectCity(defaultTrailId);
+    }
+
+    function selectCity(trailId) {
+      if (huntStarted && !huntCompleted && trailId !== activeCityId) {
+        if (!confirm("Switch trails and reset your current quest timer?")) return;
+      }
+      activeCityId = trailId;
       huntStarted = false;
       huntCompleted = false;
       if (timerInterval) clearInterval(timerInterval);
       try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
 
-      clues = ALL_DATABASE_CLUES.filter(function(c) {
-        return (c.cityId || "lawrenceville") === cityId;
-      });
+      clues = getCluesForTrail(trailId);
 
       renderCitySelector();
       renderMainContent();
@@ -881,7 +963,7 @@
             '<h2 style="font-size:19px; font-weight:900; color:#fca5a5; margin-bottom:8px;">Database Sync Needed</h2>' +
             '<p style="font-size:13px; color:#cbd5e1; margin-bottom:14px; line-height:1.5;">' +
               (databaseErrorMsg
-                ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure Line 263 has your exact <strong>/exec</strong> URL and your deployment access is set to <strong>Anyone</strong>.'
+                ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure Line 282 has your exact <strong>/exec</strong> URL and your deployment access is set to <strong>Anyone</strong>.'
                 : 'Connected to your Google Sheet, but 0 clues were returned! Make sure your tab is named <strong>Clues</strong> or run <strong>setupDatabaseTabs</strong> in Apps Script.') +
             '</p>' +
             '<button class="btn-primary" onclick="fetchLiveDatabase()">🔄 Retry Database Sync</button>' +
@@ -891,13 +973,26 @@
 
       var cityObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
 
-      if (cityObj.status !== "LIVE" || clues.length === 0) {
+      // If this city has another trail that IS playable, auto-select it if current one isn't playable
+      if (!isTrailPlayable(cityObj)) {
+        var siblingLive = CITIES.find(function(c) {
+          return String(c.name || "").trim().toLowerCase() === String(cityObj.name || "").trim().toLowerCase() && isTrailPlayable(c);
+        });
+        if (siblingLive) {
+          activeCityId = siblingLive.id;
+          cityObj = siblingLive;
+          clues = getCluesForTrail(activeCityId);
+        }
+      }
+
+      if (!isTrailPlayable(cityObj)) {
+        var firstLiveAnyCity = CITIES.find(function(c) { return isTrailPlayable(c); }) || CITIES[0];
         container.innerHTML =
           '<div class="card" style="text-align:center; padding:32px 20px;">' +
             '<div style="font-size:42px; margin-bottom:10px;">🚧</div>' +
             '<h2 style="font-size:22px; font-weight:900; color:#fcd34d; margin-bottom:8px;">' + escapeHtml(cityObj.name) + ' Trail Coming Soon!</h2>' +
             '<p style="font-size:13px; color:#94a3b8; margin-bottom:18px;">We are currently mapping out riddles and partnering with local businesses in ' + escapeHtml(cityObj.name) + '.</p>' +
-            '<button class="btn-primary" onclick="selectCity(\'lawrenceville\')">Play Live Lawrenceville Trail Now</button>' +
+            '<button class="btn-primary" onclick="selectCity(\'' + escapeQuotes(firstLiveAnyCity.id) + '\')">Play Live ' + escapeHtml(firstLiveAnyCity.name) + ' Trail Now</button>' +
           '</div>';
         return;
       }
@@ -912,6 +1007,44 @@
     }
 
     function renderStartLobby(container, cityObj) {
+      // Find all playable trails for this same city name (hides SOON trails unless Admin Mode is unlocked)
+      var normCityName = String(cityObj.name || "").trim().toLowerCase();
+      var sameCityTrails = CITIES.filter(function(c) {
+        return String(c.name || "").trim().toLowerCase() === normCityName && isTrailPlayable(c);
+      });
+
+      var multiTrailSelectorHtml = "";
+      if (sameCityTrails.length > 1) {
+        var trailButtons = "";
+        for (var t = 0; t < sameCityTrails.length; t++) {
+          var tr = sameCityTrails[t];
+          var isSelected = tr.id === cityObj.id ? "active" : "";
+          var trClueCount = getCluesForTrail(tr.id).length;
+          var soonAdminBadge = String(tr.status || "").toUpperCase() !== "LIVE"
+            ? ' <span style="background:#ef4444; color:#fff; font-size:9px; padding:2px 6px; border-radius:99px; font-weight:900;">ADMIN PREVIEW (SOON)</span>'
+            : '';
+
+          trailButtons +=
+            '<button class="trail-option-btn ' + isSelected + '" onclick="selectCity(\'' + escapeQuotes(tr.id) + '\')">' +
+              '<div>' +
+                '<div style="font-size:13px; font-weight:900; color:' + (isSelected ? '#fcd34d' : '#f8fafc') + ';">' +
+                  (isSelected ? '🔘 ' : '⚪ ') + escapeHtml(tr.tagline || ("Trail #" + (t + 1))) + soonAdminBadge +
+                '</div>' +
+                '<div style="font-size:11px; color:#94a3b8; margin-top:2px;">' +
+                  trClueCount + ' Stops &bull; ' + escapeHtml(tr.distanceMiles || "1.1 Miles") + ' &bull; ' + escapeHtml(tr.estTime || "35–50 Mins") +
+                '</div>' +
+              '</div>' +
+              '<span style="font-size:11px; font-weight:800; color:' + (isSelected ? '#10b981' : '#64748b') + ';">' + (isSelected ? 'ACTIVE' : 'Select ➔') + '</span>' +
+            '</button>';
+        }
+
+        multiTrailSelectorHtml =
+          '<div class="trail-selector-box">' +
+            '<div style="font-size:11px; font-weight:900; color:#fcd34d; text-transform:uppercase; letter-spacing:0.4px;">🗺️ Choose Your ' + escapeHtml(cityObj.name) + ' Trail (' + sameCityTrails.length + ' Available):</div>' +
+            trailButtons +
+          '</div>';
+      }
+
       var partnerShops = [];
       for (var i = 0; i < clues.length; i++) {
         var sName = clues[i].sponsorName;
@@ -935,11 +1068,13 @@
 
       container.innerHTML =
         '<div class="card">' +
+          multiTrailSelectorHtml +
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">' +
             '<span style="background:rgba(245,158,11,0.18); color:#fcd34d; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px;">🔥 ' + clues.length + ' INTERACTIVE STOPS</span>' +
             sponsorPill +
           '</div>' +
-          '<h2 style="font-size:24px; font-weight:900; color:#ffffff; margin-bottom:6px;">' + escapeHtml(cityObj.name) + ' Adventure Trail</h2>' +
+          '<h2 style="font-size:24px; font-weight:900; color:#ffffff; margin-bottom:3px;">' + escapeHtml(cityObj.name) + ' Adventure Trail</h2>' +
+          '<div style="font-size:13px; font-weight:800; color:#fcd34d; margin-bottom:10px;">🧭 ' + escapeHtml(cityObj.tagline || "Interactive Downtown Trail") + '</div>' +
           '<div style="display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color:#fcd34d; font-weight:700; margin-bottom:12px;">' +
             '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">👟 ' + escapeHtml(cityObj.distanceMiles || "1.1 Miles") + '</span>' +
             '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">⏱️ ' + escapeHtml(cityObj.estTime || "35–50 Mins") + '</span>' +
@@ -1305,7 +1440,7 @@
         }
       }
 
-      var useLvilleGrid = (cityObj.mapStyle === "lawrenceville" || activeCityId === "lawrenceville");
+      var useLvilleGrid = (cityObj.mapStyle === "lawrenceville" || String(cityObj.name || "").trim().toLowerCase() === "lawrenceville");
       var cityBackgroundSvg = "";
       if (useLvilleGrid) {
         cityBackgroundSvg =
@@ -1484,7 +1619,6 @@
       var voucherMinutes = Number(customTimerMinutes) || Number(GLOBAL_CONFIG.vipVoucherTimerMinutes) || 5;
       var remainingSec = voucherMinutes * 60;
 
-      // Pause the main race timer once per sponsor shop so teams can shop without hurting leaderboard time
       var pauseNoticeEl = document.getElementById("vipPauseNoticeStamp");
       if (huntStarted && !huntCompleted && !vipPauseUsedForShop[shopName]) {
         vipPauseUsedForShop[shopName] = true;
@@ -1571,7 +1705,7 @@
               '<button onclick="switchLeaderboardFilter(\'all\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "all" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "all" ? "#090d16" : "#94a3b8") + ';">👑 All-Time</button>' +
             '</div>' +
           '</div>' +
-          (rowsHtml || '<p style="font-size:12px; color:#64748b;">No teams recorded in Google Sheets for this filter yet—be the first!</p>') +
+          (rowsHtml || '<p style="font-size:12px; color:#64748b;">No teams recorded in Google Sheets for this trail yet—be the first!</p>') +
         '</div>'
       );
     }
@@ -1736,6 +1870,8 @@
       if (adminTapCount >= 5) {
         adminModeUnlocked = true;
         document.getElementById("adminPill").style.display = "inline-block";
+        renderCitySelector();
+        renderMainContent();
         openAdminDemoModal();
         adminTapCount = 0;
       }
