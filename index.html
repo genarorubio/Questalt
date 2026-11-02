@@ -339,7 +339,7 @@
   <!-- Main Content -->
   <main class="container" id="mainContent"></main>
 
-  <!-- Anonymous Suggestion & City Request Form (100% Private) -->
+  <!-- Anonymous Suggestion & City Request Form (100% Private — No Email Exposed) -->
   <section class="container" style="margin-top:6px;">
     <div class="card" style="padding:18px;">
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
@@ -362,21 +362,29 @@
     </div>
   </section>
 
-  <!-- Post-Clue "Unlocked!" Celebration & Fun Fact Modal -->
+  <!-- Post-Clue "Unlocked!" Celebration, Optional History Trivia & VIP Perk Modal -->
   <div class="modal-overlay" id="clueSolvedModal">
     <div class="modal-box" style="border-color:#10b981;">
       <div style="font-size:40px; margin-bottom:6px;">🎉</div>
       <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:8px;" id="solvedStopBadge">
         STOP UNLOCKED
       </div>
-      <h3 style="font-size:21px; font-weight:900; color:#ffffff; margin-bottom:8px;" id="solvedStopTitle">Correct Answer!</h3>
-      <p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:14px;" id="solvedStopFact"></p>
+      <h3 style="font-size:21px; font-weight:900; color:#ffffff; margin-bottom:10px;" id="solvedStopTitle">Correct Answer!</h3>
+
+      <!-- Optional History Trivia Box (Auto-hides when history_trivia is blank in Google Sheets) -->
+      <div id="solvedStopTriviaBox" style="display:none; background:#090d16; border:1px solid rgba(245,158,11,0.4); border-radius:14px; padding:12px 14px; margin-bottom:14px; text-align:left;">
+        <div style="font-size:10px; font-weight:900; color:#fcd34d; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px;">📜 Local History &amp; Trivia</div>
+        <div style="font-size:13px; color:#e2e8f0; line-height:1.5;" id="solvedStopTriviaText"></div>
+      </div>
+
+      <!-- Optional VIP Voucher Unlock Box -->
       <div id="solvedStopVipBox" style="display:none; background:rgba(16,185,129,0.12); border:1px solid #10b981; border-radius:14px; padding:12px; margin-bottom:14px;">
         <div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🎁 Partner VIP Perk Unlocked!</div>
         <div style="font-size:15px; font-weight:900; color:#ffffff; margin-top:2px;" id="solvedVipShop"></div>
         <div style="font-size:12px; color:#fcd34d; margin-bottom:10px;" id="solvedVipPerk"></div>
         <button class="btn-secondary" style="width:100%; border-color:#10b981; color:#34d399;" id="solvedVipBtn">Open Live VIP Voucher</button>
       </div>
+
       <button class="btn-primary" onclick="closeSolvedModal()">Continue to Next Stop ➔</button>
     </div>
   </div>
@@ -407,8 +415,8 @@
       <div id="rulesModalText" style="font-size:13px; color:#cbd5e1; line-height:1.6; text-align:left; margin-bottom:16px; background:#090d16; padding:14px; border-radius:12px; border:1px solid #1e293b; white-space:pre-line;">
         1. Head to the Starting Star pin on the trail map.
         2. Read each riddle and explore the downtown landmarks.
-        3. Type the correct answer to unlock the map pin, local history facts, and VIP discounts at partner shops!
-        4. Stuck? Tap Reveal Hint (+2:00), or use the Skip Stop (+5:00) safety button if a landmark is blocked.
+        3. Type the correct answer to unlock the map pin, optional local history trivia, and VIP discounts at partner shops!
+        4. Competing for a prize? Take a quick team selfie at Stops #1, #5, and #9 and screenshot your final Victory Claim Code!
       </div>
       <button class="btn-primary" onclick="document.getElementById('rulesModal').classList.remove('show')">Got It!</button>
     </div>
@@ -458,10 +466,11 @@
 
   <script>
     // =========================================================================
-    // 1. MASTER GOOGLE SHEET API URL (100% DATABASE-DRIVEN — NO HARDCODED CLUES)
+    // 1. MASTER GOOGLE SHEET API URL (100% DATABASE-DRIVEN)
     // =========================================================================
     var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
-    var STORAGE_KEY_SESSION = "questatl_active_session_v3";
+    var STORAGE_KEY_SESSION = "questatl_active_session_v4";
+    var STORAGE_KEY_DEVICE = "questatl_device_id_v1";
 
     var GLOBAL_CONFIG = {
       hintPenaltySeconds: 120,
@@ -473,7 +482,7 @@
 
     var MONTHLY_THEMES = {
       october:  { activeMonths: "10", primary: "#f97316", bgTop: "#2e1065", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
-      november: { activeMonths: "11", primary: "#d97706", bgTop: "#451a03", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
+      november: { activeMonths: "11", primary: "#d97316", bgTop: "#451a03", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
       december: { activeMonths: "12", primary: "#eab308", bgTop: "#064e3b", bgDeep: "#061a12", title: "QuestATL Holiday Lights", sub: "December Winter Wonderland Hunt", floater: "❄️", badge: "🎄" },
       default:  { activeMonths: "1,2,3,4,5,6,7,8,9", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" }
     };
@@ -495,12 +504,15 @@
     var leaderboardFilter = "month";
     var teamName = "";
     var referralSource = "Direct";
-    var playerCount = 2;
     var startTimeMs = 0;
+    var lastStopTimestampMs = 0;
     var elapsedSeconds = 0;
     var hintsUsedCount = 0;
     var skipsUsedCount = 0;
     var hintRevealedForStop = {};
+    var stopSplitLogs = [];
+    var gpsVerifiedCount = 0;
+    var victoryClaimCode = "";
     var timerInterval = null;
     var vipClockInterval = null;
     var adminTapCount = 0;
@@ -514,6 +526,18 @@
     var isDraggingMap = false;
     var dragStartX = 0;
     var dragStartY = 0;
+
+    function getOrCreateDeviceId() {
+      try {
+        var existing = localStorage.getItem(STORAGE_KEY_DEVICE);
+        if (existing) return existing;
+        var created = "QDEV-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+        localStorage.setItem(STORAGE_KEY_DEVICE, created);
+        return created;
+      } catch (e) {
+        return "QDEV-ANON";
+      }
+    }
 
     // =========================================================================
     // 2. WEB AUDIO SOUND EFFECTS & HAPTICS
@@ -558,7 +582,7 @@
     }
 
     // =========================================================================
-    // 3. AUTO-SAVE SESSION RECOVERY (LOCALSTORAGE)
+    // 3. AUTO-SAVE SESSION RECOVERY & ANTI-CHEAT TELEMETRY
     // =========================================================================
     function saveActiveSession() {
       if (!huntStarted || huntCompleted) {
@@ -571,9 +595,12 @@
         referralSource: referralSource,
         currentStopIndex: currentStopIndex,
         startTimeMs: startTimeMs,
+        lastStopTimestampMs: lastStopTimestampMs,
         hintsUsedCount: hintsUsedCount,
         skipsUsedCount: skipsUsedCount,
-        hintRevealedForStop: hintRevealedForStop
+        hintRevealedForStop: hintRevealedForStop,
+        stopSplitLogs: stopSplitLogs,
+        gpsVerifiedCount: gpsVerifiedCount
       };
       try { localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(state)); } catch (e) {}
     }
@@ -593,9 +620,12 @@
         referralSource = s.referralSource || "Direct";
         currentStopIndex = Number(s.currentStopIndex) || 0;
         startTimeMs = Number(s.startTimeMs);
+        lastStopTimestampMs = Number(s.lastStopTimestampMs) || startTimeMs;
         hintsUsedCount = Number(s.hintsUsedCount) || 0;
         skipsUsedCount = Number(s.skipsUsedCount) || 0;
         hintRevealedForStop = s.hintRevealedForStop || {};
+        stopSplitLogs = Array.isArray(s.stopSplitLogs) ? s.stopSplitLogs : [];
+        gpsVerifiedCount = Number(s.gpsVerifiedCount) || 0;
         huntStarted = true;
         huntCompleted = false;
         startLiveTimerLoop();
@@ -610,6 +640,31 @@
       if (timerInterval) clearInterval(timerInterval);
       try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
       renderMainContent();
+    }
+
+    // Silent GPS proximity verification (checks if player is within 160m of landmark)
+    function verifyStopGpsSilently(stop) {
+      if (!navigator.geolocation || !stop || !stop.lat || !stop.lng) return;
+      try {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          var dMeters = computeHaversineMeters(pos.coords.latitude, pos.coords.longitude, stop.lat, stop.lng);
+          if (dMeters <= 160) {
+            gpsVerifiedCount++;
+            saveActiveSession();
+          }
+        }, function() {}, { timeout: 4000, maximumAge: 60000 });
+      } catch (e) {}
+    }
+
+    function computeHaversineMeters(lat1, lon1, lat2, lon2) {
+      var R = 6371000;
+      var toRad = Math.PI / 180;
+      var dLat = (lat2 - lat1) * toRad;
+      var dLon = (lon2 - lon1) * toRad;
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
     // =========================================================================
@@ -691,7 +746,7 @@
             }
           }
 
-          // 2. Sync Themes
+          // 2. Sync Themes (Protected Merge)
           if (json.themes && json.themes.length > 0) {
             for (var ti = 0; ti < json.themes.length; ti++) {
               var st = json.themes[ti];
@@ -720,7 +775,7 @@
           // 5. Sync Clues (100% from Google Sheets)
           ALL_DATABASE_CLUES = Array.isArray(json.clues) ? json.clues : [];
 
-          // 6. Sync Cities (or auto-build from Clues if Cities tab wasn't created yet)
+          // 6. Sync Cities
           if (Array.isArray(json.cities) && json.cities.length > 0) {
             CITIES = json.cities;
           } else {
@@ -729,7 +784,6 @@
             ];
           }
 
-          // Ensure any city with active clues in the sheet is marked LIVE
           for (var c = 0; c < CITIES.length; c++) {
             var hasClues = ALL_DATABASE_CLUES.some(function(item) {
               return (item.cityId || "lawrenceville") === CITIES[c].id;
@@ -763,7 +817,7 @@
     }
 
     // =========================================================================
-    // 5. CITY SELECTOR & LOBBY SCREEN
+    // 5. CITY SELECTOR & LOBBY SCREEN (WITH DUPLICATE TEAM NAME BLOCKER)
     // =========================================================================
     function renderCitySelector() {
       var bar = document.getElementById("citySelectorBar");
@@ -819,7 +873,7 @@
             '<h2 style="font-size:19px; font-weight:900; color:#fca5a5; margin-bottom:8px;">Database Sync Needed</h2>' +
             '<p style="font-size:13px; color:#cbd5e1; margin-bottom:14px; line-height:1.5;">' +
               (databaseErrorMsg
-                ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure Line 257 has your exact <strong>/exec</strong> URL and your deployment access is set to <strong>Anyone</strong>.'
+                ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure Line 260 has your exact <strong>/exec</strong> URL and your deployment access is set to <strong>Anyone</strong>.'
                 : 'Connected to your Google Sheet, but 0 clues were returned! Make sure your tab is named <strong>Clues</strong> or run <strong>setupDatabaseTabs</strong> in Apps Script.') +
             '</p>' +
             '<button class="btn-primary" onclick="fetchLiveDatabase()">🔄 Retry Database Sync</button>' +
@@ -887,12 +941,12 @@
             'Solve real-world riddles across downtown ' + escapeHtml(cityObj.name) + ', unlock map pins and secret VIP perks as you solve each clue, and race the live leaderboard clock!' +
           '</p>' +
           '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:14px; margin-bottom:14px;">' +
-            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">ENTER YOUR TEAM NAME:</label>' +
+            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">ENTER A UNIQUE TEAM NAME:</label>' +
             '<input type="text" id="teamNameInput" placeholder="e.g. Lawrenceville Legends" value="' + escapeQuotes(teamName) + '" style="margin-bottom:12px;" />' +
             partnerDropdownHtml +
             '<label style="display:flex; align-items:flex-start; gap:8px; font-size:11px; color:#cbd5e1; cursor:pointer;">' +
               '<input type="checkbox" id="waiverCheckbox" style="margin-top:2px; transform:scale(1.2);" />' +
-              '<span><strong>Safety &amp; Liability Waiver:</strong> We agree to use crosswalks, obey all traffic laws, stay on public sidewalks, and assume full responsibility for our safety during this self-guided walking adventure.</span>' +
+              '<span><strong>Safety &amp; Fair Play Agreement:</strong> We agree to use crosswalks, obey all traffic laws, stay on public sidewalks, and play fairly on foot without outside assistance.</span>' +
             '</label>' +
           '</div>' +
           '<button class="btn-primary" onclick="handleStartQuestClick()">🚀 Start Live Timer &amp; Begin Quest</button>' +
@@ -909,6 +963,14 @@
       return false;
     }
 
+    function isDuplicateTeamName(nameToCheck) {
+      var clean = String(nameToCheck || "").trim().toLowerCase();
+      return liveRankings.some(function(r) {
+        var sameCity = !r.city || r.city.toLowerCase() === activeCityId;
+        return sameCity && String(r.team || "").trim().toLowerCase() === clean;
+      });
+    }
+
     function handleStartQuestClick() {
       var inputEl = document.getElementById("teamNameInput");
       var waiverEl = document.getElementById("waiverCheckbox");
@@ -923,8 +985,12 @@
         alert("Please choose a family-friendly Team Name for the public leaderboard!");
         return;
       }
+      if (isDuplicateTeamName(entered)) {
+        alert("That Team Name is already on the leaderboard! Please choose a unique Team Name.");
+        return;
+      }
       if (!waiverEl || !waiverEl.checked) {
-        alert("Please check the Safety & Liability Waiver box to begin.");
+        alert("Please check the Safety & Fair Play Agreement box to begin.");
         return;
       }
 
@@ -937,8 +1003,12 @@
       hintsUsedCount = 0;
       skipsUsedCount = 0;
       hintRevealedForStop = {};
+      stopSplitLogs = [];
+      gpsVerifiedCount = 0;
+      victoryClaimCode = "";
       activeGameTab = "clue";
       startTimeMs = Date.now();
+      lastStopTimestampMs = startTimeMs;
 
       saveActiveSession();
       trackQuestEvent({
@@ -946,8 +1016,7 @@
         city: activeCityId,
         team: teamName,
         referral: referralSource,
-        players: playerCount,
-        waiverAgreed: true
+        deviceId: getOrCreateDeviceId()
       });
 
       startLiveTimerLoop();
@@ -965,7 +1034,7 @@
     }
 
     // =========================================================================
-    // 6. ACTIVE GAME ENGINE (CLUES, SKIP SAFETY VALVE, FUZZY MATCHING)
+    // 6. ACTIVE GAME ENGINE (CLUES, OPTIONAL HISTORY TRIVIA, ANTI-CHEAT SPLITS)
     // =========================================================================
     function renderActiveHuntInterface(container, cityObj) {
       var stop = clues[currentStopIndex] || clues[0];
@@ -1073,7 +1142,20 @@
       var skipMin = Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60);
       if (!confirm("Skip this stop and add a +" + skipMin + ":00 penalty to your timer?")) return;
       skipsUsedCount++;
+      recordStopSplitTime(clues[currentStopIndex], true);
       advanceToNextStopOrFinish(true);
+    }
+
+    function recordStopSplitTime(stop, wasSkipped) {
+      var now = Date.now();
+      var baseRef = lastStopTimestampMs || startTimeMs || now;
+      var splitSec = Math.max(1, Math.round((now - baseRef) / 1000));
+      lastStopTimestampMs = now;
+      var stopNum = stop ? stop.number : (currentStopIndex + 1);
+      stopSplitLogs.push("S" + stopNum + ":" + splitSec + "s" + (wasSkipped ? "(skip)" : ""));
+      if (!wasSkipped) {
+        verifyStopGpsSilently(stop);
+      }
     }
 
     function editDistance(a, b) {
@@ -1109,6 +1191,7 @@
 
       if (matched) {
         playGameTone("solve");
+        recordStopSplitTime(stop, false);
         showClueSolvedCelebrationModal(stop);
       } else if (msg) {
         msg.style.display = "block";
@@ -1120,7 +1203,17 @@
     function showClueSolvedCelebrationModal(stop) {
       document.getElementById("solvedStopBadge").innerText = "✅ STOP #" + stop.number + " UNLOCKED ON MAP";
       document.getElementById("solvedStopTitle").innerText = stop.shortLabel + " Conquered!";
-      document.getElementById("solvedStopFact").innerText = stop.unlockFact || "Awesome job! Your trail map has been updated with this landmark pin.";
+
+      // Show History Trivia Box ONLY if history_trivia is populated in the Google Sheet
+      var triviaBox = document.getElementById("solvedStopTriviaBox");
+      var triviaText = document.getElementById("solvedStopTriviaText");
+      if (stop.historyTrivia && String(stop.historyTrivia).trim() !== "") {
+        triviaBox.style.display = "block";
+        triviaText.innerText = String(stop.historyTrivia).trim();
+      } else {
+        triviaBox.style.display = "none";
+        triviaText.innerText = "";
+      }
 
       var vipBox = document.getElementById("solvedStopVipBox");
       if (stop.sponsorName && stop.sponsorPerk && !isPartnerCapReached(stop)) {
@@ -1311,7 +1404,7 @@
     }
 
     // =========================================================================
-    // 8. VIP VOUCHERS (LOCKED UNTIL SOLVED + 30-CAP + LIVE CLOCK) & RANKINGS
+    // 8. VIP VOUCHERS, RANKINGS & VICTORY CLAIM CODE
     // =========================================================================
     function isPartnerCapReached(stop) {
       if (!stop.maxClaims || stop.maxClaims <= 0) return false;
@@ -1447,8 +1540,11 @@
       try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
       playGameTone("victory");
 
+      victoryClaimCode = "QATL-" + Math.floor(1000 + Math.random() * 9000);
       var finalFormatted = formatSeconds(elapsedSeconds);
       var nowMonth = new Date().toLocaleString("en-US", { month: "short", year: "numeric" });
+      var telemetryStr = "Device:" + getOrCreateDeviceId() + " | GPS:" + gpsVerifiedCount + "/" + clues.length + " | Splits:" + stopSplitLogs.join(",");
+
       var newEntry = {
         city: activeCityId,
         team: teamName,
@@ -1469,7 +1565,9 @@
         formattedTime: finalFormatted,
         hintsUsed: hintsUsedCount,
         skipsUsed: skipsUsedCount,
-        referral: referralSource
+        referral: referralSource,
+        claimCode: victoryClaimCode,
+        telemetry: telemetryStr
       });
       renderMainContent();
     }
@@ -1480,10 +1578,15 @@
           '<div style="font-size:48px; margin-bottom:8px;">🏆</div>' +
           '<h2 style="font-size:26px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Conquered!</h2>' +
           '<p style="font-size:14px; color:#cbd5e1; margin-bottom:16px;">Congratulations, <strong>' + escapeHtml(teamName) + '</strong>! Your official time has been posted to the live ' + escapeHtml(cityObj.name) + ' leaderboard.</p>' +
-          '<div style="background:#090d16; border:1px solid #f59e0b; border-radius:16px; padding:16px; margin-bottom:18px;">' +
+          '<div style="background:#090d16; border:1px solid #f59e0b; border-radius:16px; padding:16px; margin-bottom:14px;">' +
             '<div style="font-size:11px; color:#94a3b8; font-weight:800;">OFFICIAL FINISH TIME</div>' +
             '<div style="font-size:34px; font-weight:900; color:#10b981;">' + formatSeconds(elapsedSeconds) + '</div>' +
             '<div style="font-size:11px; color:#64748b; margin-top:4px;">Hints Used: ' + hintsUsedCount + ' &bull; Skips: ' + skipsUsedCount + '</div>' +
+          '</div>' +
+          '<div style="background:rgba(16,185,129,0.1); border:1px dashed #10b981; border-radius:14px; padding:12px; margin-bottom:16px;">' +
+            '<div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🔒 Official Prize Verification Code</div>' +
+            '<div style="font-size:20px; font-weight:900; color:#ffffff; letter-spacing:1px; margin:4px 0;">#' + escapeHtml(victoryClaimCode || "QATL-VERIFIED") + '</div>' +
+            '<div style="font-size:11px; color:#94a3b8;">Screenshot this screen + your trail selfies to claim contest prizes!</div>' +
           '</div>' +
           '<button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#052e16; margin-bottom:10px;" onclick="shareVictoryPost(\'' + escapeQuotes(cityObj.name) + '\')">' +
             '📲 Share Our Time on Social Media' +
@@ -1505,6 +1608,7 @@
         action: "social_share",
         city: activeCityId,
         team: teamName || "Explorer",
+        claimCode: victoryClaimCode,
         formattedTime: timeStr
       });
 
@@ -1622,6 +1726,7 @@
         teamName = "Partner Demo";
         huntStarted = true;
         startTimeMs = Date.now();
+        lastStopTimestampMs = startTimeMs;
         startLiveTimerLoop();
       }
       currentStopIndex = idx;
