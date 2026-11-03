@@ -126,7 +126,7 @@
       <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:10px;">🧭 How QuestATL Works</h3>
       <div id="rulesModalText" style="font-size:13px; color:#cbd5e1; line-height:1.6; text-align:left; margin-bottom:16px; background:#090d16; padding:14px; border-radius:12px; border:1px solid #1e293b; white-space:pre-line;">1. Head to the Starting Star pin on the trail map.
 2. Read each riddle and explore the downtown landmarks.
-3. Type the correct answer to unlock the map pin, optional local history trivia, and VIP discounts at partner shops!
+3. Type the correct answer to unlock the map pin, optional local history trivia, and single-use VIP discounts at partner shops!
 4. Competing for a prize? Take a quick team selfie at Stops #1, #5, and #9 and screenshot your final Victory Claim Code!</div>
       <button class="btn-primary" onclick="document.getElementById('rulesModal').classList.remove('show')">Got It!</button>
     </div>
@@ -135,7 +135,7 @@
   <div class="modal-overlay" id="partnerInfoModal">
     <div class="modal-box">
       <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🤝 Local Business Partners</h3>
-      <p style="font-size:12px; color:#cbd5e1; line-height:1.5; margin-bottom:12px;">QuestATL brings foot traffic directly to local storefronts! Players solve riddles outside your shop and unlock a capped monthly VIP perk inside.</p>
+      <p style="font-size:12px; color:#cbd5e1; line-height:1.5; margin-bottom:12px;">QuestATL brings foot traffic directly to local storefronts! Players solve riddles outside your shop and unlock a capped, single-use monthly VIP perk inside.</p>
       <div style="text-align:left; display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
         <input type="text" id="partnerShopInput" placeholder="Business / Shop Name *" />
         <input type="text" id="partnerPersonInput" placeholder="Your Name *" />
@@ -170,8 +170,10 @@
     // ⬇️ PASTE YOUR LIVE GOOGLE APPS SCRIPT /exec URL RIGHT HERE ⬇️
     var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
 
-    var STORAGE_KEY_SESSION = "questatl_active_session_v7";
+    var STORAGE_KEY_SESSION = "questatl_active_session_v8";
     var STORAGE_KEY_DEVICE = "questatl_device_id_v1";
+    var STORAGE_KEY_USED_VOUCHERS = "questatl_redeemed_vouchers_v1";
+
     var GLOBAL_CONFIG = { hintPenaltySeconds: 120, skipPenaltySeconds: 300, vipVoucherTimerMinutes: 5, announcementBanner: "", bannerUrl: "", rulesText: "" };
 
     var MONTHLY_THEMES = {
@@ -184,11 +186,25 @@
     var CITIES = [], ALL_DATABASE_CLUES = [], clues = [], liveRankings = [], vipClaimCounts = {};
     var isLoadingDatabase = true, databaseErrorMsg = "", activeCityId = "lawrenceville";
     var huntStarted = false, huntCompleted = false, currentStopIndex = 0, activeGameTab = "clue", leaderboardFilter = "month";
-    var teamName = "", referralSource = "Direct", startTimeMs = 0, lastStopTimestampMs = 0, elapsedSeconds = 0;
+    var teamName = "", captainContact = "", referralSource = "Direct", urlRefParam = "";
+    var startTimeMs = 0, lastStopTimestampMs = 0, elapsedSeconds = 0;
     var hintsUsedCount = 0, skipsUsedCount = 0, hintRevealedForStop = {}, vipPauseUsedForShop = {};
     var isTimerPausedForVip = false, vipPauseStartedMs = 0, stopSplitLogs = [], gpsVerifiedCount = 0, victoryClaimCode = "";
     var timerInterval = null, vipClockInterval = null, adminTapCount = 0, adminModeUnlocked = false, manualThemeOverride = null, soundMuted = false;
     var mapZoom = 1, mapPanX = 0, mapPanY = 0, isDraggingMap = false, dragStartX = 0, dragStartY = 0;
+
+    function applyUrlDeepLinks() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var tParam = params.get("trail") || params.get("city");
+        var rParam = params.get("ref") || params.get("shop");
+        if (tParam) activeCityId = String(tParam).trim().toLowerCase();
+        if (rParam) {
+          urlRefParam = String(rParam).trim();
+          referralSource = urlRefParam;
+        }
+      } catch (e) {}
+    }
 
     function getOrCreateDeviceId() {
       try {
@@ -200,6 +216,18 @@
       } catch (e) { return "QDEV-ANON"; }
     }
 
+    function getRedeemedShopsMap() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY_USED_VOUCHERS) || "{}"); } catch (e) { return {}; }
+    }
+
+    function markShopVoucherRedeemed(shopName) {
+      try {
+        var map = getRedeemedShopsMap();
+        map[shopName] = new Date().toLocaleDateString();
+        localStorage.setItem(STORAGE_KEY_USED_VOUCHERS, JSON.stringify(map));
+      } catch (e) {}
+    }
+
     function getCluesForTrail(trailId) {
       var clean = String(trailId || "lawrenceville").trim().toLowerCase();
       return ALL_DATABASE_CLUES.filter(function(item) {
@@ -209,10 +237,8 @@
 
     function isTrailPublicLive(trailObj) {
       if (!trailObj) return false;
-      var hasClues = getCluesForTrail(trailObj.id).length > 0;
-      if (!hasClues) return false;
+      if (getCluesForTrail(trailObj.id).length === 0) return false;
       var st = String(trailObj.status || trailObj.status_default || trailObj.statusdefault || "LIVE").trim().toUpperCase();
-      // If it's the primary city row (e.g. 'lawrenceville') and has clues, or status is LIVE, mark it live!
       var isPrimaryCityRow = String(trailObj.id || "").indexOf("_") === -1;
       return st === "LIVE" || isPrimaryCityRow;
     }
@@ -252,10 +278,10 @@
       if (!huntStarted || huntCompleted) { try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {} return; }
       try {
         localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify({
-          activeCityId: activeCityId, teamName: teamName, referralSource: referralSource, currentStopIndex: currentStopIndex,
-          startTimeMs: startTimeMs, lastStopTimestampMs: lastStopTimestampMs, hintsUsedCount: hintsUsedCount,
-          skipsUsedCount: skipsUsedCount, hintRevealedForStop: hintRevealedForStop, vipPauseUsedForShop: vipPauseUsedForShop,
-          stopSplitLogs: stopSplitLogs, gpsVerifiedCount: gpsVerifiedCount
+          activeCityId: activeCityId, teamName: teamName, captainContact: captainContact, referralSource: referralSource,
+          currentStopIndex: currentStopIndex, startTimeMs: startTimeMs, lastStopTimestampMs: lastStopTimestampMs,
+          hintsUsedCount: hintsUsedCount, skipsUsedCount: skipsUsedCount, hintRevealedForStop: hintRevealedForStop,
+          vipPauseUsedForShop: vipPauseUsedForShop, stopSplitLogs: stopSplitLogs, gpsVerifiedCount: gpsVerifiedCount
         }));
       } catch (e) {}
     }
@@ -268,7 +294,8 @@
         if (!s || !s.teamName || !s.startTimeMs || (Date.now() - s.startTimeMs > 12 * 3600 * 1000)) {
           localStorage.removeItem(STORAGE_KEY_SESSION); return;
         }
-        activeCityId = s.activeCityId || "lawrenceville"; teamName = s.teamName; referralSource = s.referralSource || "Direct";
+        activeCityId = s.activeCityId || "lawrenceville"; teamName = s.teamName;
+        captainContact = s.captainContact || ""; referralSource = s.referralSource || "Direct";
         currentStopIndex = Number(s.currentStopIndex) || 0; startTimeMs = Number(s.startTimeMs);
         lastStopTimestampMs = Number(s.lastStopTimestampMs) || startTimeMs;
         hintsUsedCount = Number(s.hintsUsedCount) || 0; skipsUsedCount = Number(s.skipsUsedCount) || 0;
@@ -496,7 +523,10 @@
       var partnerDropdownHtml = "";
       if (partnerShops.length > 0) {
         var opts = '<option value="Direct">Historic Courthouse / General QR</option>';
-        for (var p = 0; p < partnerShops.length; p++) opts += '<option value="' + escapeQuotes(partnerShops[p]) + '">📍 ' + escapeHtml(partnerShops[p]) + ' Window QR</option>';
+        for (var p = 0; p < partnerShops.length; p++) {
+          var isRefMatch = urlRefParam && partnerShops[p].toLowerCase().indexOf(urlRefParam.toLowerCase()) !== -1 ? " selected" : "";
+          opts += '<option value="' + escapeQuotes(partnerShops[p]) + '"' + isRefMatch + '>📍 ' + escapeHtml(partnerShops[p]) + ' Window QR</option>';
+        }
         partnerDropdownHtml = '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">STARTING AT A PARTNER SHOP WINDOW? (OPTIONAL):</label><select id="referralSelectInput" style="margin-bottom:12px;">' + opts + '</select>';
       }
 
@@ -514,10 +544,12 @@
             '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">⏱️ ' + escapeHtml(cityObj.estTime || "35–50 Mins") + '</span>' +
             '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">' + escapeHtml(cityObj.trailTags || "🐕 Dog Friendly") + '</span>' +
           '</div>' +
-          '<p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">Solve real-world riddles across downtown ' + escapeHtml(cityObj.name) + ', unlock map pins and secret VIP perks as you solve each clue, and race the live leaderboard clock!</p>' +
+          '<p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">Solve real-world riddles across downtown ' + escapeHtml(cityObj.name) + ', unlock map pins and single-use VIP perks as you solve each clue, and race the live leaderboard clock!</p>' +
           '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:14px; margin-bottom:14px;">' +
-            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">ENTER A UNIQUE TEAM NAME:</label>' +
-            '<input type="text" id="teamNameInput" placeholder="e.g. Lawrenceville Legends" value="' + escapeQuotes(teamName) + '" style="margin-bottom:12px;" />' +
+            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">ENTER A UNIQUE TEAM NAME *:</label>' +
+            '<input type="text" id="teamNameInput" placeholder="e.g. Lawrenceville Legends" value="' + escapeQuotes(teamName) + '" style="margin-bottom:10px;" />' +
+            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">TEAM CAPTAIN INSTAGRAM OR EMAIL (FOR PRIZES &amp; NEW TRAIL ALERTS):</label>' +
+            '<input type="text" id="captainContactInput" placeholder="@yourhandle or email (Optional)" value="' + escapeQuotes(captainContact) + '" style="margin-bottom:12px;" />' +
             partnerDropdownHtml +
             '<label style="display:flex; align-items:flex-start; gap:8px; font-size:11px; color:#cbd5e1; cursor:pointer;">' +
               '<input type="checkbox" id="waiverCheckbox" style="margin-top:2px; transform:scale(1.2);" />' +
@@ -544,14 +576,16 @@
     }
 
     function handleStartQuestClick() {
-      var inputEl = document.getElementById("teamNameInput"), waiverEl = document.getElementById("waiverCheckbox"), refEl = document.getElementById("referralSelectInput");
+      var inputEl = document.getElementById("teamNameInput"), contactEl = document.getElementById("captainContactInput"), waiverEl = document.getElementById("waiverCheckbox"), refEl = document.getElementById("referralSelectInput");
       var entered = inputEl ? inputEl.value.trim() : "";
       if (!entered) { alert("Please enter a Team Name before starting your quest!"); return; }
       if (containsProfanity(entered)) { alert("Please choose a family-friendly Team Name!"); return; }
       if (isDuplicateTeamName(entered)) { alert("That Team Name is already on the leaderboard! Please choose a unique Team Name."); return; }
       if (!waiverEl || !waiverEl.checked) { alert("Please check the Safety & Fair Play Agreement box to begin."); return; }
 
-      teamName = entered; referralSource = refEl ? refEl.value : "Direct";
+      teamName = entered;
+      captainContact = contactEl ? contactEl.value.trim() : "";
+      referralSource = refEl ? refEl.value : (urlRefParam || "Direct");
       huntStarted = true; huntCompleted = false; currentStopIndex = 0; elapsedSeconds = 0;
       hintsUsedCount = 0; skipsUsedCount = 0; hintRevealedForStop = {};
       vipPauseUsedForShop = {}; isTimerPausedForVip = false;
@@ -559,7 +593,7 @@
       activeGameTab = "clue"; startTimeMs = Date.now(); lastStopTimestampMs = startTimeMs;
 
       saveActiveSession();
-      trackQuestEvent({ action: "start_team", city: activeCityId, team: teamName, referral: referralSource, deviceId: getOrCreateDeviceId() });
+      trackQuestEvent({ action: "start_team", city: activeCityId, team: teamName, captainContact: captainContact, referral: referralSource, deviceId: getOrCreateDeviceId() });
       startLiveTimerLoop(); renderMainContent();
     }
 
@@ -684,8 +718,10 @@
         triviaBox.style.display = "block"; triviaText.innerText = String(stop.historyTrivia).trim();
       } else { triviaBox.style.display = "none"; triviaText.innerText = ""; }
 
+      var redeemedMap = getRedeemedShopsMap();
+      var alreadyUsed = stop.sponsorName && redeemedMap[stop.sponsorName] && !adminModeUnlocked;
       var vipBox = document.getElementById("solvedStopVipBox");
-      if (stop.sponsorName && stop.sponsorPerk && !isPartnerCapReached(stop)) {
+      if (stop.sponsorName && stop.sponsorPerk && !isPartnerCapReached(stop) && !alreadyUsed) {
         vipBox.style.display = "block";
         document.getElementById("solvedVipShop").innerText = stop.sponsorName;
         document.getElementById("solvedVipPerk").innerText = stop.sponsorPerk;
@@ -754,17 +790,23 @@
       return (vipClaimCounts[stop.sponsorName] || 0) >= stop.maxClaims;
     }
 
+    // 1-Use-Per-Phone VIP Perks Tab (Admin Mode bypasses lock for unlimited shop demos)
     function renderVipPerksTabHtml() {
       var listHtml = "", totalPartnerCount = 0;
+      var redeemedMap = getRedeemedShopsMap();
+
       for (var i = 0; i < clues.length; i++) {
         var s = clues[i];
         if (!s.sponsorName || !s.sponsorPerk) continue;
         totalPartnerCount++;
         var isUnlocked = (i < currentStopIndex) || huntCompleted || adminModeUnlocked;
         var capReached = isPartnerCapReached(s);
+        var alreadyUsedOnDevice = !!redeemedMap[s.sponsorName] && !adminModeUnlocked;
         var customMin = s.sponsorTimerMinutes || GLOBAL_CONFIG.vipVoucherTimerMinutes || 5;
 
-        if (isUnlocked && !capReached) {
+        if (isUnlocked && alreadyUsedOnDevice) {
+          listHtml += '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; opacity:0.65;"><div><div style="font-size:11px; color:#94a3b8; font-weight:800;">✅ Voucher Redeemed (' + escapeHtml(redeemedMap[s.sponsorName]) + ')</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#64748b; margin-top:2px;">Limit 1 redemption per player device.</div></div><span style="font-size:12px; font-weight:900; color:#64748b;">USED</span></div>';
+        } else if (isUnlocked && !capReached) {
           listHtml += '<div style="background:#090d16; border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#10b981; font-weight:800;">✅ Stop #' + s.number + ' Unlocked Partner (' + customMin + 'm Timer)</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#fcd34d; margin-top:2px;">' + escapeHtml(s.sponsorPerk) + '</div></div><button class="btn-secondary" style="border-color:#10b981; color:#34d399; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(s.sponsorName) + '\', \'' + escapeQuotes(s.sponsorPerk) + '\', ' + customMin + ')">Open Voucher</button></div>';
         } else if (isUnlocked && capReached) {
           listHtml += '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-bottom:10px; opacity:0.65;"><div style="font-size:11px; color:#f87171; font-weight:800;">Monthly Partner Cap Reached</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:11px; color:#94a3b8;">All monthly VIP vouchers for this shop have been claimed!</div></div>';
@@ -772,15 +814,25 @@
           listHtml += '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; opacity:0.75;"><div><div style="font-size:11px; color:#94a3b8; font-weight:800;">🔒 Mystery Partner Stop #' + s.number + '</div><div style="font-size:14px; font-weight:800; color:#cbd5e1;">Solve Stop #' + s.number + ' Riddle to Unlock</div><div style="font-size:11px; color:#64748b; margin-top:2px;">Exclusive VIP discount waiting inside!</div></div><span style="font-size:18px;">🔒</span></div>';
         }
       }
-      return '<div class="card"><h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🎁 Local Partner VIP Perks</h3><p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Solve riddles along the trail to unlock exclusive VIP vouchers you can show at local partner registers:</p>' + (totalPartnerCount > 0 ? listHtml : '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:18px; text-align:center; font-size:13px; color:#94a3b8;">No partner perks are currently active on this trail in Google Sheets.</div>') + '</div>';
+      return '<div class="card"><h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🎁 Local Partner VIP Perks</h3><p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Solve riddles along the trail to unlock exclusive single-use VIP vouchers:</p>' + (totalPartnerCount > 0 ? listHtml : '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:18px; text-align:center; font-size:13px; color:#94a3b8;">No partner perks are currently active on this trail in Google Sheets.</div>') + '</div>';
     }
 
     function openVipVoucher(shopName, perkText, customTimerMinutes) {
+      var redeemedMap = getRedeemedShopsMap();
+      if (redeemedMap[shopName] && !adminModeUnlocked) {
+        alert("✅ You have already redeemed the VIP voucher for " + shopName + " on this device (Limit 1 per player).");
+        return;
+      }
+      var voucherMinutes = Number(customTimerMinutes) || Number(GLOBAL_CONFIG.vipVoucherTimerMinutes) || 5;
+      if (!adminModeUnlocked) {
+        if (!confirm("At the register? Tap OK to start your live " + voucherMinutes + "-minute voucher timer (Single use only).")) return;
+        markShopVoucherRedeemed(shopName);
+      }
+
       document.getElementById("vipModalShopTitle").innerText = shopName;
       document.getElementById("vipModalPerkText").innerText = perkText;
       document.getElementById("vipModalTeamStamp").innerText = "Active Team: " + (teamName || "QuestATL VIP Guest");
 
-      var voucherMinutes = Number(customTimerMinutes) || Number(GLOBAL_CONFIG.vipVoucherTimerMinutes) || 5;
       var remainingSec = voucherMinutes * 60;
       var pauseNoticeEl = document.getElementById("vipPauseNoticeStamp");
       if (huntStarted && !huntCompleted && !vipPauseUsedForShop[shopName]) {
@@ -801,6 +853,7 @@
       document.getElementById("vipModal").classList.add("show");
       vipClaimCounts[shopName] = (vipClaimCounts[shopName] || 0) + 1;
       trackQuestEvent({ action: "claim_vip", city: activeCityId, team: teamName || "Demo", shopName: shopName, perk: perkText });
+      renderMainContent();
     }
 
     function closeVipModal() {
@@ -840,7 +893,7 @@
       var telemetryStr = "Device:" + getOrCreateDeviceId() + " | GPS:" + gpsVerifiedCount + "/" + clues.length + " | Splits:" + stopSplitLogs.join(",");
       liveRankings.push({ city: activeCityId, team: teamName, timeSeconds: elapsedSeconds, formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, date: nowMonth });
       liveRankings.sort(function(a, b) { return a.timeSeconds - b.timeSeconds; });
-      trackQuestEvent({ action: "submit_score", city: activeCityId, team: teamName, timeSeconds: elapsedSeconds, formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, referral: referralSource, claimCode: victoryClaimCode, telemetry: telemetryStr });
+      trackQuestEvent({ action: "submit_score", city: activeCityId, team: teamName, captainContact: captainContact, timeSeconds: elapsedSeconds, formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, referral: referralSource, claimCode: victoryClaimCode, telemetry: telemetryStr });
       renderMainContent();
     }
 
@@ -907,7 +960,12 @@
     function escapeHtml(str) { return String(str || "").replace(/[&<>"']/g, function(m) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]; }); }
     function escapeQuotes(str) { return String(str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;"); }
 
-    window.onload = function() { autoDetectMonthlyTheme(); restoreSavedSession(); fetchLiveDatabase(); };
+    window.onload = function() {
+      applyUrlDeepLinks();
+      autoDetectMonthlyTheme();
+      restoreSavedSession();
+      fetchLiveDatabase();
+    };
   </script>
 </body>
 </html>
