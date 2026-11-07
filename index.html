@@ -3,7 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>QuestATL.com — Interactive City Scavenger Hunts</title>
+  <title>QuestATL — Free Outdoor Scavenger Hunt in Downtown Lawrenceville & Gwinnett, GA</title>
+  <meta name="description" content="Explore Downtown Lawrenceville, GA with QuestATL! Solve live outdoor riddles around the Historic Courthouse & Lawrenceville Lawn, unlock VIP shop perks, and race the leaderboard. Free, dog-friendly & family-friendly." />
+  <meta name="keywords" content="Lawrenceville scavenger hunt, things to do in Downtown Lawrenceville GA, Gwinnett County outdoor activities, Lawrenceville Lawn events, free date night Lawrenceville, Duluth GA scavenger hunt, Suwanee GA scavenger hunt, QuestATL" />
+  <link rel="canonical" href="https://questatl.com/" />
+
+  <!-- Social Sharing & Local Group Previews (Facebook, Nextdoor, iMessage) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://questatl.com/" />
+  <meta property="og:title" content="QuestATL — Interactive Downtown Lawrenceville Scavenger Hunt" />
+  <meta property="og:description" content="Solve real-world riddles across Downtown Lawrenceville, unlock single-use VIP discounts at local shops, and race the live leaderboard clock!" />
+
+  <!-- Google Local Structured Data (TouristAttraction + FAQ Schema) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TouristAttraction",
+        "name": "QuestATL — Downtown Lawrenceville Interactive Scavenger Hunt",
+        "url": "https://questatl.com/",
+        "description": "Self-guided, live-timed outdoor walking scavenger hunt through Downtown Lawrenceville, Georgia. Players solve riddles at historic landmarks on their smartphones and unlock VIP perks at local businesses.",
+        "isAccessibleForFree": true,
+        "publicAccess": true,
+        "touristType": ["Families", "Couples", "Friends", "Runners", "Dog Owners"],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "185 W Croghan St (Historic Courthouse Square)",
+          "addressLocality": "Lawrenceville",
+          "addressRegion": "GA",
+          "postalCode": "30046",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 33.95675,
+          "longitude": -83.98795
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Lawrenceville, GA" },
+          { "@type": "City", "name": "Duluth, GA" },
+          { "@type": "City", "name": "Suwanee, GA" },
+          { "@type": "AdministrativeArea", "name": "Gwinnett County, GA" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Where does the Downtown Lawrenceville scavenger hunt start?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Lawrenceville Adventure Trail starts at the Historic Courthouse Square in Downtown Lawrenceville, GA (185 W Croghan St) and winds 1.1 miles through downtown landmarks and the Lawrenceville Lawn."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is QuestATL free to play and dog-friendly?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! QuestATL is 100% free to play on your phone with no app download required. The entire 1.1-mile outdoor route stays on public sidewalks and parks, making it both dog-friendly and stroller-friendly."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root { --bg-top:#172036; --bg-deep:#070b14; --bg-card:#111827; --primary:#f59e0b; --primary-glow:rgba(245,158,11,0.35); --accent:#10b981; --text-main:#f8fafc; --text-muted:#94a3b8; --border-color:#1e293b; }
@@ -84,6 +152,23 @@
       <button class="btn-secondary" id="suggestSubmitBtn" style="width:100%; border-color:#f59e0b; color:#fcd34d; padding:11px;" onclick="submitAnonymousSuggestion()">🚀 Submit Anonymous Suggestion</button>
       <div id="suggestStatusMsg" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-top:10px; text-align:center;">✅ Thank you! Your suggestion has been sent to the QuestATL team.</div>
     </div>
+
+    <!-- Local SEO & Trail Guide Block for Google Indexing -->
+    <details class="card" style="padding:14px 18px; margin-top:12px; cursor:pointer;">
+      <summary style="font-size:13px; font-weight:800; color:#fcd34d; outline:none;">
+        📍 About QuestATL: Downtown Lawrenceville &amp; Gwinnett Outdoor Trails
+      </summary>
+      <div style="font-size:12px; color:#94a3b8; line-height:1.6; margin-top:10px;">
+        <h1 style="font-size:14px; font-weight:800; color:#f8fafc; margin-bottom:4px;">Interactive Walking Scavenger Hunts in Gwinnett County, GA</h1>
+        <p style="margin-bottom:8px;">
+          Looking for fun things to do in <strong>Downtown Lawrenceville, Georgia</strong>? <strong>QuestATL.com</strong> turns historic city squares into live, mobile-guided outdoor adventure trails. Start at the <strong>Lawrenceville Historic Courthouse Square</strong>, solve 9 real-world riddles along Croghan Street, Perry Street, Pike Street, and the <strong>Lawrenceville Lawn</strong>, and unlock exclusive VIP discounts at local partner coffee shops, bookstores, restaurants, and tasting rooms.
+        </p>
+        <p>
+          <strong>Trail Highlights:</strong> 1.1-mile walking loop &bull; 35–50 minutes &bull; Free to play on any smartphone &bull; Dog &amp; stroller friendly &bull; Expanding soon to <strong>Downtown Duluth</strong> and <strong>Suwanee Town Center</strong>.
+        </p>
+      </div>
+    </details>
+
     <div style="text-align:center; font-size:11px; color:#64748b; margin-top:10px;">&copy; 2026 QuestATL.com &bull; Interactive City Scavenger Hunts</div>
   </section>
 
