@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>QuestATL.com — Interactive City Scavenger Hunts</title>
   <meta name="description" content="Explore downtown Lawrenceville and Metro Atlanta with live interactive mobile scavenger hunts, local history riddles, and VIP shop perks." />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-51N0DTM4L3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-51N0DTM4L3');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -34,6 +42,23 @@
       50% { transform: translateX(50vw) translateY(18px) rotate(12deg); }
       90% { opacity: 0.75; }
       100% { transform: translateX(110vw) translateY(-10px) rotate(-12deg); opacity: 0; }
+    }
+    @keyframes radarPulse {
+      0% { transform: scale(0.65); opacity: 0.85; }
+      70% { transform: scale(1.35); opacity: 0.15; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+    @keyframes beaconBreath {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 0.9; }
+    }
+    .radar-pulse-ring {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: radarPulse 2.4s ease-out infinite;
+    }
+    .radar-glow-zone {
+      animation: beaconBreath 2.4s ease-in-out infinite;
     }
     .seasonal-floater {
       position: fixed;
@@ -235,8 +260,8 @@
   <!-- 1. CLUE SOLVED CELEBRATION + TRIVIA + VIP UNLOCK MODAL -->
   <div class="modal-overlay" id="clueSolvedModal">
     <div class="modal-box" style="border-color:#10b981;">
-      <div style="font-size:40px; margin-bottom:6px;">🎉</div>
-      <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:8px;" id="solvedStopBadge">✅ STOP UNLOCKED</div>
+      <div style="font-size:40px; margin-bottom:6px;">🌟</div>
+      <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:8px;" id="solvedStopBadge">★ STOP CLAIMED ON MAP</div>
       <h3 style="font-size:21px; font-weight:900; color:#fff; margin-bottom:10px;" id="solvedStopTitle">Landmark Conquered!</h3>
 
       <div id="solvedStopTriviaBox" style="display:none; background:#090d16; border:1px solid rgba(245,158,11,0.4); border-radius:14px; padding:12px 14px; margin-bottom:14px; text-align:left;">
@@ -304,18 +329,18 @@
     </div>
   </div>
 
-  <!-- 5. SECRET ADMIN DEMO MODAL (5 Taps on Logo) -->
+  <!-- 5. SECRET ADMIN DEMO MODAL (5 Taps on Logo — PIN 2622) -->
   <div class="modal-overlay" id="adminDemoModal">
     <div class="modal-box" style="border-color:#ef4444;">
       <div style="background:rgba(239,68,68,0.2); color:#fca5a5; font-size:10px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:6px;">ENGINEER & PARTNER DEMO MODE</div>
       <h3 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:10px;">🛠️ QuestATL Admin Controls</h3>
 
       <div style="text-align:left; background:#090d16; padding:12px; border-radius:12px; border:1px solid #1e293b; margin-bottom:12px;">
-        <div style="font-size:11px; font-weight:800; color:#fcd34d; margin-bottom:6px;">📅 Preview Day-of-Week VIP Schedule:</div>
+        <div style="font-size:11px; font-weight:800; color:#fcd34d; margin-bottom:6px;">📅 Preview Day-of-Week Trail & VIP Schedule:</div>
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
           <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="setAdminDayPreview(null)">Live Day (Auto)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:6px 10px; border-color:#10b981; color:#34d399;" onclick="setAdminDayPreview('2')">Mon–Sat (Zack's 3 Shops)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:6px 10px; border-color:#f59e0b; color:#fcd34d;" onclick="setAdminDayPreview('0')">Sunday Mode (Day 0)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px; border-color:#10b981; color:#34d399;" onclick="setAdminDayPreview('2')">Mon–Sat Hunt</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px; border-color:#f59e0b; color:#fcd34d;" onclick="setAdminDayPreview('0')">Sunday Hunt (Day 0)</button>
         </div>
       </div>
 
@@ -335,7 +360,7 @@
       </div>
 
       <div style="display:flex; gap:8px; margin-bottom:10px;">
-        <button class="btn-secondary" style="flex:1; color:#fca5a5; border-color:#ef4444;" onclick="resetCurrentDeviceSession()">Reset Team & Vouchers</button>
+        <button class="btn-secondary" style="flex:1; color:#fca5a5; border-color:#ef4444;" onclick="resetCurrentDeviceSession()">Full Admin Reset (Incl. VIP)</button>
         <button class="btn-secondary" style="flex:1;" onclick="fetchLiveDatabase(true); closeAdminDemoModal();">🔄 Force Sync Sheet</button>
       </div>
       <button class="btn-primary" onclick="closeAdminDemoModal()">Close Admin Panel</button>
@@ -344,7 +369,7 @@
 
   <script>
     // =========================================================================
-    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP (/exec) URL ON THE LINE BELOW:
+    // LIVE GOOGLE APPS SCRIPT WEB APP URL (PRE-WIRED TO YOUR DEPLOYMENT)
     // =========================================================================
     var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
 
@@ -360,8 +385,8 @@
       hintPenaltySeconds: 120,
       skipPenaltySeconds: 300,
       vipVoucherTimerMinutes: 10,
-      adminPin: "1234",
-      rulesText: "1. Head to the Starting Star pin on the trail map.\n2. Read each riddle and explore the downtown landmarks.\n3. Type the correct answer to unlock the map pin, optional local history trivia, and VIP discounts at partner shops!\n4. Chasing the #1 Leaderboard spot? Screenshot your final Victory Claim Code at the finish line to lock in your official team time!"
+      adminPin: "2622",
+      rulesText: "1. Head to the Starting Star pin on the trail map.\n2. Read each riddle and follow the glowing radar zone on the map to explore downtown landmarks.\n3. Type the correct answer to claim your gold star on the map, unlock local history trivia, and claim VIP discounts at partner shops!\n4. Chasing the #1 Leaderboard spot? Screenshot your final Victory Claim Code at the finish line to lock in your official team time!"
     };
 
     var MONTHLY_THEMES = {
@@ -394,7 +419,6 @@
     var skipsUsedCount = 0;
     var hintRevealedForStop = {};
     var stopSplitSeconds = {};
-    var gpsVerifiedStops = {};
     var victoryClaimCode = "";
 
     // VIP Timer Pause & Voucher State
@@ -406,7 +430,7 @@
     var mainTimerInterval = null;
 
     // UI & Admin State
-    var activeTab = "clue"; // "clue", "vip", "leaderboard"
+    var activeTab = "clue";
     var soundMuted = false;
     var adminTapCount = 0;
     var adminTapTimer = null;
@@ -458,16 +482,20 @@
       return (m < 10 ? "0" + m : "" + m) + ":" + (rem < 10 ? "0" + rem : "" + rem);
     }
 
-    // =========================================================================
-    // DAY-OF-WEEK VIP SCHEDULE & NEXT-DOOR BONUS RESOLVER
-    // =========================================================================
-    function applyDayScheduleToClues(cluesArray) {
-      if (!Array.isArray(cluesArray)) return cluesArray;
+    function getEffectiveDayStr() {
       var urlParams = new URLSearchParams(window.location.search);
       var testDayParam = adminDayOverride !== null ? adminDayOverride : urlParams.get("testDay");
-      var todayStr = (testDayParam !== null && testDayParam !== "")
+      return (testDayParam !== null && testDayParam !== "")
         ? String(testDayParam).trim()
         : String(new Date().getDay());
+    }
+
+    // =========================================================================
+    // DAY-OF-WEEK TRAIL & VIP SCHEDULE RESOLVER (SUPPORTS SUNDAY EDITION HUNT)
+    // =========================================================================
+    function applyDayScheduleToClues(cluesArray) {
+      if (!Array.isArray(cluesArray)) return [];
+      var todayStr = getEffectiveDayStr();
 
       cluesArray.forEach(function(stop) {
         if (stop.primarySponsorName === undefined) {
@@ -478,6 +506,10 @@
           stop.rawBonusSponsorName = stop.bonusSponsorName || null;
           stop.rawBonusSponsorPerk = stop.bonusSponsorPerk || null;
         }
+
+        var cDays = String(stop.clueDays !== undefined && stop.clueDays !== "" ? stop.clueDays : "0,1,2,3,4,5,6")
+          .split(",").map(function(d) { return d.trim(); });
+        stop.isScheduledToday = cDays.indexOf(todayStr) !== -1;
 
         var pDays = String(stop.sponsorDays !== undefined && stop.sponsorDays !== "" ? stop.sponsorDays : "0,1,2,3,4,5,6")
           .split(",").map(function(d) { return d.trim(); });
@@ -505,15 +537,26 @@
           stop.bonusSponsorPerk = null;
         }
       });
+
       return cluesArray;
+    }
+
+    function getActiveCluesForCity(cityId) {
+      if (!Array.isArray(window.MASTER_SHEET_CLUES)) return [];
+      applyDayScheduleToClues(window.MASTER_SHEET_CLUES);
+      var filtered = window.MASTER_SHEET_CLUES.filter(function(c) {
+        return c.cityId === cityId && c.isScheduledToday !== false;
+      });
+      // Renumber sequentially (1, 2, 3...) so Sunday vs Mon-Sat trails always have clean stop numbers
+      filtered.forEach(function(st, idx) {
+        st.number = idx + 1;
+      });
+      return filtered;
     }
 
     function setAdminDayPreview(dayVal) {
       adminDayOverride = dayVal;
-      if (window.MASTER_SHEET_CLUES) {
-        applyDayScheduleToClues(window.MASTER_SHEET_CLUES);
-        clues = window.MASTER_SHEET_CLUES.filter(function(c) { return c.cityId === activeCityId; });
-      }
+      clues = getActiveCluesForCity(activeCityId);
       closeAdminDemoModal();
       renderMainContent();
     }
@@ -581,14 +624,12 @@
             CITIES_DATABASE = json.cities;
           }
           if (Array.isArray(json.clues) && json.clues.length > 0) {
-            applyDayScheduleToClues(json.clues);
             window.MASTER_SHEET_CLUES = json.clues;
             CITIES_DATABASE.forEach(function(city) {
               var hasClues = json.clues.some(function(cl) { return cl.cityId === city.id; });
               if (hasClues) city.status = "LIVE";
             });
-            var cityClues = json.clues.filter(function(cl) { return cl.cityId === activeCityId; });
-            clues = cityClues;
+            clues = getActiveCluesForCity(activeCityId);
           }
 
           isLoadingDatabase = false;
@@ -637,9 +678,7 @@
 
     function selectCity(cityId) {
       activeCityId = cityId;
-      if (window.MASTER_SHEET_CLUES) {
-        clues = window.MASTER_SHEET_CLUES.filter(function(c) { return c.cityId === activeCityId; });
-      }
+      clues = getActiveCluesForCity(activeCityId);
       renderCitySelectorBar();
       renderMainContent();
     }
@@ -658,7 +697,7 @@
     }
 
     function showClueSolvedCelebrationModal(stop) {
-      document.getElementById("solvedStopBadge").innerText = "✅ STOP #" + stop.number + " UNLOCKED ON MAP";
+      document.getElementById("solvedStopBadge").innerText = "★ STOP #" + stop.number + " CLAIMED ON MAP";
       document.getElementById("solvedStopTitle").innerText = (stop.shortLabel || ("Stop #" + stop.number)) + " Conquered!";
 
       var triviaBox = document.getElementById("solvedStopTriviaBox");
@@ -787,7 +826,6 @@
       if (vipClockInterval) clearInterval(vipClockInterval);
       vipClockInterval = setInterval(updateLiveStamp, 1000);
 
-      // Check if claiming this shop unlocked a chained Next-Door Bonus Perk (e.g., Liberty Books -> Becca's Well)
       var unlockedBonusStop = clues.find(function(c) {
         return c.sponsorName === shopName && c.bonusSponsorName && c.bonusSponsorPerk;
       });
@@ -825,7 +863,7 @@
     }
 
     // =========================================================================
-    // MAIN INTERFACE RENDERING & GAMEPLAY ENGINE
+    // MAIN INTERFACE RENDERING & DETAILED FOG-OF-WAR ADVENTURE MAP
     // =========================================================================
     function renderMainContent() {
       var container = document.getElementById("mainContent");
@@ -837,7 +875,7 @@
       }
 
       if (GLOBAL_CONFIG.maintenanceMode && !adminModeUnlocked) {
-        container.innerHTML = '<div class="card" style="text-align:center; padding:32px 20px;"><div style="font-size:38px; margin-bottom:10px;">🛠️</div><h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Maintenance in Progress</h2><p style="font-size:13px; color:#94a3b8;">We are updatingdowntown stops right now. Check back shortly!</p></div>';
+        container.innerHTML = '<div class="card" style="text-align:center; padding:32px 20px;"><div style="font-size:38px; margin-bottom:10px;">🛠️</div><h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Maintenance in Progress</h2><p style="font-size:13px; color:#94a3b8;">We are updating downtown stops right now. Check back shortly!</p></div>';
         return;
       }
 
@@ -865,35 +903,47 @@
 
     function renderActiveHuntInterface(container, cityObj) {
       var html = "";
+      var isSundayEdition = getEffectiveDayStr() === "0";
 
       if (adminDayOverride !== null) {
         html += '<div style="background:rgba(245,158,11,0.18); border:1px solid #f59e0b; color:#fde68a; padding:8px 12px; border-radius:12px; margin-bottom:12px; font-size:12px; font-weight:800; display:flex; justify-content:space-between; align-items:center;">' +
-          '<span>📅 Admin Schedule Preview: ' + (adminDayOverride === "0" ? "SUNDAY MODE (Day 0)" : "MON–SAT MODE") + '</span>' +
+          '<span>📅 Admin Schedule Preview: ' + (adminDayOverride === "0" ? "SUNDAY HUNT (Day 0)" : "MON–SAT HUNT") + '</span>' +
           '<button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="setAdminDayPreview(null)">Reset</button></div>';
       }
 
-      // Map Card
+      // 1. Detailed Fog-of-War Adventure Map Card
       html += '<div class="card" style="padding:14px;">' +
-        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
-        '<div><div style="font-size:15px; font-weight:900; color:#fff;">📍 ' + escapeHtml(cityObj.name) + ' Adventure Map</div>' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
+        '<div><div style="font-size:15px; font-weight:900; color:#fff;">📍 ' + escapeHtml(cityObj.name) + (isSundayEdition ? " Sunday Trail" : " Adventure Map") + '</div>' +
         '<div style="font-size:11px; color:#94a3b8;">' + escapeHtml(cityObj.distanceMiles) + ' • ' + escapeHtml(cityObj.estTime) + ' • ' + escapeHtml(cityObj.trailTags) + '</div></div>' +
-        '<span style="background:rgba(16,185,129,0.16); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px;">' + Math.min(currentStopIndex, clues.length) + '/' + clues.length + ' Solved</span>' +
+        '<span style="background:rgba(245,158,11,0.16); border:1px solid rgba(245,158,11,0.4); color:#fcd34d; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px;">★ ' + Math.min(currentStopIndex, clues.length) + '/' + clues.length + ' Claimed</span>' +
         '</div>' +
         renderAdventureMapSvg(cityObj) +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:10px; color:#94a3b8; font-weight:700; padding:0 4px;">' +
+        '<span>🚩 Start Pin</span>' +
+        '<span>🟠 Pulsing Glow = Next Clue Direction</span>' +
+        '<span>⭐ Gold Star = Claimed Stop</span>' +
+        '</div>' +
         '</div>';
 
-      // Status / Timer Bar if Started
+      // 2. Status / Timer Bar + Player Restart/End Hunt Button
       if (huntStarted) {
         var totalPenaltySec = (hintsUsedCount * GLOBAL_CONFIG.hintPenaltySeconds) + (skipsUsedCount * GLOBAL_CONFIG.skipPenaltySeconds);
-        html += '<div class="card" style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center; background:#090d16; border-color:#334155;">' +
+        html += '<div class="card" style="padding:12px 14px; background:#090d16; border-color:#334155;">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center;">' +
           '<div><div style="font-size:11px; color:#94a3b8; font-weight:700;">TEAM: <span style="color:#fff; font-weight:900;">' + escapeHtml(teamName) + '</span></div>' +
           '<div style="font-size:11px; color:#fcd34d; font-weight:700;">Penalties: +' + formatSeconds(totalPenaltySec) + ' (' + hintsUsedCount + ' hints, ' + skipsUsedCount + ' skips)</div></div>' +
           '<div style="text-align:right;"><div style="font-size:10px; color:#94a3b8; font-weight:800;">' + (isTimerPausedForVip ? "⏸️ PAUSED FOR VIP" : "OFFICIAL CLOCK") + '</div>' +
           '<div id="liveTimerDisplay" style="font-size:20px; font-weight:900; color:#34d399; font-variant-numeric:tabular-nums;">' + formatSeconds(elapsedSeconds + totalPenaltySec) + '</div></div>' +
+          '</div>' +
+          '<div style="margin-top:10px; padding-top:8px; border-top:1px solid #1e293b; display:flex; justify-content:space-between; align-items:center;">' +
+          '<span style="font-size:11px; color:#64748b; font-weight:600;">Need to start over or end your run early?</span>' +
+          '<button class="btn-secondary" style="padding:5px 10px; font-size:11px; color:#fca5a5; border-color:rgba(239,68,68,0.45); background:rgba(239,68,68,0.1);" onclick="playerRestartOrEndHunt()">🔄 Restart / End Hunt</button>' +
+          '</div>' +
           '</div>';
       }
 
-      // Navigation Tabs
+      // 3. Navigation Tabs
       html += '<div class="tab-row">' +
         '<button class="tab-btn ' + (activeTab === "clue" ? "active" : "") + '" onclick="switchTab(\'clue\')">🧩 Active Clue</button>' +
         '<button class="tab-btn ' + (activeTab === "vip" ? "active" : "") + '" onclick="switchTab(\'vip\')">🎁 VIP Perks</button>' +
@@ -914,50 +964,135 @@
     }
 
     function renderAdventureMapSvg(cityObj) {
-      var startX = Number(cityObj.startMapX) || 22;
-      var startY = Number(cityObj.startMapY) || 38;
-      var polyPoints = startX + "," + startY;
-      clues.forEach(function(s) {
-        polyPoints += " " + (Number(s.mapX) || 50) + "," + (Number(s.mapY) || 50);
-      });
+      var startX = clues.length > 0 ? (Number(clues[0].mapX) || Number(cityObj.startMapX) || 22) : (Number(cityObj.startMapX) || 22);
+      var startY = clues.length > 0 ? (Number(clues[0].mapY) || Number(cityObj.startMapY) || 38) : (Number(cityObj.startMapY) || 38);
 
-      var pinsSvg = '<g transform="translate(' + startX + ',' + startY + ')">' +
-        '<circle r="4.2" fill="#f59e0b" stroke="#090d16" stroke-width="1.2"/>' +
-        '<text y="1.2" text-anchor="middle" font-size="4.5" font-weight="900" fill="#090d16">★</text>' +
+      // Build trail path ONLY through solved stops + current active stop (Future stops stay hidden!)
+      var pathPoints = startX + "," + startY;
+      var maxVisibleStopIdx = huntCompleted ? (clues.length - 1) : (huntStarted ? currentStopIndex : 0);
+
+      for (var p = 0; p <= maxVisibleStopIdx && p < clues.length; p++) {
+        var px = Number(clues[p].mapX) || 50;
+        var py = Number(clues[p].mapY) || 50;
+        pathPoints += " " + px + "," + py;
+      }
+
+      var overlaysSvg = "";
+
+      // Starting Flag Pin
+      overlaysSvg += '<g transform="translate(' + startX + ',' + startY + ')">' +
+        '<circle r="4.2" fill="#090d16" stroke="#38bdf8" stroke-width="1.2"/>' +
+        '<text y="1.4" text-anchor="middle" font-size="4.2">🚩</text>' +
         '</g>';
 
+      // Render ONLY Solved Stops (as Gold Stars ★) and the Single Active Next Stop (as a Directional Glow Radius)
       for (var i = 0; i < clues.length; i++) {
         var st = clues[i];
         var x = Number(st.mapX) || 50;
         var y = Number(st.mapY) || 50;
-        var solved = (i < currentStopIndex) || huntCompleted;
-        var isCurrent = huntStarted && !huntCompleted && (i === currentStopIndex);
-        var fillCol = solved ? "#10b981" : (isCurrent ? "#f59e0b" : "#334155");
+        var isSolved = (i < currentStopIndex) || huntCompleted;
+        var isCurrentActive = (!huntCompleted) && (i === currentStopIndex);
 
-        pinsSvg += '<g transform="translate(' + x + ',' + y + ')">' +
-          (isCurrent ? '<circle r="6.5" fill="rgba(245,158,11,0.28)"/>' : '') +
-          '<circle r="3.8" fill="' + fillCol + '" stroke="#090d16" stroke-width="1"/>' +
-          '<text y="1.3" text-anchor="middle" font-size="3.6" font-weight="900" fill="#ffffff">' + st.number + '</text>' +
-          '</g>';
+        if (isSolved) {
+          // Claimed Stop -> Permanent Gold Star (★)
+          overlaysSvg += '<g transform="translate(' + x + ',' + y + ')">' +
+            '<circle r="5.2" fill="rgba(245,158,11,0.22)"/>' +
+            '<circle r="3.9" fill="#090d16" stroke="#fbbf24" stroke-width="1.2"/>' +
+            '<text y="1.4" text-anchor="middle" font-size="4.8" fill="#fbbf24">★</text>' +
+            '<text y="-5.2" text-anchor="middle" font-size="3.1" font-weight="900" fill="#fde68a">#' + st.number + '</text>' +
+            '</g>';
+        } else if (isCurrentActive) {
+          // Active Next Clue -> Soft Directional Glow Zone (No exact pin number until solved!)
+          overlaysSvg += '<g transform="translate(' + x + ',' + y + ')">' +
+            '<circle class="radar-glow-zone" r="11" fill="url(#nextStopGlowGrad)"/>' +
+            '<circle class="radar-pulse-ring" r="7.5" fill="none" stroke="#f59e0b" stroke-width="1.1" stroke-dasharray="2,1.5"/>' +
+            '<circle r="2.2" fill="#fbbf24" opacity="0.85"/>' +
+            '<text y="-8.5" text-anchor="middle" font-size="3.2" font-weight="900" fill="#fcd34d">NEXT CLUE ZONE</text>' +
+            '</g>';
+        }
+        // Future stops (i > currentStopIndex) are intentionally NOT rendered so players can't see ahead!
       }
 
-      return '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; overflow:hidden; position:relative;">' +
-        '<svg viewBox="0 0 100 100" style="width:100%; height:190px; display:block;">' +
-        '<rect width="100" height="100" fill="#090d16"/>' +
-        '<line x1="0" y1="33" x2="100" y2="33" stroke="#1e293b" stroke-width="2.5"/>' +
-        '<line x1="20" y1="0" x2="20" y2="100" stroke="#1e293b" stroke-width="2"/>' +
-        '<line x1="80" y1="0" x2="80" y2="100" stroke="#1e293b" stroke-width="2"/>' +
-        '<rect x="22" y="55" width="56" height="36" rx="4" fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.2)" stroke-width="0.6"/>' +
-        '<polyline points="' + polyPoints + '" fill="none" stroke="rgba(245,158,11,0.45)" stroke-width="1.2" stroke-dasharray="2.5,2"/>' +
-        pinsSvg +
+      return '<div style="background:#070c18; border:1px solid #1e293b; border-radius:14px; overflow:hidden; position:relative;">' +
+        '<svg viewBox="0 0 100 100" style="width:100%; height:235px; display:block;">' +
+        '<defs>' +
+        '<radialGradient id="nextStopGlowGrad" cx="50%" cy="50%" r="50%">' +
+        '<stop offset="0%" stop-color="#f59e0b" stop-opacity="0.65"/>' +
+        '<stop offset="55%" stop-color="#ea580c" stop-opacity="0.25"/>' +
+        '<stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>' +
+        '</radialGradient>' +
+        '<pattern id="cityGrid" width="10" height="10" patternUnits="userSpaceOnUse">' +
+        '<path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(148,163,184,0.05)" stroke-width="0.4"/>' +
+        '</pattern>' +
+        '</defs>' +
+
+        // Base Aerial Night Background + Subtle Grid
+        '<rect width="100" height="100" fill="#070c18"/>' +
+        '<rect width="100" height="100" fill="url(#cityGrid)"/>' +
+
+        // Historic Courthouse Square Grounds (Top Left)
+        '<rect x="11" y="6" width="24" height="18" rx="2.5" fill="rgba(16,185,129,0.09)" stroke="rgba(16,185,129,0.28)" stroke-width="0.6"/>' +
+        '<rect x="16" y="10" width="14" height="9" rx="1.2" fill="#1e293b" stroke="#475569" stroke-width="0.6"/>' +
+        '<text x="23" y="15.5" text-anchor="middle" font-size="2.5" font-weight="800" fill="#94a3b8">COURTHOUSE</text>' +
+
+        // Lawrenceville Lawn Park Grounds (South Central / East)
+        '<rect x="18" y="50" width="72" height="43" rx="6" fill="rgba(16,185,129,0.11)" stroke="rgba(16,185,129,0.32)" stroke-width="0.7"/>' +
+        '<ellipse cx="52" cy="72" rx="22" ry="13" fill="rgba(16,185,129,0.08)" stroke="rgba(52,211,153,0.22)" stroke-width="0.5" stroke-dasharray="2,1.5"/>' +
+        '<path d="M 22 68 Q 52 56 86 78" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="1" stroke-dasharray="1.5,1.5"/>' +
+        '<text x="53" y="69" text-anchor="middle" font-size="3.1" font-weight="900" fill="rgba(52,211,153,0.45)" letter-spacing="0.4">LAWRENCEVILLE LAWN</text>' +
+        '<text x="78" y="61" text-anchor="middle" font-size="2.3" font-weight="700" fill="rgba(148,163,184,0.45)">DOG PARK</text>' +
+        '<text x="48" y="88" text-anchor="middle" font-size="2.3" font-weight="700" fill="rgba(148,163,184,0.45)">PLAYGROUND</text>' +
+
+        // Downtown Storefront Blocks (Between Pike St & Crogan St)
+        '<rect x="22" y="25" width="22" height="6" rx="1" fill="#0f172a" stroke="#1e293b" stroke-width="0.5"/>' +
+        '<rect x="48" y="25" width="30" height="6" rx="1" fill="#0f172a" stroke="#1e293b" stroke-width="0.5"/>' +
+        '<rect x="22" y="36" width="22" height="8" rx="1" fill="#0f172a" stroke="#1e293b" stroke-width="0.5"/>' +
+        '<rect x="48" y="36" width="30" height="8" rx="1" fill="#0f172a" stroke="#1e293b" stroke-width="0.5"/>' +
+
+        // Major Downtown Lawrenceville Streets
+        // W Pike St (North Horizontal)
+        '<line x1="0" y1="23" x2="100" y2="23" stroke="#1e293b" stroke-width="2.6"/>' +
+        '<text x="58" y="21.5" text-anchor="middle" font-size="2.3" font-weight="800" fill="#64748b" letter-spacing="0.5">W PIKE ST</text>' +
+
+        // E / W Crogan St (Main Commercial Corridor)
+        '<line x1="0" y1="33.5" x2="100" y2="33.5" stroke="#334155" stroke-width="3.6"/>' +
+        '<line x1="0" y1="33.5" x2="100" y2="33.5" stroke="rgba(245,158,11,0.22)" stroke-width="0.5" stroke-dasharray="3,3"/>' +
+        '<text x="54" y="34.4" text-anchor="middle" font-size="2.5" font-weight="900" fill="#94a3b8" letter-spacing="0.6">CROGAN ST</text>' +
+
+        // Luckie St (South Border of Lawn)
+        '<line x1="15" y1="95" x2="95" y2="95" stroke="#1e293b" stroke-width="2"/>' +
+
+        // N / S Perry St (West Vertical Artery)
+        '<line x1="19" y1="0" x2="19" y2="100" stroke="#334155" stroke-width="3"/>' +
+        '<text x="16.5" y="46" text-anchor="middle" font-size="2.3" font-weight="800" fill="#64748b" transform="rotate(-90 16.5,46)">S PERRY ST</text>' +
+
+        // N / S Clayton St (Center Vertical Artery)
+        '<line x1="46" y1="0" x2="46" y2="50" stroke="#1e293b" stroke-width="2.4"/>' +
+        '<text x="44" y="14" text-anchor="middle" font-size="2.1" font-weight="800" fill="#64748b" transform="rotate(-90 44,14)">CLAYTON ST</text>' +
+
+        // Culver St / East Perimeter
+        '<line x1="82" y1="0" x2="82" y2="100" stroke="#1e293b" stroke-width="2.2"/>' +
+
+        // Compass Rose (Top Right)
+        '<g transform="translate(92, 10)">' +
+        '<circle r="4.5" fill="rgba(9,13,22,0.8)" stroke="#334155" stroke-width="0.6"/>' +
+        '<text y="1.2" text-anchor="middle" font-size="3.2" font-weight="900" fill="#fcd34d">N▲</text>' +
+        '</g>' +
+
+        // Completed + Current Active Trail Path
+        '<polyline points="' + pathPoints + '" fill="none" stroke="rgba(245,158,11,0.55)" stroke-width="1.3" stroke-dasharray="2.5,2" stroke-linecap="round"/>' +
+
+        // Dynamic Stars & Active Glow Zone
+        overlaysSvg +
         '</svg></div>';
     }
 
     function renderClueTabHtml(cityObj) {
       if (!huntStarted) {
+        var isSunday = getEffectiveDayStr() === "0";
         return '<div class="card">' +
-          '<h2 style="font-size:20px; font-weight:900; color:#fff; margin-bottom:6px;">🚀 Start Your Downtown Quest</h2>' +
-          '<p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Head to the Starting Star on the map, enter your team name below, and tap Start Clock when you are ready!</p>' +
+          '<h2 style="font-size:20px; font-weight:900; color:#fff; margin-bottom:6px;">🚀 Start Your ' + (isSunday ? 'Sunday Edition ' : 'Downtown ') + 'Quest</h2>' +
+          '<p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Head to the glowing Starting Zone on the map above, enter your team name, and tap Start Clock when ready!</p>' +
           '<input id="teamNameInput" class="input-field" placeholder="Enter Team Name (e.g. Square Sleuths)" value="' + escapeHtml(teamName) + '" style="margin-bottom:12px;" />' +
           '<button class="btn-primary" onclick="startNewHunt()">Start Official Team Clock ⏱️</button>' +
           '</div>';
@@ -969,7 +1104,7 @@
         return '<div class="card" style="text-align:center; border-color:#10b981;">' +
           '<div style="font-size:44px; margin-bottom:6px;">🏆</div>' +
           '<h2 style="font-size:22px; font-weight:900; color:#fff; margin-bottom:4px;">Trail Completed!</h2>' +
-          '<p style="font-size:13px; color:#94a3b8; margin-bottom:12px;">Awesome job, <b>' + escapeHtml(teamName) + '</b>! You conquered all ' + clues.length + ' stops.</p>' +
+          '<p style="font-size:13px; color:#94a3b8; margin-bottom:12px;">Awesome job, <b>' + escapeHtml(teamName) + '</b>! You claimed all ' + clues.length + ' gold stars on the map.</p>' +
           '<div style="background:#090d16; border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:14px;">' +
           '<div style="font-size:11px; color:#94a3b8; font-weight:800;">FINAL OFFICIAL TIME</div>' +
           '<div style="font-size:28px; font-weight:900; color:#34d399; margin:4px 0;">' + formatSeconds(finalTotalSec) + '</div>' +
@@ -978,7 +1113,9 @@
           '<div style="display:flex; gap:8px; margin-bottom:10px;">' +
           '<button class="btn-primary" style="flex:1;" onclick="switchTab(\'vip\')">🎁 View Unlocked VIP Perks</button>' +
           '<button class="btn-secondary" style="flex:1;" onclick="shareVictoryScore(\'' + formatSeconds(finalTotalSec) + '\')">📲 Share Score</button>' +
-          '</div></div>';
+          '</div>' +
+          '<button class="btn-secondary" style="width:100%; margin-top:4px;" onclick="playerRestartOrEndHunt()">🔄 Start a New Team Run</button>' +
+          '</div>';
       }
 
       var stop = clues[currentStopIndex];
@@ -995,8 +1132,8 @@
 
       return '<div class="card">' +
         '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
-        '<span style="background:rgba(245,158,11,0.18); color:#fcd34d; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px;">STOP #' + stop.number + ' OF ' + clues.length + '</span>' +
-        '<span style="font-size:12px; color:#94a3b8; font-weight:700;">' + escapeHtml(stop.shortLabel) + '</span>' +
+        '<span style="background:rgba(245,158,11,0.18); color:#fcd34d; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px;">CLUE #' + stop.number + ' OF ' + clues.length + '</span>' +
+        '<span style="font-size:12px; color:#fcd34d; font-weight:700;">🟠 Follow Pulsing Map Glow</span>' +
         '</div>' +
         '<h3 style="font-size:19px; font-weight:900; color:#fff; margin-bottom:10px;">' + escapeHtml(stop.title) + '</h3>' +
         '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:15px; font-size:15px; color:#f1f5f9; line-height:1.6; font-weight:600; margin-bottom:14px;">' +
@@ -1007,7 +1144,7 @@
           : '') +
         '<input id="clueAnswerInput" class="input-field" placeholder="Type your answer here..." onkeydown="if(event.key===\'Enter\') submitAnswer()" style="margin-bottom:10px;" />' +
         '<div id="answerFeedbackMsg" style="display:none; font-size:12px; font-weight:800; color:#f87171; margin-bottom:10px;"></div>' +
-        '<button class="btn-primary" onclick="submitAnswer()">Unlock Stop #' + stop.number + ' 🔓</button>' +
+        '<button class="btn-primary" onclick="submitAnswer()">Claim Stop #' + stop.number + ' Star ⭐</button>' +
         '<div style="display:flex; gap:8px; margin-top:10px;">' +
         (!hintShown && stop.hint
           ? '<button class="btn-secondary" style="flex:1;" onclick="useClueHint(' + stop.number + ')">💡 Use Hint (+' + hintPenaltyMin + 'm)</button>'
@@ -1048,7 +1185,7 @@
     }
 
     // =========================================================================
-    // HUNT START, ANSWER CHECK, HINTS, SKIPS & FINISH
+    // HUNT START, ANSWER CHECK, HINTS, SKIPS, PLAYER RESET & FINISH
     // =========================================================================
     function startNewHunt() {
       var inputEl = document.getElementById("teamNameInput");
@@ -1083,6 +1220,28 @@
       saveActiveSession();
       startMainClockLoop();
       trackQuestEvent({ action: "start_team", city: activeCityId, team: teamName, deviceId: getDeviceId() });
+      renderMainContent();
+    }
+
+    function playerRestartOrEndHunt() {
+      if (!confirm("Are you sure you want to end or restart your current scavenger hunt? Your current timer and clue progress will be reset.")) {
+        return;
+      }
+      if (mainTimerInterval) clearInterval(mainTimerInterval);
+      localStorage.removeItem(STORAGE_KEY_SESSION);
+      // Note: STORAGE_KEY_REDEEMED is intentionally preserved so redeemed merchant vouchers cannot be abused
+      huntStarted = false;
+      huntCompleted = false;
+      currentStopIndex = 0;
+      elapsedSeconds = 0;
+      totalPausedMs = 0;
+      hintsUsedCount = 0;
+      skipsUsedCount = 0;
+      hintRevealedForStop = {};
+      stopSplitSeconds = {};
+      victoryClaimCode = "";
+      isTimerPausedForVip = false;
+      activeTab = "clue";
       renderMainContent();
     }
 
@@ -1217,7 +1376,7 @@
     }
 
     // =========================================================================
-    // SESSION PERSISTENCE, FORMS & ADMIN TOOLS
+    // SESSION PERSISTENCE, FORMS & ADMIN TOOLS (PIN 2622)
     // =========================================================================
     function saveActiveSession() {
       var payload = {
@@ -1265,7 +1424,7 @@
     }
 
     function resetCurrentDeviceSession() {
-      if (!confirm("Reset active team session and clear all redeemed VIP locks on this phone?")) return;
+      if (!confirm("Admin Reset: Clear active team session AND reset all redeemed VIP voucher locks on this phone?")) return;
       localStorage.removeItem(STORAGE_KEY_SESSION);
       localStorage.removeItem(STORAGE_KEY_REDEEMED);
       huntStarted = false;
