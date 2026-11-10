@@ -1,123 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="google-site-verification" content="BpEFgPnqf0QEtnjvKYnOADAF2dl-OhelAKrOhsJ0j5E" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>QuestATL — Free Outdoor Scavenger Hunt in Downtown Lawrenceville & Gwinnett, GA</title>
-  <meta name="description" content="Explore Downtown Lawrenceville, GA with QuestATL! Solve live outdoor riddles around the Historic Courthouse & Lawrenceville Lawn, unlock VIP shop perks, and race the leaderboard. Free, dog-friendly & family-friendly." />
-  <meta name="keywords" content="Lawrenceville scavenger hunt, things to do in Downtown Lawrenceville GA, Gwinnett County outdoor activities, Lawrenceville Lawn events, free date night Lawrenceville, Duluth GA scavenger hunt, Suwanee GA scavenger hunt, QuestATL" />
-  <link rel="canonical" href="https://questatl.com/" />
-
-  <!-- Social Sharing & Local Group Previews (Facebook, Nextdoor, iMessage) -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://questatl.com/" />
-  <meta property="og:title" content="QuestATL — Interactive Downtown Lawrenceville Scavenger Hunt" />
-  <meta property="og:description" content="Solve real-world riddles across Downtown Lawrenceville, unlock single-use VIP discounts at local shops, and race the live leaderboard clock!" />
-
-  <!-- Google Local Structured Data (TouristAttraction + FAQ Schema) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "TouristAttraction",
-        "name": "QuestATL — Downtown Lawrenceville Interactive Scavenger Hunt",
-        "url": "https://questatl.com/",
-        "description": "Self-guided, live-timed outdoor walking scavenger hunt through Downtown Lawrenceville, Georgia. Players solve riddles at historic landmarks on their smartphones and unlock VIP perks at local businesses.",
-        "isAccessibleForFree": true,
-        "publicAccess": true,
-        "touristType": ["Families", "Couples", "Friends", "Runners", "Dog Owners"],
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "185 W Croghan St (Historic Courthouse Square)",
-          "addressLocality": "Lawrenceville",
-          "addressRegion": "GA",
-          "postalCode": "30046",
-          "addressCountry": "US"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 33.95675,
-          "longitude": -83.98795
-        },
-        "areaServed": [
-          { "@type": "City", "name": "Lawrenceville, GA" },
-          { "@type": "City", "name": "Duluth, GA" },
-          { "@type": "City", "name": "Suwanee, GA" },
-          { "@type": "AdministrativeArea", "name": "Gwinnett County, GA" }
-        ]
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Where does the Downtown Lawrenceville scavenger hunt start?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The Lawrenceville Adventure Trail starts at the Historic Courthouse Square in Downtown Lawrenceville, GA (185 W Croghan St) and winds 1.1 miles through downtown landmarks and the Lawrenceville Lawn."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is QuestATL free to play and dog-friendly?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes! QuestATL is 100% free to play on your phone with no app download required. The entire 1.1-mile outdoor route stays on public sidewalks and parks, making it both dog-friendly and stroller-friendly."
-            }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
-
+  <title>QuestATL.com — Interactive City Scavenger Hunts</title>
+  <meta name="description" content="Explore downtown Lawrenceville and Metro Atlanta with live interactive mobile scavenger hunts, local history riddles, and VIP shop perks." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root { --bg-top:#172036; --bg-deep:#070b14; --bg-card:#111827; --primary:#f59e0b; --primary-glow:rgba(245,158,11,0.35); --accent:#10b981; --text-main:#f8fafc; --text-muted:#94a3b8; --border-color:#1e293b; }
-    * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-    body { font-family:'Inter',-apple-system,sans-serif; background:radial-gradient(circle at top,var(--bg-top) 0%,var(--bg-deep) 70%); color:var(--text-main); min-height:100vh; overflow-x:hidden; padding-bottom:40px; transition:background 0.4s ease; }
-    @keyframes floatAcross { 0%{transform:translateX(-10vw) translateY(0) rotate(-5deg);opacity:0;} 15%{opacity:0.85;} 50%{transform:translateX(45vw) translateY(-6px) rotate(6deg);opacity:0.95;} 85%{opacity:0.85;} 100%{transform:translateX(105vw) translateY(2px) rotate(-5deg);opacity:0;} }
-    .seasonal-floater { position:fixed; top:10px; left:0; font-size:24px; pointer-events:none; z-index:999; animation:floatAcross 14s linear infinite; filter:drop-shadow(0 0 8px rgba(255,255,255,0.4)); }
-    .top-banner { background:linear-gradient(180deg,rgba(15,23,42,0.95) 0%,rgba(11,17,32,0.88) 100%); border-bottom:1px solid rgba(245,158,11,0.25); padding:14px 16px 12px; position:sticky; top:0; z-index:50; backdrop-filter:blur(12px); }
-    .header-row { max-width:640px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .brand-box { display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; }
-    .brand-icon { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,var(--primary),#ea580c); display:flex; align-items:center; justify-content:center; font-size:19px; box-shadow:0 0 16px var(--primary-glow); }
-    .brand-title { font-size:19px; font-weight:900; letter-spacing:-0.5px; background:linear-gradient(90deg,#fff,var(--primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .brand-sub { font-size:10px; color:var(--text-muted); font-weight:700; letter-spacing:0.4px; text-transform:uppercase; }
-    .city-bar { max-width:640px; margin:12px auto 0; display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
-    .city-bar::-webkit-scrollbar { display:none; }
-    .city-pill { flex-shrink:0; padding:7px 13px; border-radius:999px; font-size:12px; font-weight:700; border:1px solid var(--border-color); background:rgba(30,41,59,0.6); color:var(--text-muted); display:flex; align-items:center; gap:6px; cursor:pointer; transition:all 0.2s ease; }
-    .city-pill.active { background:linear-gradient(135deg,rgba(245,158,11,0.22),rgba(234,88,12,0.25)); border-color:var(--primary); color:#fff; box-shadow:0 0 14px rgba(245,158,11,0.25); }
-    .badge-live { background:#10b981; color:#052e16; font-size:9px; font-weight:900; padding:2px 6px; border-radius:99px; }
-    .badge-soon { background:#334155; color:#94a3b8; font-size:9px; font-weight:800; padding:2px 6px; border-radius:99px; }
-    .trail-selector-box { background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:12px; margin-bottom:14px; }
-    .trail-option-btn { width:100%; text-align:left; padding:10px 12px; border-radius:10px; border:1px solid #1e293b; background:rgba(30,41,59,0.45); color:#cbd5e1; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:6px; transition:all 0.2s ease; }
-    .trail-option-btn.active { background:linear-gradient(135deg,rgba(245,158,11,0.18),rgba(16,185,129,0.15)); border-color:var(--primary); color:#fff; box-shadow:0 0 12px rgba(245,158,11,0.2); }
-    .container { max-width:640px; margin:16px auto; padding:0 14px; }
-    .card { background:linear-gradient(180deg,rgba(30,41,59,0.78) 0%,rgba(15,23,42,0.94) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:20px; box-shadow:0 16px 40px rgba(0,0,0,0.45); margin-bottom:16px; position:relative; overflow:hidden; }
-    .btn-primary { width:100%; padding:14px 18px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--primary) 0%,#ea580c 100%); color:#090d16; font-size:15px; font-weight:900; letter-spacing:0.3px; cursor:pointer; box-shadow:0 6px 20px rgba(245,158,11,0.35); }
-    .btn-secondary { padding:9px 12px; border-radius:11px; border:1px solid #334155; background:rgba(30,41,59,0.85); color:#e2e8f0; font-size:12px; font-weight:700; cursor:pointer; }
-    .game-tabs { display:flex; gap:6px; background:#090d16; padding:5px; border-radius:14px; border:1px solid #1e293b; margin-bottom:14px; }
-    .game-tab { flex:1; text-align:center; padding:10px 6px; border-radius:10px; font-size:12px; font-weight:800; color:#94a3b8; cursor:pointer; border:none; background:transparent; }
-    .game-tab.active { background:linear-gradient(135deg,var(--primary),#ea580c); color:#090d16; box-shadow:0 2px 10px rgba(245,158,11,0.3); }
-    .map-viewport { width:100%; height:360px; background:#060b13; border-radius:16px; border:1px solid rgba(245,158,11,0.3); position:relative; overflow:hidden; touch-action:none; user-select:none; }
-    .map-controls { position:absolute; bottom:12px; right:12px; display:flex; flex-direction:column; gap:6px; z-index:20; }
-    .map-ctrl-btn { width:34px; height:34px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:rgba(15,23,42,0.9); color:#fff; font-weight:900; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-    @keyframes radarSpin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
-    .radar-sweep { transform-origin:500px 500px; animation:radarSpin 8s linear infinite; }
-    @keyframes pulsePin { 0%{r:14;opacity:0.9;} 100%{r:34;opacity:0;} }
-    .pin-pulse { animation:pulsePin 1.8s ease-out infinite; }
-    .modal-overlay { position:fixed; inset:0; background:rgba(3,7,18,0.86); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; padding:16px; z-index:200; }
-    .modal-overlay.show { display:flex; }
-    .modal-box { background:#111827; border:1px solid var(--primary); border-radius:20px; max-width:440px; width:100%; padding:22px; box-shadow:0 20px 50px rgba(0,0,0,0.85); text-align:center; }
-    input[type="text"],input[type="email"],select,textarea { width:100%; padding:12px 14px; border-radius:12px; border:1px solid #334155; background:#090d16; color:#fff; font-size:14px; font-family:inherit; outline:none; }
-    input[type="text"]:focus,select:focus,textarea:focus { border-color:var(--primary); box-shadow:0 0 0 2px rgba(245,158,11,0.2); }
+    :root {
+      --bg-top: #172036;
+      --bg-deep: #070b14;
+      --bg-card: #111827;
+      --primary: #f59e0b;
+      --primary-glow: rgba(245, 158, 11, 0.35);
+      --accent: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, var(--bg-top) 0%, var(--bg-deep) 70%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 48px;
+      transition: background 0.4s ease;
+    }
+    @keyframes floatAcross {
+      0% { transform: translateX(-10vw) translateY(0px) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.75; }
+      50% { transform: translateX(50vw) translateY(18px) rotate(12deg); }
+      90% { opacity: 0.75; }
+      100% { transform: translateX(110vw) translateY(-10px) rotate(-12deg); opacity: 0; }
+    }
+    .seasonal-floater {
+      position: fixed;
+      top: 12px;
+      left: 0;
+      font-size: 22px;
+      pointer-events: none;
+      z-index: 999;
+      animation: floatAcross 16s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.35));
+    }
+    .top-banner {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 11, 20, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px 10px;
+    }
+    .header-row {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 14px var(--primary-glow);
+    }
+    .brand-title { font-size: 17px; font-weight: 900; letter-spacing: -0.3px; color: #fff; }
+    .brand-sub { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+    .city-bar {
+      max-width: 600px;
+      margin: 10px auto 0;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .city-bar::-webkit-scrollbar { display: none; }
+    .city-pill {
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--border-color);
+      background: #0f172a;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .city-pill.active {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+    }
+    .container { max-width: 600px; margin: 0 auto; padding: 16px; }
+    .card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), #ea580c);
+      color: #090d16;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.2s ease;
+    }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-secondary {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .input-field {
+      width: 100%;
+      background: #090d16;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+    }
+    .input-field:focus { border-color: var(--primary); }
+    .tab-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tab-btn {
+      padding: 10px 8px;
+      border-radius: 12px;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+    .tab-btn.active {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: var(--primary);
+      color: #fcd34d;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.82);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: #111827;
+      border: 2px solid var(--primary);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+    }
   </style>
 </head>
 <body>
-  <div id="seasonalFloater" class="seasonal-floater">👻</div>
+  <div id="seasonalFloater" class="seasonal-floater">✨</div>
 
   <header class="top-banner" id="appHeader">
     <div class="header-row">
@@ -142,289 +232,382 @@
 
   <main class="container" id="mainContent"></main>
 
-  <section class="container" style="margin-top:6px;">
-    <div class="card" style="padding:18px;">
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-        <span style="font-size:18px;">💡</span>
-        <h3 style="font-size:15px; font-weight:800; color:#f8fafc;">Anonymous Suggestion &amp; City Request Box</h3>
-      </div>
-      <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Want QuestATL in your city next, or know a local shop that should be a VIP stop? Send an anonymous note straight to our team:</p>
-      <input type="text" id="suggestText" placeholder="Suggest a city, riddle idea, or local business..." style="margin-bottom:10px;" onkeydown="if(event.key==='Enter') submitAnonymousSuggestion()" />
-      <button class="btn-secondary" id="suggestSubmitBtn" style="width:100%; border-color:#f59e0b; color:#fcd34d; padding:11px;" onclick="submitAnonymousSuggestion()">🚀 Submit Anonymous Suggestion</button>
-      <div id="suggestStatusMsg" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-top:10px; text-align:center;">✅ Thank you! Your suggestion has been sent to the QuestATL team.</div>
-    </div>
-
-    <!-- Local SEO & Trail Guide Block for Google Indexing -->
-    <details class="card" style="padding:14px 18px; margin-top:12px; cursor:pointer;">
-      <summary style="font-size:13px; font-weight:800; color:#fcd34d; outline:none;">
-        📍 About QuestATL: Downtown Lawrenceville &amp; Gwinnett Outdoor Trails
-      </summary>
-      <div style="font-size:12px; color:#94a3b8; line-height:1.6; margin-top:10px;">
-        <h1 style="font-size:14px; font-weight:800; color:#f8fafc; margin-bottom:4px;">Interactive Walking Scavenger Hunts in Gwinnett County, GA</h1>
-        <p style="margin-bottom:8px;">
-          Looking for fun things to do in <strong>Downtown Lawrenceville, Georgia</strong>? <strong>QuestATL.com</strong> turns historic city squares into live, mobile-guided outdoor adventure trails. Start at the <strong>Lawrenceville Historic Courthouse Square</strong>, solve 9 real-world riddles along Croghan Street, Perry Street, Pike Street, and the <strong>Lawrenceville Lawn</strong>, and unlock exclusive VIP discounts at local partner coffee shops, bookstores, restaurants, and tasting rooms.
-        </p>
-        <p>
-          <strong>Trail Highlights:</strong> 1.1-mile walking loop &bull; 35–50 minutes &bull; Free to play on any smartphone &bull; Dog &amp; stroller friendly &bull; Expanding soon to <strong>Downtown Duluth</strong> and <strong>Suwanee Town Center</strong>.
-        </p>
-      </div>
-    </details>
-
-    <div style="text-align:center; font-size:11px; color:#64748b; margin-top:10px;">&copy; 2026 QuestATL.com &bull; Interactive City Scavenger Hunts</div>
-  </section>
-
+  <!-- 1. CLUE SOLVED CELEBRATION + TRIVIA + VIP UNLOCK MODAL -->
   <div class="modal-overlay" id="clueSolvedModal">
     <div class="modal-box" style="border-color:#10b981;">
       <div style="font-size:40px; margin-bottom:6px;">🎉</div>
-      <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:8px;" id="solvedStopBadge">STOP UNLOCKED</div>
-      <h3 style="font-size:21px; font-weight:900; color:#fff; margin-bottom:10px;" id="solvedStopTitle">Correct Answer!</h3>
+      <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:8px;" id="solvedStopBadge">✅ STOP UNLOCKED</div>
+      <h3 style="font-size:21px; font-weight:900; color:#fff; margin-bottom:10px;" id="solvedStopTitle">Landmark Conquered!</h3>
+
       <div id="solvedStopTriviaBox" style="display:none; background:#090d16; border:1px solid rgba(245,158,11,0.4); border-radius:14px; padding:12px 14px; margin-bottom:14px; text-align:left;">
-        <div style="font-size:10px; font-weight:900; color:#fcd34d; text-transform:uppercase; margin-bottom:4px;">📜 Local History &amp; Trivia</div>
+        <div style="font-size:10px; font-weight:900; color:#fcd34d; text-transform:uppercase; margin-bottom:4px;">📜 Local History & Trivia</div>
         <div style="font-size:13px; color:#e2e8f0; line-height:1.5;" id="solvedStopTriviaText"></div>
       </div>
+
       <div id="solvedStopVipBox" style="display:none; background:rgba(16,185,129,0.12); border:1px solid #10b981; border-radius:14px; padding:12px; margin-bottom:14px;">
         <div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🎁 Partner VIP Perk Unlocked!</div>
-        <div style="font-size:15px; font-weight:900; color:#fff; margin-top:2px;" id="solvedVipShop"></div>
-        <div style="font-size:12px; color:#fcd34d; margin-bottom:10px;" id="solvedVipPerk"></div>
-        <button class="btn-secondary" style="width:100%; border-color:#10b981; color:#34d399;" id="solvedVipBtn">Open Live VIP Voucher</button>
+        <div style="font-size:16px; font-weight:900; color:#fff; margin-top:3px;" id="solvedVipShop">Partner Shop</div>
+        <div style="font-size:13px; color:#fcd34d; font-weight:700; margin:4px 0 10px;" id="solvedVipPerk">Special Offer</div>
+        <button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#fff; padding:10px;" id="solvedVipBtn">Open Live Register Voucher</button>
+        <div id="solvedStopBonusHint" style="display:none; margin-top:10px; padding:8px 10px; border-radius:10px; background:rgba(245,158,11,0.15); border:1px dashed #f59e0b; font-size:11px; color:#fcd34d; font-weight:700;"></div>
       </div>
-      <button class="btn-primary" onclick="closeSolvedModal()">Continue to Next Stop ➔</button>
+
+      <button class="btn-primary" onclick="closeClueSolvedModal()">Continue to Next Clue ➔</button>
     </div>
   </div>
 
+  <!-- 2. LIVE VIP VOUCHER MODAL -->
   <div class="modal-overlay" id="vipModal">
     <div class="modal-box" style="border-color:#10b981;">
-      <div style="background:rgba(16,185,129,0.15); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:10px;">🎁 OFFICIAL QUESTATL VIP VOUCHER</div>
-      <h3 style="font-size:22px; font-weight:900; color:#fff; margin-bottom:6px;" id="vipModalShopTitle">Partner Shop</h3>
-      <p style="font-size:15px; font-weight:700; color:#fcd34d; margin-bottom:14px;" id="vipModalPerkText">Special Offer</p>
-      <div style="background:#090d16; border:1px dashed #10b981; border-radius:12px; padding:12px; margin-bottom:16px; font-size:12px; color:#cbd5e1;">
-        Show this live screen to the cashier at checkout!<br/>
-        <span style="color:#94a3b8; font-size:11px; display:block; margin-top:4px;" id="vipModalTeamStamp">Team: Explorer</span>
-        <span style="color:#34d399; font-size:12px; font-weight:900; display:block; margin-top:6px;" id="vipLiveClockStamp">● LIVE VERIFIED</span>
-        <span style="color:#fcd34d; font-size:11px; font-weight:700; display:block; margin-top:4px;" id="vipPauseNoticeStamp">⏸️ Your race timer is paused while this voucher is open!</span>
+      <div style="background:rgba(16,185,129,0.18); color:#34d399; font-size:11px; font-weight:900; padding:4px 12px; border-radius:99px; display:inline-block; margin-bottom:8px;">OFFICIAL QUESTATL VIP VOUCHER</div>
+      <h3 style="font-size:22px; font-weight:900; color:#fff;" id="vipModalShopTitle">Partner Name</h3>
+      <p style="font-size:16px; font-weight:800; color:#fcd34d; margin:8px 0 12px;" id="vipModalPerkText">Discount Details</p>
+
+      <div style="background:#090d16; border:1px solid #1e293b; border-radius:12px; padding:10px; margin-bottom:10px;">
+        <div style="font-size:12px; color:#cbd5e1; font-weight:700;" id="vipModalTeamStamp">Active Team: Explorer</div>
+        <div style="font-size:13px; color:#34d399; font-weight:900; margin-top:4px;" id="vipLiveClockStamp">● LIVE</div>
       </div>
-      <button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#052e16;" onclick="closeVipModal()">✅ Done / Resume Quest Timer</button>
+
+      <div id="vipPauseNoticeStamp" style="display:none; background:rgba(245,158,11,0.15); border:1px solid #f59e0b; color:#fde68a; font-size:12px; font-weight:800; padding:8px 10px; border-radius:10px; margin-bottom:12px;"></div>
+      <div id="vipModalBonusUnlockedBanner" style="display:none; margin-top:10px; margin-bottom:12px; padding:10px; border-radius:12px; background:rgba(245,158,11,0.15); border:1px solid #f59e0b; text-align:center;"></div>
+
+      <p style="font-size:11px; color:#94a3b8; margin-bottom:14px;">Show this live ticking screen to the cashier at checkout.</p>
+      <button class="btn-secondary" style="width:100%; padding:11px;" onclick="closeVipModal()">Done / Resume Hunt Timer</button>
     </div>
   </div>
 
+  <!-- 3. RULES MODAL -->
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-box">
-      <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:10px;">🧭 How QuestATL Works</h3>
-      <div id="rulesModalText" style="font-size:13px; color:#cbd5e1; line-height:1.6; text-align:left; margin-bottom:16px; background:#090d16; padding:14px; border-radius:12px; border:1px solid #1e293b; white-space:pre-line;">1. Head to the Starting Star pin on the trail map.
-2. Read each riddle and explore the downtown landmarks.
-3. Type the correct answer to unlock the map pin, optional local history trivia, and single-use VIP discounts at partner shops!
-4. Competing for a prize? Take a quick team selfie at Stops #1, #5, and #9 and screenshot your final Victory Claim Code!</div>
-      <button class="btn-primary" onclick="document.getElementById('rulesModal').classList.remove('show')">Got It!</button>
+      <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:12px;">🧭 How QuestATL Works</h3>
+      <div id="rulesModalText" style="text-align:left; font-size:13px; color:#e2e8f0; line-height:1.65; white-space:pre-line; background:#090d16; padding:14px; border-radius:12px; border:1px solid #1e293b; margin-bottom:14px;"></div>
+      <button class="btn-primary" onclick="closeRulesModal()">Got It!</button>
     </div>
   </div>
 
+  <!-- 4. PARTNER INQUIRY MODAL -->
   <div class="modal-overlay" id="partnerInfoModal">
     <div class="modal-box">
-      <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🤝 Local Business Partners</h3>
-      <p style="font-size:12px; color:#cbd5e1; line-height:1.5; margin-bottom:12px;">QuestATL brings foot traffic directly to local storefronts! Players solve riddles outside your shop and unlock a capped, single-use monthly VIP perk inside.</p>
-      <div style="text-align:left; display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
-        <input type="text" id="partnerShopInput" placeholder="Business / Shop Name *" />
-        <input type="text" id="partnerPersonInput" placeholder="Your Name *" />
-        <input type="text" id="partnerContactInput" placeholder="Best Email or Phone Number *" />
-        <textarea id="partnerNoteInput" rows="2" placeholder="City & any questions or perk ideas (Optional)..."></textarea>
+      <h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🤝 Become a VIP Trail Stop</h3>
+      <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Drive local players straight to your register with capped, minimum-spend VIP perks and built-in 10-minute timer pauses.</p>
+      <div style="display:flex; flex-direction:column; gap:8px; text-align:left; margin-bottom:12px;">
+        <input id="partnerShopInput" class="input-field" placeholder="Business / Shop Name" />
+        <input id="partnerPersonInput" class="input-field" placeholder="Your Name & Role" />
+        <input id="partnerContactInput" class="input-field" placeholder="Best Phone or Email" />
+        <textarea id="partnerNoteInput" class="input-field" rows="3" placeholder="City & any questions (e.g. 30-day pilot)..."></textarea>
       </div>
-      <button class="btn-primary" id="partnerSubmitBtn" style="margin-bottom:8px;" onclick="submitPartnerInquiryForm()">📩 Request Partner Info</button>
-      <div id="partnerFormFeedback" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-bottom:8px;">✅ Received! We'll reach out to your shop shortly.</div>
-      <button class="btn-secondary" style="width:100%;" onclick="document.getElementById('partnerInfoModal').classList.remove('show')">Close</button>
+      <div id="partnerFormFeedback" style="font-size:12px; color:#34d399; font-weight:700; margin-bottom:10px; display:none;"></div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-secondary" style="flex:1;" onclick="closePartnerInfoModal()">Close</button>
+        <button class="btn-primary" style="flex:2;" onclick="submitPartnerInquiryForm()">Send Inquiry</button>
+      </div>
     </div>
   </div>
 
+  <!-- 5. SECRET ADMIN DEMO MODAL (5 Taps on Logo) -->
   <div class="modal-overlay" id="adminDemoModal">
-    <div class="modal-box">
-      <h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">⚡ Partner &amp; Admin Demo Control</h3>
-      <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Tap any theme below to preview it on screen, or jump to any stop pulled from your Google Sheet:</p>
-      <div style="text-align:left; margin-bottom:12px;">
-        <label style="font-size:11px; font-weight:800; color:#94a3b8;">PREVIEW MONTHLY THEME:</label>
-        <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">
-          <button class="btn-secondary" style="font-size:11px; padding:7px 11px; border-color:#f97316; color:#fed7aa;" onclick="applyMonthlyTheme('october', true)">🎃 Oct (Ghost)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:7px 11px; border-color:#d97706; color:#fde68a;" onclick="applyMonthlyTheme('november', true)">🦃 Nov (Turkey)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:7px 11px; border-color:#10b981; color:#a7f3d0;" onclick="applyMonthlyTheme('december', true)">❄️ Dec (Holiday)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:7px 11px;" onclick="applyMonthlyTheme('default', true)">🧭 Default</button>
+    <div class="modal-box" style="border-color:#ef4444;">
+      <div style="background:rgba(239,68,68,0.2); color:#fca5a5; font-size:10px; font-weight:900; padding:4px 10px; border-radius:99px; display:inline-block; margin-bottom:6px;">ENGINEER & PARTNER DEMO MODE</div>
+      <h3 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:10px;">🛠️ QuestATL Admin Controls</h3>
+
+      <div style="text-align:left; background:#090d16; padding:12px; border-radius:12px; border:1px solid #1e293b; margin-bottom:12px;">
+        <div style="font-size:11px; font-weight:800; color:#fcd34d; margin-bottom:6px;">📅 Preview Day-of-Week VIP Schedule:</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="setAdminDayPreview(null)">Live Day (Auto)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px; border-color:#10b981; color:#34d399;" onclick="setAdminDayPreview('2')">Mon–Sat (Zack's 3 Shops)</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px; border-color:#f59e0b; color:#fcd34d;" onclick="setAdminDayPreview('0')">Sunday Mode (Day 0)</button>
         </div>
       </div>
-      <div style="text-align:left; max-height:180px; overflow-y:auto; margin-bottom:14px;" id="adminStopJumpList"></div>
-      <button class="btn-secondary" style="width:100%;" onclick="closeAdminDemoModal()">Close Admin Panel</button>
+
+      <div style="text-align:left; background:#090d16; padding:12px; border-radius:12px; border:1px solid #1e293b; margin-bottom:12px;">
+        <div style="font-size:11px; font-weight:800; color:#fcd34d; margin-bottom:6px;">🎨 Preview Seasonal Theme:</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('default', true)">Default</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('october', true)">🎃 Oct</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('november', true)">🍂 Nov</button>
+          <button class="btn-secondary" style="font-size:11px; padding:6px 10px;" onclick="applyMonthlyTheme('december', true)">🎄 Dec</button>
+        </div>
+      </div>
+
+      <div style="text-align:left; background:#090d16; padding:12px; border-radius:12px; border:1px solid #1e293b; margin-bottom:12px;">
+        <div style="font-size:11px; font-weight:800; color:#fcd34d; margin-bottom:6px;">⚡ Jump Directly to Stop / Test VIP:</div>
+        <div id="adminStopJumpList" style="display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto;"></div>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-bottom:10px;">
+        <button class="btn-secondary" style="flex:1; color:#fca5a5; border-color:#ef4444;" onclick="resetCurrentDeviceSession()">Reset Team & Vouchers</button>
+        <button class="btn-secondary" style="flex:1;" onclick="fetchLiveDatabase(true); closeAdminDemoModal();">🔄 Force Sync Sheet</button>
+      </div>
+      <button class="btn-primary" onclick="closeAdminDemoModal()">Close Admin Panel</button>
     </div>
   </div>
 
   <script>
-    // ⬇️ PASTE YOUR LIVE GOOGLE APPS SCRIPT /exec URL RIGHT HERE ⬇️
+    // =========================================================================
+    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP (/exec) URL ON THE LINE BELOW:
+    // =========================================================================
     var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby-I-ZOWwZCxq3tKWlT2-P7XDFxxeSlkz0fDxSnGz3gdS9HQKt4iTfvjly5hpi71X8CXQ/exec";
 
     var STORAGE_KEY_SESSION = "questatl_active_session_v8";
     var STORAGE_KEY_DEVICE = "questatl_device_id_v1";
-    var STORAGE_KEY_USED_VOUCHERS = "questatl_redeemed_vouchers_v1";
+    var STORAGE_KEY_REDEEMED = "questatl_redeemed_vouchers_v1";
 
-    var GLOBAL_CONFIG = { hintPenaltySeconds: 120, skipPenaltySeconds: 300, vipVoucherTimerMinutes: 5, announcementBanner: "", bannerUrl: "", rulesText: "" };
-
-    var MONTHLY_THEMES = {
-      october:  { activeMonths: "10", primary: "#f97316", bgTop: "#2e1065", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
-      november: { activeMonths: "11", primary: "#d97706", bgTop: "#451a03", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
-      december: { activeMonths: "12", primary: "#eab308", bgTop: "#064e3b", bgDeep: "#061a12", title: "QuestATL Holiday Lights", sub: "December Winter Wonderland Hunt", floater: "❄️", badge: "🎄" },
-      default:  { activeMonths: "1,2,3,4,5,6,7,8,9", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" }
+    var GLOBAL_CONFIG = {
+      defaultCity: "lawrenceville",
+      maintenanceMode: false,
+      announcementBanner: "",
+      bannerUrl: "",
+      hintPenaltySeconds: 120,
+      skipPenaltySeconds: 300,
+      vipVoucherTimerMinutes: 10,
+      adminPin: "1234",
+      rulesText: "1. Head to the Starting Star pin on the trail map.\n2. Read each riddle and explore the downtown landmarks.\n3. Type the correct answer to unlock the map pin, optional local history trivia, and VIP discounts at partner shops!\n4. Chasing the #1 Leaderboard spot? Screenshot your final Victory Claim Code at the finish line to lock in your official team time!"
     };
 
-    var CITIES = [], ALL_DATABASE_CLUES = [], clues = [], liveRankings = [], vipClaimCounts = {};
-    var isLoadingDatabase = true, databaseErrorMsg = "", activeCityId = "lawrenceville";
-    var huntStarted = false, huntCompleted = false, currentStopIndex = 0, activeGameTab = "clue", leaderboardFilter = "month";
-    var teamName = "", captainContact = "", referralSource = "Direct", urlRefParam = "";
-    var startTimeMs = 0, lastStopTimestampMs = 0, elapsedSeconds = 0;
-    var hintsUsedCount = 0, skipsUsedCount = 0, hintRevealedForStop = {}, vipPauseUsedForShop = {};
-    var isTimerPausedForVip = false, vipPauseStartedMs = 0, stopSplitLogs = [], gpsVerifiedCount = 0, victoryClaimCode = "";
-    var timerInterval = null, vipClockInterval = null, adminTapCount = 0, adminModeUnlocked = false, manualThemeOverride = null, soundMuted = false;
-    var mapZoom = 1, mapPanX = 0, mapPanY = 0, isDraggingMap = false, dragStartX = 0, dragStartY = 0;
+    var MONTHLY_THEMES = {
+      default: { primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" },
+      october: { primary: "#f97316", bgTop: "#2e1065", bgDeep: "#0f071e", title: "Haunted QuestATL", sub: "Spooky October Trail Edition", floater: "👻", badge: "🎃" },
+      november: { primary: "#d97706", bgTop: "#451a03", bgDeep: "#180d07", title: "QuestATL Autumn Trail", sub: "November Harvest & Turkey Quest", floater: "🦃", badge: "🍂" },
+      december: { primary: "#eab308", bgTop: "#064e3b", bgDeep: "#061a12", title: "QuestATL Holiday Lights", sub: "December Winter Wonderland Hunt", floater: "❄️", badge: "🎄" }
+    };
 
-    function applyUrlDeepLinks() {
-      try {
-        var params = new URLSearchParams(window.location.search);
-        var tParam = params.get("trail") || params.get("city");
-        var rParam = params.get("ref") || params.get("shop");
-        if (tParam) activeCityId = String(tParam).trim().toLowerCase();
-        if (rParam) {
-          urlRefParam = String(rParam).trim();
-          referralSource = urlRefParam;
-        }
-      } catch (e) {}
-    }
+    var CITIES_DATABASE = [
+      { id: "lawrenceville", name: "Lawrenceville", state: "GA", status: "LIVE", tagline: "Historic Downtown Square & Lawn Trail", distanceMiles: "1.1 Miles", estTime: "35–50 Mins", trailTags: "🐕 Dog & Stroller Friendly", startLabel: "START: LAWRENCEVILLE", startLat: 33.95615, startLng: -83.98899, startMapX: 22, startMapY: 38, mapStyle: "lawrenceville" }
+    ];
 
-    function getOrCreateDeviceId() {
-      try {
-        var ex = localStorage.getItem(STORAGE_KEY_DEVICE);
-        if (ex) return ex;
-        var id = "QDEV-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+    var activeCityId = "lawrenceville";
+    var clues = [];
+    var rankings = [];
+    var vipClaimCounts = {};
+    var isLoadingDatabase = true;
+    var databaseErrorMsg = "";
+
+    // Active Gameplay State
+    var teamName = "";
+    var huntStarted = false;
+    var huntCompleted = false;
+    var currentStopIndex = 0;
+    var startTimeMs = 0;
+    var stopEnteredMs = 0;
+    var elapsedSeconds = 0;
+    var hintsUsedCount = 0;
+    var skipsUsedCount = 0;
+    var hintRevealedForStop = {};
+    var stopSplitSeconds = {};
+    var gpsVerifiedStops = {};
+    var victoryClaimCode = "";
+
+    // VIP Timer Pause & Voucher State
+    var isTimerPausedForVip = false;
+    var vipPauseStartedMs = 0;
+    var totalPausedMs = 0;
+    var vipPauseUsedForShop = {};
+    var vipClockInterval = null;
+    var mainTimerInterval = null;
+
+    // UI & Admin State
+    var activeTab = "clue"; // "clue", "vip", "leaderboard"
+    var soundMuted = false;
+    var adminTapCount = 0;
+    var adminTapTimer = null;
+    var adminModeUnlocked = false;
+    var manualThemeOverride = null;
+    var adminDayOverride = null;
+
+    function getDeviceId() {
+      var id = localStorage.getItem(STORAGE_KEY_DEVICE);
+      if (!id) {
+        id = "QDEV-" + Math.random().toString(36).substring(2, 7).toUpperCase();
         localStorage.setItem(STORAGE_KEY_DEVICE, id);
-        return id;
-      } catch (e) { return "QDEV-ANON"; }
+      }
+      return id;
     }
 
     function getRedeemedShopsMap() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY_USED_VOUCHERS) || "{}"); } catch (e) { return {}; }
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY_REDEEMED);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
     }
 
     function markShopVoucherRedeemed(shopName) {
-      try {
-        var map = getRedeemedShopsMap();
-        map[shopName] = new Date().toLocaleDateString();
-        localStorage.setItem(STORAGE_KEY_USED_VOUCHERS, JSON.stringify(map));
-      } catch (e) {}
+      if (!shopName) return;
+      var map = getRedeemedShopsMap();
+      map[shopName] = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEY_REDEEMED, JSON.stringify(map));
     }
 
-    function getCluesForTrail(trailId) {
-      var clean = String(trailId || "lawrenceville").trim().toLowerCase();
-      return ALL_DATABASE_CLUES.filter(function(item) {
-        return String(item.cityId || "lawrenceville").trim().toLowerCase() === clean;
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function escapeQuotes(str) {
+      return String(str || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    function formatSeconds(sec) {
+      var s = Math.max(0, Math.floor(Number(sec) || 0));
+      var m = Math.floor(s / 60);
+      var rem = s % 60;
+      return (m < 10 ? "0" + m : "" + m) + ":" + (rem < 10 ? "0" + rem : "" + rem);
+    }
+
+    // =========================================================================
+    // DAY-OF-WEEK VIP SCHEDULE & NEXT-DOOR BONUS RESOLVER
+    // =========================================================================
+    function applyDayScheduleToClues(cluesArray) {
+      if (!Array.isArray(cluesArray)) return cluesArray;
+      var urlParams = new URLSearchParams(window.location.search);
+      var testDayParam = adminDayOverride !== null ? adminDayOverride : urlParams.get("testDay");
+      var todayStr = (testDayParam !== null && testDayParam !== "")
+        ? String(testDayParam).trim()
+        : String(new Date().getDay());
+
+      cluesArray.forEach(function(stop) {
+        if (stop.primarySponsorName === undefined) {
+          stop.primarySponsorName = stop.sponsorName || null;
+          stop.primarySponsorPerk = stop.sponsorPerk || null;
+        }
+        if (stop.rawBonusSponsorName === undefined) {
+          stop.rawBonusSponsorName = stop.bonusSponsorName || null;
+          stop.rawBonusSponsorPerk = stop.bonusSponsorPerk || null;
+        }
+
+        var pDays = String(stop.sponsorDays !== undefined && stop.sponsorDays !== "" ? stop.sponsorDays : "0,1,2,3,4,5,6")
+          .split(",").map(function(d) { return d.trim(); });
+        var aDays = String(stop.altSponsorDays !== undefined && stop.altSponsorDays !== "" ? stop.altSponsorDays : "0")
+          .split(",").map(function(d) { return d.trim(); });
+        var bDays = String(stop.bonusSponsorDays !== undefined && stop.bonusSponsorDays !== "" ? stop.bonusSponsorDays : "1,2,3,4,5,6")
+          .split(",").map(function(d) { return d.trim(); });
+
+        if (stop.primarySponsorName && stop.primarySponsorPerk && pDays.indexOf(todayStr) !== -1) {
+          stop.sponsorName = stop.primarySponsorName;
+          stop.sponsorPerk = stop.primarySponsorPerk;
+        } else if (stop.altSponsorName && stop.altSponsorPerk && aDays.indexOf(todayStr) !== -1) {
+          stop.sponsorName = stop.altSponsorName;
+          stop.sponsorPerk = stop.altSponsorPerk;
+        } else {
+          stop.sponsorName = null;
+          stop.sponsorPerk = null;
+        }
+
+        if (stop.rawBonusSponsorName && stop.rawBonusSponsorPerk && bDays.indexOf(todayStr) !== -1) {
+          stop.bonusSponsorName = stop.rawBonusSponsorName;
+          stop.bonusSponsorPerk = stop.rawBonusSponsorPerk;
+        } else {
+          stop.bonusSponsorName = null;
+          stop.bonusSponsorPerk = null;
+        }
       });
+      return cluesArray;
     }
 
-    function isTrailPublicLive(trailObj) {
-      if (!trailObj) return false;
-      if (getCluesForTrail(trailObj.id).length === 0) return false;
-      var st = String(trailObj.status || trailObj.status_default || trailObj.statusdefault || "LIVE").trim().toUpperCase();
-      var isPrimaryCityRow = String(trailObj.id || "").indexOf("_") === -1;
-      return st === "LIVE" || isPrimaryCityRow;
-    }
-
-    function isTrailPlayable(trailObj) {
-      if (!trailObj) return false;
-      if (getCluesForTrail(trailObj.id).length === 0) return false;
-      return isTrailPublicLive(trailObj) || adminModeUnlocked;
-    }
-
-    function playGameTone(type) {
-      if (soundMuted) return;
-      try {
-        var ctx = new (window.AudioContext || window.webkitAudioContext)();
-        var osc = ctx.createOscillator(), gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        var now = ctx.currentTime;
-        if (type === "solve") {
-          osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2);
-          gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-          osc.start(now); osc.stop(now + 0.45);
-        } else if (type === "victory") {
-          osc.frequency.setValueAtTime(440, now); osc.frequency.setValueAtTime(554.37, now + 0.12); osc.frequency.setValueAtTime(659.25, now + 0.24); osc.frequency.setValueAtTime(880, now + 0.36);
-          gain.gain.setValueAtTime(0.18, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
-          osc.start(now); osc.stop(now + 0.7);
-        }
-      } catch (e) {}
-    }
-
-    function toggleSoundMute() {
-      soundMuted = !soundMuted;
-      var btn = document.getElementById("soundToggleBtn");
-      if (btn) btn.innerText = soundMuted ? "🔇" : "🔊";
-    }
-
-    function saveActiveSession() {
-      if (!huntStarted || huntCompleted) { try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {} return; }
-      try {
-        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify({
-          activeCityId: activeCityId, teamName: teamName, captainContact: captainContact, referralSource: referralSource,
-          currentStopIndex: currentStopIndex, startTimeMs: startTimeMs, lastStopTimestampMs: lastStopTimestampMs,
-          hintsUsedCount: hintsUsedCount, skipsUsedCount: skipsUsedCount, hintRevealedForStop: hintRevealedForStop,
-          vipPauseUsedForShop: vipPauseUsedForShop, stopSplitLogs: stopSplitLogs, gpsVerifiedCount: gpsVerifiedCount
-        }));
-      } catch (e) {}
-    }
-
-    function restoreSavedSession() {
-      try {
-        var raw = localStorage.getItem(STORAGE_KEY_SESSION);
-        if (!raw) return;
-        var s = JSON.parse(raw);
-        if (!s || !s.teamName || !s.startTimeMs || (Date.now() - s.startTimeMs > 12 * 3600 * 1000)) {
-          localStorage.removeItem(STORAGE_KEY_SESSION); return;
-        }
-        activeCityId = s.activeCityId || "lawrenceville"; teamName = s.teamName;
-        captainContact = s.captainContact || ""; referralSource = s.referralSource || "Direct";
-        currentStopIndex = Number(s.currentStopIndex) || 0; startTimeMs = Number(s.startTimeMs);
-        lastStopTimestampMs = Number(s.lastStopTimestampMs) || startTimeMs;
-        hintsUsedCount = Number(s.hintsUsedCount) || 0; skipsUsedCount = Number(s.skipsUsedCount) || 0;
-        hintRevealedForStop = s.hintRevealedForStop || {}; vipPauseUsedForShop = s.vipPauseUsedForShop || {};
-        stopSplitLogs = Array.isArray(s.stopSplitLogs) ? s.stopSplitLogs : []; gpsVerifiedCount = Number(s.gpsVerifiedCount) || 0;
-        huntStarted = true; huntCompleted = false;
-        startLiveTimerLoop();
-      } catch (e) {}
-    }
-
-    function abandonActiveSession() {
-      if (!confirm("Reset your current quest and return to the start screen?")) return;
-      huntStarted = false; huntCompleted = false; currentStopIndex = 0;
-      if (timerInterval) clearInterval(timerInterval);
-      try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
+    function setAdminDayPreview(dayVal) {
+      adminDayOverride = dayVal;
+      if (window.MASTER_SHEET_CLUES) {
+        applyDayScheduleToClues(window.MASTER_SHEET_CLUES);
+        clues = window.MASTER_SHEET_CLUES.filter(function(c) { return c.cityId === activeCityId; });
+      }
+      closeAdminDemoModal();
       renderMainContent();
     }
 
-    function verifyStopGpsSilently(stop) {
-      if (!navigator.geolocation || !stop || !stop.lat || !stop.lng) return;
-      try {
-        navigator.geolocation.getCurrentPosition(function(pos) {
-          var R = 6371000, toRad = Math.PI / 180;
-          var dLat = (stop.lat - pos.coords.latitude) * toRad, dLon = (stop.lng - pos.coords.longitude) * toRad;
-          var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(pos.coords.latitude * toRad) * Math.cos(stop.lat * toRad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-          var dMeters = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          if (dMeters <= 160) { gpsVerifiedCount++; saveActiveSession(); }
-        }, function() {}, { timeout: 4000, maximumAge: 60000 });
-      } catch (e) {}
-    }
+    // =========================================================================
+    // LIVE GOOGLE SHEET FETCH & SYNC
+    // =========================================================================
+    function fetchLiveDatabase(forceNoCache) {
+      isLoadingDatabase = true;
+      databaseErrorMsg = "";
+      renderMainContent();
 
-    function autoDetectMonthlyTheme() {
-      if (manualThemeOverride) { applyMonthlyTheme(manualThemeOverride, false); return; }
-      var m = new Date().getMonth() + 1;
-      for (var key in MONTHLY_THEMES) {
-        var months = String(MONTHLY_THEMES[key].activeMonths || "").split(",").map(function(x) { return parseInt(x.trim(), 10); });
-        if (months.indexOf(m) !== -1) { applyMonthlyTheme(key, false); return; }
-      }
-      applyMonthlyTheme("default", false);
+      var url = GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime() + (forceNoCache ? "&nocache=1" : "");
+      fetch(url)
+        .then(function(res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function(json) {
+          if (!json || json.status !== "ok") throw new Error("Invalid JSON payload from Google Sheet.");
+
+          // 1. Sync Config
+          if (json.config) {
+            var c = json.config;
+            if (c.defaultcity) GLOBAL_CONFIG.defaultCity = String(c.defaultcity).trim().toLowerCase();
+            GLOBAL_CONFIG.maintenanceMode = String(c.maintenancemode || "").toUpperCase() === "TRUE";
+            GLOBAL_CONFIG.announcementBanner = String(c.announcementbanner || "").trim();
+            GLOBAL_CONFIG.bannerUrl = String(c.bannerurl || "").trim();
+            if (c.hintpenaltyseconds !== undefined && c.hintpenaltyseconds !== "") GLOBAL_CONFIG.hintPenaltySeconds = Number(c.hintpenaltyseconds) || 120;
+            if (c.skippenaltyseconds !== undefined && c.skippenaltyseconds !== "") GLOBAL_CONFIG.skipPenaltySeconds = Number(c.skippenaltyseconds) || 300;
+            if (c.vipvouchertimerminutes !== undefined && c.vipvouchertimerminutes !== "") GLOBAL_CONFIG.vipVoucherTimerMinutes = Number(c.vipvouchertimerminutes) || 10;
+            if (c.adminpin) GLOBAL_CONFIG.adminPin = String(c.adminpin).trim();
+            if (c.rulestext) GLOBAL_CONFIG.rulesText = String(c.rulestext).replace(/\\n/g, "\n");
+          }
+
+          var bannerEl = document.getElementById("announcementBanner");
+          if (bannerEl) {
+            if (GLOBAL_CONFIG.announcementBanner) {
+              bannerEl.style.display = "block";
+              bannerEl.innerText = GLOBAL_CONFIG.announcementBanner;
+              bannerEl.href = GLOBAL_CONFIG.bannerUrl || "#";
+            } else {
+              bannerEl.style.display = "none";
+            }
+          }
+
+          // 2. Sync Themes
+          if (Array.isArray(json.themes) && json.themes.length > 0) {
+            var currentMonth = String(new Date().getMonth() + 1);
+            var matchedThemeKey = "default";
+            json.themes.forEach(function(th) {
+              MONTHLY_THEMES[th.themeId] = th;
+              var mList = String(th.activeMonths || "").split(",").map(function(x) { return x.trim(); });
+              if (mList.indexOf(currentMonth) !== -1) matchedThemeKey = th.themeId;
+            });
+            applyMonthlyTheme(manualThemeOverride || matchedThemeKey, false);
+          }
+
+          // 3. Sync VIP Claim Counts & Rankings
+          vipClaimCounts = json.vipClaimCounts || {};
+          rankings = Array.isArray(json.rankings) ? json.rankings : [];
+
+          // 4. Sync Cities & Clues
+          if (Array.isArray(json.cities) && json.cities.length > 0) {
+            CITIES_DATABASE = json.cities;
+          }
+          if (Array.isArray(json.clues) && json.clues.length > 0) {
+            applyDayScheduleToClues(json.clues);
+            window.MASTER_SHEET_CLUES = json.clues;
+            CITIES_DATABASE.forEach(function(city) {
+              var hasClues = json.clues.some(function(cl) { return cl.cityId === city.id; });
+              if (hasClues) city.status = "LIVE";
+            });
+            var cityClues = json.clues.filter(function(cl) { return cl.cityId === activeCityId; });
+            clues = cityClues;
+          }
+
+          isLoadingDatabase = false;
+          restoreActiveSession();
+          renderCitySelectorBar();
+          renderMainContent();
+        })
+        .catch(function(err) {
+          isLoadingDatabase = false;
+          databaseErrorMsg = err ? String(err.message || err) : "Could not reach Google Sheet Web App URL.";
+          renderMainContent();
+        });
     }
 
     function applyMonthlyTheme(themeKey, isManualAdminPreview) {
-      if (isManualAdminPreview) { manualThemeOverride = themeKey; closeAdminDemoModal(); }
+      if (isManualAdminPreview) {
+        manualThemeOverride = themeKey;
+        closeAdminDemoModal();
+      }
       var t = MONTHLY_THEMES[themeKey] || MONTHLY_THEMES.default;
       var topGlow = t.bgTop || (themeKey === "october" ? "#2e1065" : (themeKey === "november" ? "#451a03" : (themeKey === "december" ? "#064e3b" : "#172036")));
       document.documentElement.style.setProperty("--primary", t.primary || "#f59e0b");
@@ -437,446 +620,81 @@
       document.getElementById("brandEmojiIcon").innerText = t.badge || "🧭";
     }
 
-    function fetchLiveDatabase() {
-      isLoadingDatabase = true; databaseErrorMsg = "";
-      renderMainContent();
-
-      fetch(GOOGLE_SHEET_API_URL + "?t=" + new Date().getTime())
-        .then(function(res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
-        .then(function(json) {
-          if (!json || json.status !== "ok") throw new Error("Invalid JSON payload from Google Sheet.");
-
-          if (json.config) {
-            if (json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) GLOBAL_CONFIG.hintPenaltySeconds = Number(json.config.hintpenaltyseconds || json.config.hint_penalty_seconds) || 120;
-            if (json.config.skippenaltyseconds || json.config.skip_penalty_seconds) GLOBAL_CONFIG.skipPenaltySeconds = Number(json.config.skippenaltyseconds || json.config.skip_penalty_seconds) || 300;
-            if (json.config.vipvouchertimerminutes || json.config.vip_voucher_timer_minutes) GLOBAL_CONFIG.vipVoucherTimerMinutes = Number(json.config.vipvouchertimerminutes || json.config.vip_voucher_timer_minutes) || 5;
-            var bannerTxt = String(json.config.announcementbanner || json.config.announcement_banner || "").trim();
-            var bannerEl = document.getElementById("announcementBanner");
-            if (bannerEl) {
-              if (bannerTxt) { bannerEl.style.display = "block"; bannerEl.innerText = "📣 " + bannerTxt; bannerEl.href = String(json.config.bannerurl || json.config.banner_url || "#"); }
-              else { bannerEl.style.display = "none"; }
-            }
-            var rTxt = String(json.config.rulestext || json.config.rules_text || "").trim();
-            if (rTxt && document.getElementById("rulesModalText")) document.getElementById("rulesModalText").innerText = rTxt;
-          }
-
-          if (json.themes && json.themes.length > 0) {
-            for (var ti = 0; ti < json.themes.length; ti++) {
-              var st = json.themes[ti], id = String(st.themeId || "").toLowerCase();
-              if (!id) continue;
-              var base = MONTHLY_THEMES[id] || { activeMonths: "", primary: "#f59e0b", bgTop: "#172036", bgDeep: "#070b14", title: "QuestATL.com", sub: "Live Outdoor City Quests", floater: "✨", badge: "🧭" };
-              if (st.activeMonths) base.activeMonths = st.activeMonths;
-              if (st.primary && st.primary !== "#f59e0b") base.primary = st.primary;
-              if (st.bgTop) base.bgTop = st.bgTop;
-              if (st.bgDeep && st.bgDeep !== "#070b14") base.bgDeep = st.bgDeep;
-              if (st.title && st.title !== "QuestATL.com") base.title = st.title;
-              if (st.sub && st.sub !== "Live Outdoor City Quests") base.sub = st.sub;
-              if (st.floater && st.floater !== "✨") base.floater = st.floater;
-              if (st.badge && st.badge !== "🧭") base.badge = st.badge;
-              MONTHLY_THEMES[id] = base;
-            }
-            autoDetectMonthlyTheme();
-          }
-
-          vipClaimCounts = json.vipClaimCounts || {};
-          liveRankings = Array.isArray(json.rankings) ? json.rankings : [];
-          ALL_DATABASE_CLUES = Array.isArray(json.clues) ? json.clues : [];
-
-          if (Array.isArray(json.cities) && json.cities.length > 0) {
-            CITIES = json.cities;
-          } else {
-            CITIES = [{ id: "lawrenceville", name: "Lawrenceville", status: "LIVE", tagline: "Historic Downtown Square & Lawn Trail", distanceMiles: "1.1 Miles", estTime: "35–50 Mins", trailTags: "🐕 Dog & Stroller Friendly", startLabel: "START: COURTHOUSE", startLat: 33.95675, startLng: -83.98795, startMapX: 49, startMapY: 26, mapStyle: "lawrenceville" }];
-          }
-
-          var currentTrailObj = CITIES.find(function(c) { return c.id === activeCityId; });
-          if (!currentTrailObj && CITIES.length > 0) activeCityId = CITIES[0].id;
-          clues = getCluesForTrail(activeCityId);
-
-          isLoadingDatabase = false;
-          renderCitySelector();
-          renderMainContent();
-        })
-        .catch(function(err) {
-          isLoadingDatabase = false;
-          databaseErrorMsg = err ? String(err.message || err) : "Could not reach Google Sheet Web App URL.";
-          renderMainContent();
-        });
-    }
-
-    function trackQuestEvent(payload) {
-      if (!GOOGLE_SHEET_API_URL) return;
-      fetch(GOOGLE_SHEET_API_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(payload) }).catch(function() {});
-    }
-
-    function renderCitySelector() {
+    function renderCitySelectorBar() {
       var bar = document.getElementById("citySelectorBar");
-      var activeTrailObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
-      var activeCityNameNorm = activeTrailObj ? String(activeTrailObj.name || "").trim().toLowerCase() : "";
-
-      var cityGroups = [], groupMap = {};
-      for (var i = 0; i < CITIES.length; i++) {
-        var c = CITIES[i], key = String(c.name || c.id).trim().toLowerCase();
-        if (!groupMap[key]) {
-          groupMap[key] = { cityName: c.name, normName: key, trails: [], hasPublicLiveTrail: false };
-          cityGroups.push(groupMap[key]);
-        }
-        groupMap[key].trails.push(c);
-        if (isTrailPublicLive(c)) groupMap[key].hasPublicLiveTrail = true;
-      }
-
+      if (!bar) return;
       var html = "";
-      for (var g = 0; g < cityGroups.length; g++) {
-        var grp = cityGroups[g];
-        var isCurrentCityGroup = grp.normName === activeCityNameNorm ? "active" : "";
-        var badge = grp.hasPublicLiveTrail ? '<span class="badge-live">LIVE</span>' : '<span class="badge-soon">SOON</span>';
-        var targetTrail = grp.trails.find(function(t) { return isTrailPlayable(t); }) || grp.trails[0];
-        html += '<button class="city-pill ' + isCurrentCityGroup + '" onclick="selectCityGroup(\'' + escapeQuotes(grp.normName) + '\', \'' + escapeQuotes(targetTrail.id) + '\')"><span>📍 ' + escapeHtml(grp.cityName) + '</span>' + badge + '</button>';
-      }
+      CITIES_DATABASE.forEach(function(city) {
+        var isLive = city.status === "LIVE";
+        var isActive = city.id === activeCityId;
+        html += '<div class="city-pill ' + (isActive ? "active" : "") + '" onclick="selectCity(\'' + escapeQuotes(city.id) + '\')">' +
+          '<span>' + (isLive ? "🟢" : "⏳") + '</span>' +
+          '<span>' + escapeHtml(city.name) + '</span>' +
+          '</div>';
+      });
       bar.innerHTML = html;
     }
 
-    function selectCityGroup(normCityName, defaultTrailId) {
-      var currentTrailObj = CITIES.find(function(c) { return c.id === activeCityId; });
-      var currentNormName = currentTrailObj ? String(currentTrailObj.name || "").trim().toLowerCase() : "";
-      if (currentNormName === normCityName && !huntCompleted) return;
-      selectCity(defaultTrailId);
-    }
-
-    function selectCity(trailId) {
-      if (huntStarted && !huntCompleted && trailId !== activeCityId) {
-        if (!confirm("Switch trails and reset your current quest timer?")) return;
+    function selectCity(cityId) {
+      activeCityId = cityId;
+      if (window.MASTER_SHEET_CLUES) {
+        clues = window.MASTER_SHEET_CLUES.filter(function(c) { return c.cityId === activeCityId; });
       }
-      activeCityId = trailId; huntStarted = false; huntCompleted = false;
-      if (timerInterval) clearInterval(timerInterval);
-      try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
-      clues = getCluesForTrail(trailId);
-      renderCitySelector(); renderMainContent();
-    }
-
-    function renderMainContent() {
-      var container = document.getElementById("mainContent");
-      if (isLoadingDatabase) {
-        container.innerHTML = '<div class="card" style="text-align:center; padding:36px 20px;"><div style="font-size:38px; margin-bottom:10px;">⏳</div><h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Syncing Live Trail Database...</h2><p style="font-size:13px; color:#94a3b8;">Loading live riddles, VIP shop perks, and rankings from Google Sheets.</p></div>';
-        return;
-      }
-      if (databaseErrorMsg || ALL_DATABASE_CLUES.length === 0) {
-        container.innerHTML = '<div class="card" style="text-align:center; padding:28px 20px; border-color:#ef4444;"><div style="font-size:38px; margin-bottom:10px;">⚠️</div><h2 style="font-size:19px; font-weight:900; color:#fca5a5; margin-bottom:8px;">Database Sync Needed</h2><p style="font-size:13px; color:#cbd5e1; margin-bottom:14px; line-height:1.5;">' + (databaseErrorMsg ? 'Could not load data from your Google Sheet Web App URL (' + escapeHtml(databaseErrorMsg) + '). Make sure GOOGLE_SHEET_API_URL has your exact <strong>/exec</strong> URL.' : 'Connected to your Google Sheet, but 0 clues were returned!') + '</p><button class="btn-primary" onclick="fetchLiveDatabase()">🔄 Retry Database Sync</button></div>';
-        return;
-      }
-
-      var cityObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
-      if (!isTrailPlayable(cityObj)) {
-        var siblingLive = CITIES.find(function(c) { return String(c.name || "").trim().toLowerCase() === String(cityObj.name || "").trim().toLowerCase() && isTrailPlayable(c); });
-        if (siblingLive) { activeCityId = siblingLive.id; cityObj = siblingLive; clues = getCluesForTrail(activeCityId); }
-      }
-
-      if (!isTrailPlayable(cityObj)) {
-        var firstLiveAnyCity = CITIES.find(function(c) { return isTrailPlayable(c); }) || CITIES[0];
-        container.innerHTML = '<div class="card" style="text-align:center; padding:32px 20px;"><div style="font-size:42px; margin-bottom:10px;">🚧</div><h2 style="font-size:22px; font-weight:900; color:#fcd34d; margin-bottom:8px;">' + escapeHtml(cityObj.name) + ' Trail Coming Soon!</h2><p style="font-size:13px; color:#94a3b8; margin-bottom:18px;">We are currently mapping out riddles and partnering with local businesses in ' + escapeHtml(cityObj.name) + '.</p><button class="btn-primary" onclick="selectCity(\'' + escapeQuotes(firstLiveAnyCity.id) + '\')">Play Live ' + escapeHtml(firstLiveAnyCity.name) + ' Trail Now</button></div>';
-        return;
-      }
-
-      if (!huntStarted) renderStartLobby(container, cityObj);
-      else if (huntCompleted) renderVictoryScreen(container, cityObj);
-      else renderActiveHuntInterface(container, cityObj);
-    }
-
-    function renderStartLobby(container, cityObj) {
-      var normCityName = String(cityObj.name || "").trim().toLowerCase();
-      var sameCityTrails = CITIES.filter(function(c) { return String(c.name || "").trim().toLowerCase() === normCityName && isTrailPlayable(c); });
-
-      var multiTrailSelectorHtml = "";
-      if (sameCityTrails.length > 1) {
-        var trailButtons = "";
-        for (var t = 0; t < sameCityTrails.length; t++) {
-          var tr = sameCityTrails[t], isSelected = tr.id === cityObj.id ? "active" : "";
-          var trClueCount = getCluesForTrail(tr.id).length;
-          var soonBadge = !isTrailPublicLive(tr) ? ' <span style="background:#ef4444; color:#fff; font-size:9px; padding:2px 6px; border-radius:99px; font-weight:900;">ADMIN PREVIEW</span>' : '';
-          trailButtons += '<button class="trail-option-btn ' + isSelected + '" onclick="selectCity(\'' + escapeQuotes(tr.id) + '\')"><div><div style="font-size:13px; font-weight:900; color:' + (isSelected ? '#fcd34d' : '#f8fafc') + ';">' + (isSelected ? '🔘 ' : '⚪ ') + escapeHtml(tr.tagline || ("Trail #" + (t + 1))) + soonBadge + '</div><div style="font-size:11px; color:#94a3b8; margin-top:2px;">' + trClueCount + ' Stops &bull; ' + escapeHtml(tr.distanceMiles || "1.1 Miles") + ' &bull; ' + escapeHtml(tr.estTime || "35–50 Mins") + '</div></div><span style="font-size:11px; font-weight:800; color:' + (isSelected ? '#10b981' : '#64748b') + ';">' + (isSelected ? 'ACTIVE' : 'Select ➔') + '</span></button>';
-        }
-        multiTrailSelectorHtml = '<div class="trail-selector-box"><div style="font-size:11px; font-weight:900; color:#fcd34d; text-transform:uppercase;">🗺️ Choose Your ' + escapeHtml(cityObj.name) + ' Trail (' + sameCityTrails.length + ' Available):</div>' + trailButtons + '</div>';
-      }
-
-      var partnerShops = [];
-      for (var i = 0; i < clues.length; i++) {
-        if (clues[i].sponsorName && partnerShops.indexOf(clues[i].sponsorName) === -1) partnerShops.push(clues[i].sponsorName);
-      }
-
-      var sponsorPill = partnerShops.length > 0
-        ? '<span style="background:rgba(16,185,129,0.18); color:#34d399; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px;">🎁 ' + partnerShops.length + ' VIP SHOP PERKS</span>'
-        : '<span style="background:rgba(59,130,246,0.18); color:#93c5fd; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px;">⏱️ LIVE TIMED TRAIL</span>';
-
-      var partnerDropdownHtml = "";
-      if (partnerShops.length > 0) {
-        var opts = '<option value="Direct">Historic Courthouse / General QR</option>';
-        for (var p = 0; p < partnerShops.length; p++) {
-          var isRefMatch = urlRefParam && partnerShops[p].toLowerCase().indexOf(urlRefParam.toLowerCase()) !== -1 ? " selected" : "";
-          opts += '<option value="' + escapeQuotes(partnerShops[p]) + '"' + isRefMatch + '>📍 ' + escapeHtml(partnerShops[p]) + ' Window QR</option>';
-        }
-        partnerDropdownHtml = '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">STARTING AT A PARTNER SHOP WINDOW? (OPTIONAL):</label><select id="referralSelectInput" style="margin-bottom:12px;">' + opts + '</select>';
-      }
-
-      container.innerHTML =
-        '<div class="card">' +
-          multiTrailSelectorHtml +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">' +
-            '<span style="background:rgba(245,158,11,0.18); color:#fcd34d; font-size:11px; font-weight:800; padding:4px 10px; border-radius:99px;">🔥 ' + clues.length + ' INTERACTIVE STOPS</span>' +
-            sponsorPill +
-          '</div>' +
-          '<h2 style="font-size:24px; font-weight:900; color:#fff; margin-bottom:3px;">' + escapeHtml(cityObj.name) + ' Adventure Trail</h2>' +
-          '<div style="font-size:13px; font-weight:800; color:#fcd34d; margin-bottom:10px;">🧭 ' + escapeHtml(cityObj.tagline || "Interactive Downtown Trail") + '</div>' +
-          '<div style="display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color:#fcd34d; font-weight:700; margin-bottom:12px;">' +
-            '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">👟 ' + escapeHtml(cityObj.distanceMiles || "1.1 Miles") + '</span>' +
-            '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">⏱️ ' + escapeHtml(cityObj.estTime || "35–50 Mins") + '</span>' +
-            '<span style="background:#090d16; padding:4px 9px; border-radius:8px; border:1px solid #1e293b;">' + escapeHtml(cityObj.trailTags || "🐕 Dog Friendly") + '</span>' +
-          '</div>' +
-          '<p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">Solve real-world riddles across downtown ' + escapeHtml(cityObj.name) + ', unlock map pins and single-use VIP perks as you solve each clue, and race the live leaderboard clock!</p>' +
-          '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:14px; margin-bottom:14px;">' +
-            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">ENTER A UNIQUE TEAM NAME *:</label>' +
-            '<input type="text" id="teamNameInput" placeholder="e.g. Lawrenceville Legends" value="' + escapeQuotes(teamName) + '" style="margin-bottom:10px;" />' +
-            '<label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:6px;">TEAM CAPTAIN INSTAGRAM OR EMAIL (FOR PRIZES &amp; NEW TRAIL ALERTS):</label>' +
-            '<input type="text" id="captainContactInput" placeholder="@yourhandle or email (Optional)" value="' + escapeQuotes(captainContact) + '" style="margin-bottom:12px;" />' +
-            partnerDropdownHtml +
-            '<label style="display:flex; align-items:flex-start; gap:8px; font-size:11px; color:#cbd5e1; cursor:pointer;">' +
-              '<input type="checkbox" id="waiverCheckbox" style="margin-top:2px; transform:scale(1.2);" />' +
-              '<span><strong>Safety &amp; Fair Play Agreement:</strong> We agree to use crosswalks, obey all traffic laws, stay on public sidewalks, and play fairly on foot without outside assistance.</span>' +
-            '</label>' +
-          '</div>' +
-          '<button class="btn-primary" onclick="handleStartQuestClick()">🚀 Start Live Timer &amp; Begin Quest</button>' +
-        '</div>' +
-        renderLeaderboardCardHtml();
-    }
-
-    function containsProfanity(text) {
-      var bad = ["fuck", "shit", "bitch", "asshole", "cunt", "dick", "pussy", "nigger", "faggot", "slut", "whore"];
-      var low = String(text || "").toLowerCase();
-      for (var i = 0; i < bad.length; i++) if (low.indexOf(bad[i]) !== -1) return true;
-      return false;
-    }
-
-    function isDuplicateTeamName(nameToCheck) {
-      var clean = String(nameToCheck || "").trim().toLowerCase();
-      return liveRankings.some(function(r) {
-        return (!r.city || r.city.toLowerCase() === activeCityId) && String(r.team || "").trim().toLowerCase() === clean;
-      });
-    }
-
-    function handleStartQuestClick() {
-      var inputEl = document.getElementById("teamNameInput"), contactEl = document.getElementById("captainContactInput"), waiverEl = document.getElementById("waiverCheckbox"), refEl = document.getElementById("referralSelectInput");
-      var entered = inputEl ? inputEl.value.trim() : "";
-      if (!entered) { alert("Please enter a Team Name before starting your quest!"); return; }
-      if (containsProfanity(entered)) { alert("Please choose a family-friendly Team Name!"); return; }
-      if (isDuplicateTeamName(entered)) { alert("That Team Name is already on the leaderboard! Please choose a unique Team Name."); return; }
-      if (!waiverEl || !waiverEl.checked) { alert("Please check the Safety & Fair Play Agreement box to begin."); return; }
-
-      teamName = entered;
-      captainContact = contactEl ? contactEl.value.trim() : "";
-      referralSource = refEl ? refEl.value : (urlRefParam || "Direct");
-      huntStarted = true; huntCompleted = false; currentStopIndex = 0; elapsedSeconds = 0;
-      hintsUsedCount = 0; skipsUsedCount = 0; hintRevealedForStop = {};
-      vipPauseUsedForShop = {}; isTimerPausedForVip = false;
-      stopSplitLogs = []; gpsVerifiedCount = 0; victoryClaimCode = "";
-      activeGameTab = "clue"; startTimeMs = Date.now(); lastStopTimestampMs = startTimeMs;
-
-      saveActiveSession();
-      trackQuestEvent({ action: "start_team", city: activeCityId, team: teamName, captainContact: captainContact, referral: referralSource, deviceId: getOrCreateDeviceId() });
-      startLiveTimerLoop(); renderMainContent();
-    }
-
-    function startLiveTimerLoop() {
-      if (timerInterval) clearInterval(timerInterval);
-      timerInterval = setInterval(function() {
-        if (isTimerPausedForVip) return;
-        var penaltySec = (hintsUsedCount * GLOBAL_CONFIG.hintPenaltySeconds) + (skipsUsedCount * GLOBAL_CONFIG.skipPenaltySeconds);
-        elapsedSeconds = Math.floor((Date.now() - startTimeMs) / 1000) + penaltySec;
-        var timerDom = document.getElementById("liveClockDisplay");
-        if (timerDom) timerDom.innerText = formatSeconds(elapsedSeconds);
-      }, 1000);
-    }
-
-    function renderActiveHuntInterface(container, cityObj) {
-      var stop = clues[currentStopIndex] || clues[0];
-      var progressPct = Math.round((currentStopIndex / clues.length) * 100);
-      var unlockedVipCount = 0;
-      for (var v = 0; v < currentStopIndex; v++) if (clues[v] && clues[v].sponsorName && clues[v].sponsorPerk) unlockedVipCount++;
-
-      var headerHud =
-        '<div class="card" style="padding:14px 16px; margin-bottom:12px;">' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
-            '<div><div style="font-size:10px; font-weight:800; color:#94a3b8; text-transform:uppercase;">TEAM: ' + escapeHtml(teamName) + ' &bull; <span style="color:#f87171; cursor:pointer; text-decoration:underline;" onclick="abandonActiveSession()">Reset</span></div><div style="font-size:14px; font-weight:900; color:#fcd34d;">Stop ' + (currentStopIndex + 1) + ' of ' + clues.length + '</div></div>' +
-            '<div style="text-align:right;"><div style="font-size:10px; font-weight:800; color:#94a3b8;">TOTAL TIME</div><div id="liveClockDisplay" style="font-size:20px; font-weight:900; color:#fff; font-variant-numeric:tabular-nums;">' + formatSeconds(elapsedSeconds) + '</div></div>' +
-          '</div>' +
-          '<div style="width:100%; height:7px; background:#090d16; border-radius:99px; overflow:hidden;"><div style="width:' + progressPct + '%; height:100%; background:linear-gradient(90deg,#f59e0b,#10b981); transition:width 0.3s;"></div></div>' +
-        '</div>';
-
-      var tabsBar =
-        '<div class="game-tabs">' +
-          '<button class="game-tab ' + (activeGameTab === "clue" ? "active" : "") + '" onclick="switchTab(\'clue\')">🧩 Clue</button>' +
-          '<button class="game-tab ' + (activeGameTab === "map" ? "active" : "") + '" onclick="switchTab(\'map\')">🗺️ Trail Map</button>' +
-          '<button class="game-tab ' + (activeGameTab === "vip" ? "active" : "") + '" onclick="switchTab(\'vip\')">🎁 VIP (' + unlockedVipCount + ')</button>' +
-          '<button class="game-tab ' + (activeGameTab === "rankings" ? "active" : "") + '" onclick="switchTab(\'rankings\')">🏆 Ranks</button>' +
-        '</div>';
-
-      var bodyHtml = activeGameTab === "clue" ? renderClueTabHtml(stop) : (activeGameTab === "map" ? renderInteractiveSvgMapHtml(stop) : (activeGameTab === "vip" ? renderVipPerksTabHtml() : renderLeaderboardCardHtml()));
-      container.innerHTML = headerHud + tabsBar + bodyHtml;
-      if (activeGameTab === "map") attachSvgMapInteractions();
-    }
-
-    function switchTab(tabName) { activeGameTab = tabName; renderMainContent(); }
-
-    function renderClueTabHtml(stop) {
-      var isHintShown = !!hintRevealedForStop[stop.number];
-      var hintMin = Math.round(GLOBAL_CONFIG.hintPenaltySeconds / 60), skipMin = Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60);
-      var optionalImageHtml = stop.imageUrl ? '<img src="' + escapeQuotes(stop.imageUrl) + '" alt="Clue Visual" style="width:100%; max-height:200px; object-fit:cover; border-radius:12px; margin-bottom:12px; border:1px solid #334155;" />' : '';
-      var skipButtonHtml = isHintShown ? '<button class="btn-secondary" style="width:100%; margin-top:10px; border-color:#f87171; color:#fca5a5;" onclick="handleSkipStopClick()">⏭️ Landmark Blocked? Skip Stop (+' + skipMin + ':00 Penalty)</button>' : '';
-
-      return (
-        '<div class="card">' +
-          '<h3 style="font-size:19px; font-weight:900; color:#fcd34d; margin-bottom:10px;">' + escapeHtml(stop.title) + '</h3>' +
-          optionalImageHtml +
-          '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:16px; font-size:15px; color:#f1f5f9; line-height:1.6; margin-bottom:16px; font-weight:600;">“' + escapeHtml(stop.riddle) + '”</div>' +
-          (isHintShown ? '<div style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); border-radius:12px; padding:12px; font-size:13px; color:#fde68a; margin-bottom:14px;">💡 <strong>Hint:</strong> ' + escapeHtml(stop.hint) + '</div>' : '') +
-          '<input type="text" id="riddleAnswerInput" placeholder="Type your answer to unlock the next stop..." style="margin-bottom:10px;" onkeydown="if(event.key===\'Enter\') checkRiddleAnswer()" />' +
-          '<div id="answerFeedbackMsg" style="font-size:12px; font-weight:700; margin-bottom:10px; display:none;"></div>' +
-          '<button class="btn-primary" onclick="checkRiddleAnswer()" style="margin-bottom:12px;">🔓 Submit Answer</button>' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">' +
-            '<button class="btn-secondary" style="flex:1;" onclick="useClueHint(' + stop.number + ')">' + (isHintShown ? '💡 Hint Active' : '💡 Reveal Hint (+' + hintMin + ':00)') + '</button>' +
-            '<button class="btn-secondary" style="flex:1;" onclick="switchTab(\'map\')">📍 View Trail Map</button>' +
-          '</div>' +
-          skipButtonHtml +
-        '</div>'
-      );
-    }
-
-    function useClueHint(stopNumber) {
-      if (!hintRevealedForStop[stopNumber]) { hintRevealedForStop[stopNumber] = true; hintsUsedCount++; saveActiveSession(); }
+      renderCitySelectorBar();
       renderMainContent();
     }
 
-    function handleSkipStopClick() {
-      var skipMin = Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60);
-      if (!confirm("Skip this stop and add a +" + skipMin + ":00 penalty to your timer?")) return;
-      skipsUsedCount++; recordStopSplitTime(clues[currentStopIndex], true); advanceToNextStopOrFinish(true);
+    // =========================================================================
+    // VIP CAP, MODAL, AND CHAINED NEXT-DOOR BONUS FUNCTIONS
+    // =========================================================================
+    function isShopNameCapReached(shopName, maxClaims) {
+      var cap = Number(maxClaims) || 30;
+      if (!shopName || cap <= 0) return false;
+      return (vipClaimCounts[shopName] || 0) >= cap;
     }
 
-    function recordStopSplitTime(stop, wasSkipped) {
-      var now = Date.now(), baseRef = lastStopTimestampMs || startTimeMs || now;
-      var splitSec = Math.max(1, Math.round((now - baseRef) / 1000));
-      lastStopTimestampMs = now;
-      stopSplitLogs.push("S" + (stop ? stop.number : (currentStopIndex + 1)) + ":" + splitSec + "s" + (wasSkipped ? "(skip)" : ""));
-      if (!wasSkipped) verifyStopGpsSilently(stop);
-    }
-
-    function editDistance(a, b) {
-      var matrix = [];
-      for (var i = 0; i <= b.length; i++) matrix[i] = [i];
-      for (var j = 0; j <= a.length; j++) matrix[0][j] = j;
-      for (i = 1; i <= b.length; i++) {
-        for (j = 1; j <= a.length; j++) {
-          if (b.charAt(i - 1) === a.charAt(j - 1)) matrix[i][j] = matrix[i - 1][j - 1];
-          else matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
-        }
-      }
-      return matrix[b.length][a.length];
-    }
-
-    function checkRiddleAnswer() {
-      var input = document.getElementById("riddleAnswerInput"), msg = document.getElementById("answerFeedbackMsg");
-      if (!input) return;
-      var cleaned = input.value.trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
-      if (!cleaned) return;
-      var stop = clues[currentStopIndex];
-      var matched = stop.acceptedAnswers.some(function(ans) {
-        var target = String(ans).trim().toLowerCase().replace(/[^a-z0-9\s-]/g, "");
-        if (cleaned === target || cleaned.indexOf(target) !== -1) return true;
-        if (target.length >= 5 && isNaN(target) && editDistance(cleaned, target) <= 1) return true;
-        return false;
-      });
-      if (matched) { playGameTone("solve"); recordStopSplitTime(stop, false); showClueSolvedCelebrationModal(stop); }
-      else if (msg) { msg.style.display = "block"; msg.style.color = "#f87171"; msg.innerText = "❌ Not quite! Double-check your surroundings or tap Reveal Hint."; }
+    function isPartnerCapReached(stop) {
+      return isShopNameCapReached(stop.sponsorName, stop.maxClaims);
     }
 
     function showClueSolvedCelebrationModal(stop) {
       document.getElementById("solvedStopBadge").innerText = "✅ STOP #" + stop.number + " UNLOCKED ON MAP";
-      document.getElementById("solvedStopTitle").innerText = stop.shortLabel + " Conquered!";
-      var triviaBox = document.getElementById("solvedStopTriviaBox"), triviaText = document.getElementById("solvedStopTriviaText");
-      if (stop.historyTrivia && String(stop.historyTrivia).trim() !== "") {
-        triviaBox.style.display = "block"; triviaText.innerText = String(stop.historyTrivia).trim();
-      } else { triviaBox.style.display = "none"; triviaText.innerText = ""; }
+      document.getElementById("solvedStopTitle").innerText = (stop.shortLabel || ("Stop #" + stop.number)) + " Conquered!";
 
-      var redeemedMap = getRedeemedShopsMap();
-      var alreadyUsed = stop.sponsorName && redeemedMap[stop.sponsorName] && !adminModeUnlocked;
+      var triviaBox = document.getElementById("solvedStopTriviaBox");
+      var triviaText = document.getElementById("solvedStopTriviaText");
+      var factContent = stop.historyTrivia || stop.unlockFact || "";
+      if (triviaBox) triviaBox.style.display = factContent ? "block" : "none";
+      if (triviaText) triviaText.innerText = factContent;
+
       var vipBox = document.getElementById("solvedStopVipBox");
-      if (stop.sponsorName && stop.sponsorPerk && !isPartnerCapReached(stop) && !alreadyUsed) {
+      if (stop.sponsorName && stop.sponsorPerk && !isPartnerCapReached(stop)) {
         vipBox.style.display = "block";
         document.getElementById("solvedVipShop").innerText = stop.sponsorName;
         document.getElementById("solvedVipPerk").innerText = stop.sponsorPerk;
-        document.getElementById("solvedVipBtn").onclick = function() { openVipVoucher(stop.sponsorName, stop.sponsorPerk, stop.sponsorTimerMinutes); };
-      } else { vipBox.style.display = "none"; }
+        document.getElementById("solvedVipBtn").onclick = function() {
+          openVipVoucher(stop.sponsorName, stop.sponsorPerk, stop.sponsorTimerMinutes);
+        };
+
+        var bonusHintEl = document.getElementById("solvedStopBonusHint");
+        if (bonusHintEl) {
+          if (stop.bonusSponsorName && stop.bonusSponsorPerk && !isShopNameCapReached(stop.bonusSponsorName, stop.maxClaims)) {
+            bonusHintEl.style.display = "block";
+            bonusHintEl.innerText = "🔥 Next-Door Bonus: Claim your " + stop.sponsorName + " voucher to immediately unlock a bonus perk at " + stop.bonusSponsorName + "!";
+          } else {
+            bonusHintEl.style.display = "none";
+          }
+        }
+      } else {
+        vipBox.style.display = "none";
+      }
       document.getElementById("clueSolvedModal").classList.add("show");
     }
 
-    function closeSolvedModal() { document.getElementById("clueSolvedModal").classList.remove("show"); advanceToNextStopOrFinish(false); }
-    function advanceToNextStopOrFinish(wasSkipped) {
-      if (currentStopIndex < clues.length - 1) { currentStopIndex++; saveActiveSession(); renderMainContent(); }
-      else { completeEntireQuest(); }
+    function closeClueSolvedModal() {
+      document.getElementById("clueSolvedModal").classList.remove("show");
     }
 
-    function renderInteractiveSvgMapHtml(activeStop) {
-      var cityObj = CITIES.find(function(c) { return c.id === activeCityId; }) || CITIES[0];
-      var startX = (cityObj.startMapX || 49) * 10, startY = (cityObj.startMapY || 26) * 10;
-      var startLabel = cityObj.startLabel || ("START: " + cityObj.name.toUpperCase());
-      var startLat = cityObj.startLat || 33.95675, startLng = cityObj.startLng || -83.98795;
-
-      var polylinePoints = [startX + "," + startY];
-      for (var p = 0; p < currentStopIndex; p++) polylinePoints.push(((clues[p].mapX || 50) * 10) + "," + ((clues[p].mapY || 50) * 10));
-
-      var lastKnownX = currentStopIndex === 0 ? startX : ((clues[currentStopIndex - 1].mapX || 50) * 10);
-      var lastKnownY = currentStopIndex === 0 ? startY : ((clues[currentStopIndex - 1].mapY || 50) * 10);
-      var gpsTargetLat = currentStopIndex === 0 ? startLat : clues[currentStopIndex - 1].lat;
-      var gpsTargetLng = currentStopIndex === 0 ? startLng : clues[currentStopIndex - 1].lng;
-
-      var pinsSvg =
-        '<circle cx="' + lastKnownX + '" cy="' + lastKnownY + '" r="20" fill="none" stroke="#f59e0b" stroke-width="4" class="pin-pulse" />' +
-        '<g style="cursor:pointer;" onclick="alert(\'Starting Point: ' + escapeQuotes(startLabel) + '\')"><circle cx="' + startX + '" cy="' + startY + '" r="18" fill="#f59e0b" stroke="#090d16" stroke-width="4" /><text x="' + startX + '" y="' + (startY + 6) + '" text-anchor="middle" fill="#090d16" font-size="16" font-weight="900">★</text><rect x="' + (startX - 80) + '" y="' + (startY - 44) + '" width="160" height="20" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" /><text x="' + startX + '" y="' + (startY - 30) + '" text-anchor="middle" fill="#fcd34d" font-size="10" font-weight="900">' + escapeHtml(startLabel) + '</text></g>';
-
-      for (var i = 0; i < clues.length; i++) {
-        var c = clues[i], cx = (c.mapX || 50) * 10, cy = (c.mapY || 50) * 10, isSolved = i < currentStopIndex;
-        if (isSolved || adminModeUnlocked) {
-          var fillColor = isSolved ? "#10b981" : "#f59e0b";
-          pinsSvg += '<g style="cursor:pointer;" onclick="alert(\'Unlocked Stop #' + c.number + ': ' + escapeQuotes(c.shortLabel) + '\')"><circle cx="' + cx + '" cy="' + cy + '" r="16" fill="' + fillColor + '" stroke="#090d16" stroke-width="4" /><text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" fill="#090d16" font-size="14" font-weight="900">' + c.number + '</text><rect x="' + (cx - 65) + '" y="' + (cy - 42) + '" width="130" height="20" rx="6" fill="#0f172a" stroke="' + fillColor + '" stroke-width="1.5" /><text x="' + cx + '" y="' + (cy - 28) + '" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="800">' + escapeHtml(c.shortLabel) + '</text></g>';
-        }
-      }
-
-      var useLvilleGrid = (cityObj.mapStyle === "lawrenceville" || String(cityObj.name || "").trim().toLowerCase() === "lawrenceville");
-      var cityBackgroundSvg = useLvilleGrid
-        ? '<rect x="330" y="180" width="320" height="210" rx="18" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" stroke-dasharray="8,6" /><text x="490" y="255" text-anchor="middle" fill="rgba(245,158,11,0.5)" font-size="16" font-weight="900">HISTORIC COURTHOUSE SQUARE</text><rect x="200" y="580" width="680" height="320" rx="28" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.3)" /><text x="540" y="740" text-anchor="middle" fill="rgba(16,185,129,0.45)" font-size="20" font-weight="900">LAWRENCEVILLE LAWN &amp; PARK</text><g stroke="#1e293b" stroke-width="26" stroke-linecap="round"><line x1="40" y1="330" x2="960" y2="330" /><line x1="40" y1="160" x2="960" y2="160" /><line x1="40" y1="540" x2="960" y2="540" /><line x1="280" y1="40" x2="280" y2="960" /><line x1="700" y1="40" x2="700" y2="960" /></g><g fill="#64748b" font-size="13" font-weight="800"><text x="500" y="335" text-anchor="middle">W CROGHAN ST / E CROGHAN ST</text><text x="500" y="165" text-anchor="middle">W PIKE ST / E PIKE ST</text><text x="500" y="545" text-anchor="middle">LUCKIE ST</text><text x="265" y="460" transform="rotate(-90 265,460)">N PERRY ST</text><text x="715" y="460" transform="rotate(-90 715,460)">N CLAYTON ST</text></g>'
-        : '<circle cx="500" cy="500" r="180" fill="none" stroke="rgba(245,158,11,0.2)" stroke-width="2" stroke-dasharray="8,8" /><circle cx="500" cy="500" r="310" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="2" stroke-dasharray="10,8" /><g stroke="#1e293b" stroke-width="22" stroke-linecap="round"><line x1="60" y1="500" x2="940" y2="500" /><line x1="500" y1="60" x2="500" y2="940" /><line x1="200" y1="200" x2="800" y2="800" /><line x1="800" y1="200" x2="200" y2="800" /></g><text x="500" y="470" text-anchor="middle" fill="rgba(245,158,11,0.45)" font-size="22" font-weight="900">DOWNTOWN ' + escapeHtml(cityObj.name.toUpperCase()) + ' TRAIL ZONE</text>';
-
-      return (
-        '<div class="card" style="padding:14px;">' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><div><div style="font-size:14px; font-weight:900; color:#fcd34d;">🗺️ Live ' + escapeHtml(cityObj.name) + ' Trail Radar</div><div style="font-size:11px; color:#94a3b8;">★ Start Pin &bull; Solve riddles to unlock &amp; connect stops!</div></div><a href="https://www.google.com/maps/search/?api=1&query=' + gpsTargetLat + ',' + gpsTargetLng + '" target="_blank" class="btn-secondary" style="text-decoration:none; font-size:11px; border-color:#f59e0b; color:#fcd34d;">🧭 GPS Last Pin</a></div>' +
-          '<div class="map-viewport" id="mapViewport"><svg id="questSvgMap" viewBox="0 0 1000 1000" style="width:100%; height:100%; transform-origin:center center;"><defs><radialGradient id="radarGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(16,185,129,0.18)" /><stop offset="100%" stop-color="rgba(6,11,19,0)" /></radialGradient></defs><rect width="1000" height="1000" fill="#060b13" /><g stroke="#111e32" stroke-width="2"><line x1="0" y1="200" x2="1000" y2="200" /><line x1="0" y1="400" x2="1000" y2="400" /><line x1="0" y1="600" x2="1000" y2="600" /><line x1="0" y1="800" x2="1000" y2="800" /><line x1="200" y1="0" x2="200" y2="1000" /><line x1="400" y1="0" x2="400" y2="1000" /><line x1="600" y1="0" x2="600" y2="1000" /><line x1="800" y1="0" x2="800" y2="1000" /></g>' + cityBackgroundSvg + '<circle cx="500" cy="500" r="420" fill="url(#radarGlow)" stroke="rgba(16,185,129,0.2)" stroke-width="2" /><g class="radar-sweep"><path d="M500,500 L500,80 A420,420 0 0,1 820,230 Z" fill="rgba(16,185,129,0.12)" /></g>' + (polylinePoints.length > 1 ? '<polyline points="' + polylinePoints.join(" ") + '" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="12,8" />' : '') + pinsSvg + '</svg><div class="map-controls"><button class="map-ctrl-btn" onclick="zoomMap(0.25)">+</button><button class="map-ctrl-btn" onclick="zoomMap(-0.25)">−</button><button class="map-ctrl-btn" style="font-size:11px;" onclick="resetMapZoom()">⟲</button></div></div>' +
-        '</div>'
-      );
-    }
-
-    function updateSvgTransform() { var svg = document.getElementById("questSvgMap"); if (svg) svg.style.transform = "translate(" + mapPanX + "px, " + mapPanY + "px) scale(" + mapZoom + ")"; }
-    function zoomMap(d) { mapZoom = Math.max(0.8, Math.min(2.8, mapZoom + d)); updateSvgTransform(); }
-    function resetMapZoom() { mapZoom = 1; mapPanX = 0; mapPanY = 0; updateSvgTransform(); }
-    function attachSvgMapInteractions() {
-      var vp = document.getElementById("mapViewport"); if (!vp) return;
-      vp.onpointerdown = function(e) { if (e.target.tagName === "BUTTON") return; isDraggingMap = true; dragStartX = e.clientX - mapPanX; dragStartY = e.clientY - mapPanY; };
-      vp.onpointermove = function(e) { if (!isDraggingMap) return; mapPanX = e.clientX - dragStartX; mapPanY = e.clientY - dragStartY; updateSvgTransform(); };
-      vp.onpointerup = function() { isDraggingMap = false; }; vp.onpointerleave = function() { isDraggingMap = false; };
-    }
-
-    function isPartnerCapReached(stop) {
-      if (!stop.maxClaims || stop.maxClaims <= 0) return false;
-      return (vipClaimCounts[stop.sponsorName] || 0) >= stop.maxClaims;
-    }
-
-    // 1-Use-Per-Phone VIP Perks Tab (Admin Mode bypasses lock for unlimited shop demos)
     function renderVipPerksTabHtml() {
       var listHtml = "", totalPartnerCount = 0;
       var redeemedMap = getRedeemedShopsMap();
@@ -885,22 +703,43 @@
         var s = clues[i];
         if (!s.sponsorName || !s.sponsorPerk) continue;
         totalPartnerCount++;
+
         var isUnlocked = (i < currentStopIndex) || huntCompleted || adminModeUnlocked;
         var capReached = isPartnerCapReached(s);
         var alreadyUsedOnDevice = !!redeemedMap[s.sponsorName] && !adminModeUnlocked;
-        var customMin = s.sponsorTimerMinutes || GLOBAL_CONFIG.vipVoucherTimerMinutes || 5;
+        var customMin = s.sponsorTimerMinutes || GLOBAL_CONFIG.vipVoucherTimerMinutes || 10;
 
-        if (isUnlocked && alreadyUsedOnDevice) {
-          listHtml += '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; opacity:0.65;"><div><div style="font-size:11px; color:#94a3b8; font-weight:800;">✅ Voucher Redeemed (' + escapeHtml(redeemedMap[s.sponsorName]) + ')</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#64748b; margin-top:2px;">Limit 1 redemption per player device.</div></div><span style="font-size:12px; font-weight:900; color:#64748b;">USED</span></div>';
-        } else if (isUnlocked && !capReached) {
-          listHtml += '<div style="background:#090d16; border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#10b981; font-weight:800;">✅ Stop #' + s.number + ' Unlocked Partner (' + customMin + 'm Timer)</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#fcd34d; margin-top:2px;">' + escapeHtml(s.sponsorPerk) + '</div></div><button class="btn-secondary" style="border-color:#10b981; color:#34d399; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(s.sponsorName) + '\', \'' + escapeQuotes(s.sponsorPerk) + '\', ' + customMin + ')">Open Voucher</button></div>';
-        } else if (isUnlocked && capReached) {
-          listHtml += '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-bottom:10px; opacity:0.65;"><div style="font-size:11px; color:#f87171; font-weight:800;">Monthly Partner Cap Reached</div><div style="font-size:15px; font-weight:900; color:#fff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:11px; color:#94a3b8;">All monthly VIP vouchers for this shop have been claimed!</div></div>';
+        if (capReached) {
+          listHtml += '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-bottom:10px; opacity:0.65; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#94a3b8; font-weight:800;">Stop #' + s.number + ' Partner</div><div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#94a3b8; margin-top:2px;">Monthly VIP limit (30/30) reached</div></div><span style="font-size:11px; color:#94a3b8; font-weight:800;">MAXED</span></div>';
+        } else if (!isUnlocked) {
+          listHtml += '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:14px; margin-bottom:10px; opacity:0.75; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#64748b; font-weight:800;">🔒 Solve Stop #' + s.number + ' to Unlock</div><div style="font-size:15px; font-weight:900; color:#cbd5e1;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#64748b; margin-top:2px;">VIP Perk Hidden Until Solved</div></div><span style="font-size:18px;">🔒</span></div>';
+        } else if (alreadyUsedOnDevice) {
+          listHtml += '<div style="background:#090d16; border:1px solid #059669; border-radius:14px; padding:14px; margin-bottom:10px; opacity:0.8; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#34d399; font-weight:800;">✅ Stop #' + s.number + ' Partner Redeemed</div><div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#94a3b8; margin-top:2px;">' + escapeHtml(s.sponsorPerk) + '</div></div><span style="font-size:11px; color:#34d399; font-weight:900;">CLAIMED</span></div>';
         } else {
-          listHtml += '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; opacity:0.75;"><div><div style="font-size:11px; color:#94a3b8; font-weight:800;">🔒 Mystery Partner Stop #' + s.number + '</div><div style="font-size:14px; font-weight:800; color:#cbd5e1;">Solve Stop #' + s.number + ' Riddle to Unlock</div><div style="font-size:11px; color:#64748b; margin-top:2px;">Exclusive VIP discount waiting inside!</div></div><span style="font-size:18px;">🔒</span></div>';
+          listHtml += '<div style="background:#090d16; border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#10b981; font-weight:800;">✅ Stop #' + s.number + ' Unlocked Partner (' + customMin + 'm Timer)</div><div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.sponsorName) + '</div><div style="font-size:12px; color:#fcd34d; margin-top:2px;">' + escapeHtml(s.sponsorPerk) + '</div></div><button class="btn-secondary" style="border-color:#10b981; color:#34d399; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(s.sponsorName) + '\', \'' + escapeQuotes(s.sponsorPerk) + '\', ' + customMin + ')">Open Voucher</button></div>';
+        }
+
+        // --- CHAINED NEXT-DOOR BONUS PERK (e.g., Becca's Well on Stop #2) ---
+        if (s.bonusSponsorName && s.bonusSponsorPerk) {
+          totalPartnerCount++;
+          var primaryClaimed = !!redeemedMap[s.sponsorName] || adminModeUnlocked;
+          var bonusCapReached = isShopNameCapReached(s.bonusSponsorName, s.maxClaims);
+          var bonusAlreadyUsed = !!redeemedMap[s.bonusSponsorName] && !adminModeUnlocked;
+
+          if (bonusCapReached) {
+            listHtml += '<div style="background:#090d16; border:1px solid #334155; border-radius:14px; padding:14px; margin-left:14px; margin-bottom:12px; opacity:0.65; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#94a3b8; font-weight:800;">🎁 Stop #' + s.number + ' Next-Door Bonus</div><div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.bonusSponsorName) + '</div><div style="font-size:12px; color:#94a3b8; margin-top:2px;">Monthly VIP limit (30/30) reached</div></div><span style="font-size:11px; color:#94a3b8; font-weight:800;">MAXED</span></div>';
+          } else if (!isUnlocked) {
+            listHtml += '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:14px; margin-left:14px; margin-bottom:12px; opacity:0.7; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#f59e0b; font-weight:800;">🔒 Next-Door Bonus Perk (Stop #' + s.number + ')</div><div style="font-size:15px; font-weight:900; color:#cbd5e1;">' + escapeHtml(s.bonusSponsorName) + '</div><div style="font-size:12px; color:#64748b; margin-top:2px;">Solve Stop #' + s.number + ' & claim ' + escapeHtml(s.sponsorName) + ' to unlock!</div></div><span style="font-size:18px;">🎁</span></div>';
+          } else if (!primaryClaimed) {
+            listHtml += '<div style="background:rgba(245,158,11,0.08); border:1px dashed #f59e0b; border-radius:14px; padding:14px; margin-left:14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#fbbf24; font-weight:800;">🔒 Next-Door Bonus Waiting!</div><div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.bonusSponsorName) + '</div><div style="font-size:12px; color:#fde68a; margin-top:2px;">Claim your ' + escapeHtml(s.sponsorName) + ' voucher above to unlock this next-door perk!</div></div><span style="font-size:18px;">🔓</span></div>';
+          } else if (bonusAlreadyUsed) {
+            listHtml += '<div style="background:#090d16; border:1px solid #059669; border-radius:14px; padding:14px; margin-left:14px; margin-bottom:12px; opacity:0.8; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#34d399; font-weight:800;">✅ Bonus Partner Redeemed</div><div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.bonusSponsorName) + '</div><div style="font-size:12px; color:#94a3b8; margin-top:2px;">' + escapeHtml(s.bonusSponsorPerk) + '</div></div><span style="font-size:11px; color:#34d399; font-weight:900;">CLAIMED</span></div>';
+          } else {
+            listHtml += '<div style="background:rgba(245,158,11,0.12); border:1px solid #f59e0b; border-radius:14px; padding:14px; margin-left:14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:10px;"><div><div style="font-size:11px; color:#fbbf24; font-weight:800;">🎁 Next-Door Bonus Unlocked! (' + customMin + 'm Timer)</div><div style="font-size:15px; font-weight:900; color:#ffffff;">' + escapeHtml(s.bonusSponsorName) + '</div><div style="font-size:12px; color:#fcd34d; margin-top:2px;">' + escapeHtml(s.bonusSponsorPerk) + '</div></div><button class="btn-secondary" style="border-color:#f59e0b; color:#fbbf24; flex-shrink:0;" onclick="openVipVoucher(\'' + escapeQuotes(s.bonusSponsorName) + '\', \'' + escapeQuotes(s.bonusSponsorPerk) + '\', ' + customMin + ')">Open Bonus</button></div>';
+          }
         }
       }
-      return '<div class="card"><h3 style="font-size:18px; font-weight:900; color:#fcd34d; margin-bottom:6px;">🎁 Local Partner VIP Perks</h3><p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Solve riddles along the trail to unlock exclusive single-use VIP vouchers:</p>' + (totalPartnerCount > 0 ? listHtml : '<div style="background:#090d16; border:1px dashed #334155; border-radius:14px; padding:18px; text-align:center; font-size:13px; color:#94a3b8;">No partner perks are currently active on this trail in Google Sheets.</div>') + '</div>';
+      return listHtml || '<div style="text-align:center; color:#94a3b8; padding:20px;">No VIP perks active for this schedule right now.</div>';
     }
 
     function openVipVoucher(shopName, perkText, customTimerMinutes) {
@@ -909,12 +748,13 @@
         alert("✅ You have already redeemed the VIP voucher for " + shopName + " on this device (Limit 1 per player).");
         return;
       }
-      var voucherMinutes = Number(customTimerMinutes) || Number(GLOBAL_CONFIG.vipVoucherTimerMinutes) || 5;
+      var voucherMinutes = Number(customTimerMinutes) || Number(GLOBAL_CONFIG.vipVoucherTimerMinutes) || 10;
       if (!adminModeUnlocked) {
         if (!confirm("At the register? Tap OK to start your live " + voucherMinutes + "-minute voucher timer (Single use only).")) return;
         markShopVoucherRedeemed(shopName);
       }
 
+      closeClueSolvedModal();
       document.getElementById("vipModalShopTitle").innerText = shopName;
       document.getElementById("vipModalPerkText").innerText = perkText;
       document.getElementById("vipModalTeamStamp").innerText = "Active Team: " + (teamName || "QuestATL VIP Guest");
@@ -922,20 +762,47 @@
       var remainingSec = voucherMinutes * 60;
       var pauseNoticeEl = document.getElementById("vipPauseNoticeStamp");
       if (huntStarted && !huntCompleted && !vipPauseUsedForShop[shopName]) {
-        vipPauseUsedForShop[shopName] = true; isTimerPausedForVip = true; vipPauseStartedMs = Date.now();
-        if (pauseNoticeEl) { pauseNoticeEl.style.display = "block"; pauseNoticeEl.innerText = "⏸️ Race timer paused for up to " + voucherMinutes + " mins while you redeem!"; }
-      } else if (pauseNoticeEl) { pauseNoticeEl.style.display = "none"; }
+        vipPauseUsedForShop[shopName] = true;
+        isTimerPausedForVip = true;
+        vipPauseStartedMs = Date.now();
+        if (pauseNoticeEl) {
+          pauseNoticeEl.style.display = "block";
+          pauseNoticeEl.innerText = "⏸️ Race timer paused for up to " + voucherMinutes + " mins while you redeem!";
+        }
+      } else if (pauseNoticeEl) {
+        pauseNoticeEl.style.display = "none";
+      }
 
       function updateLiveStamp() {
         var el = document.getElementById("vipLiveClockStamp");
         if (!el) return;
-        if (remainingSec <= 0) { closeVipModal(); return; }
+        if (remainingSec <= 0) {
+          closeVipModal();
+          return;
+        }
         el.innerText = "● LIVE (" + new Date().toLocaleTimeString() + ") • Expires in " + formatSeconds(remainingSec);
         remainingSec--;
       }
       updateLiveStamp();
       if (vipClockInterval) clearInterval(vipClockInterval);
       vipClockInterval = setInterval(updateLiveStamp, 1000);
+
+      // Check if claiming this shop unlocked a chained Next-Door Bonus Perk (e.g., Liberty Books -> Becca's Well)
+      var unlockedBonusStop = clues.find(function(c) {
+        return c.sponsorName === shopName && c.bonusSponsorName && c.bonusSponsorPerk;
+      });
+      var bonusBannerEl = document.getElementById("vipModalBonusUnlockedBanner");
+      if (bonusBannerEl) {
+        if (unlockedBonusStop && !getRedeemedShopsMap()[unlockedBonusStop.bonusSponsorName]) {
+          bonusBannerEl.style.display = "block";
+          bonusBannerEl.innerHTML = '<div style="font-size:11px; font-weight:900; color:#fbbf24; text-transform:uppercase;">🎉 Next-Door Bonus Unlocked!</div>' +
+            '<div style="font-size:12px; color:#fff; margin:4px 0 8px;">You just unlocked <b>' + escapeHtml(unlockedBonusStop.bonusSponsorName) + '</b> (' + escapeHtml(unlockedBonusStop.bonusSponsorPerk) + ') right next door!</div>' +
+            '<button class="btn-secondary" style="border-color:#f59e0b; color:#fbbf24; font-size:12px; padding:6px 12px;" onclick="closeVipModal(); openVipVoucher(\'' + escapeQuotes(unlockedBonusStop.bonusSponsorName) + '\', \'' + escapeQuotes(unlockedBonusStop.bonusSponsorPerk) + '\', ' + (unlockedBonusStop.sponsorTimerMinutes || 10) + ');">Open ' + escapeHtml(unlockedBonusStop.bonusSponsorName) + ' Voucher Next</button>';
+        } else {
+          bonusBannerEl.style.display = "none";
+        }
+      }
+
       document.getElementById("vipModal").classList.add("show");
       vipClaimCounts[shopName] = (vipClaimCounts[shopName] || 0) + 1;
       trackQuestEvent({ action: "claim_vip", city: activeCityId, team: teamName || "Demo", shopName: shopName, perk: perkText });
@@ -943,115 +810,601 @@
     }
 
     function closeVipModal() {
-      if (vipClockInterval) clearInterval(vipClockInterval);
+      if (vipClockInterval) {
+        clearInterval(vipClockInterval);
+        vipClockInterval = null;
+      }
       if (isTimerPausedForVip && vipPauseStartedMs > 0) {
-        var pausedMs = Date.now() - vipPauseStartedMs;
-        startTimeMs += pausedMs; lastStopTimestampMs += pausedMs;
-        isTimerPausedForVip = false; vipPauseStartedMs = 0; saveActiveSession();
+        totalPausedMs += (Date.now() - vipPauseStartedMs);
+        vipPauseStartedMs = 0;
+        isTimerPausedForVip = false;
       }
       document.getElementById("vipModal").classList.remove("show");
-    }
-
-    function switchLeaderboardFilter(mode) { leaderboardFilter = mode; renderMainContent(); }
-
-    function renderLeaderboardCardHtml() {
-      var nowMonth = new Date().toLocaleString("en-US", { month: "short", year: "numeric" });
-      var cityRanks = liveRankings.filter(function(r) {
-        var sameCity = !r.city || r.city.toLowerCase() === activeCityId;
-        if (!sameCity) return false;
-        return leaderboardFilter === "month" ? (!r.date || r.date === nowMonth) : true;
-      });
-      var rowsHtml = "";
-      for (var i = 0; i < Math.min(cityRanks.length, 15); i++) {
-        var r = cityRanks[i], medal = i === 0 ? "🥇" : (i === 1 ? "🥈" : (i === 2 ? "🥉" : "#" + (i + 1)));
-        rowsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:#090d16; border:1px solid #1e293b; border-radius:12px; margin-bottom:8px;"><div style="display:flex; align-items:center; gap:10px;"><span style="font-size:14px; font-weight:900; color:#fcd34d; min-width:26px;">' + medal + '</span><div><div style="font-size:13px; font-weight:800; color:#fff;">' + escapeHtml(r.team) + '</div><div style="font-size:10px; color:#64748b;">Hints: ' + (r.hintsUsed || 0) + ' &bull; ' + escapeHtml(r.date || nowMonth) + '</div></div></div><div style="font-size:14px; font-weight:900; color:#10b981;">' + escapeHtml(r.formattedTime) + '</div></div>';
-      }
-      return '<div class="card"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;"><h3 style="font-size:17px; font-weight:900; color:#fcd34d;">🏆 Official Trail Leaderboard</h3><div style="display:flex; gap:4px; background:#090d16; padding:3px; border-radius:9px; border:1px solid #1e293b;"><button onclick="switchLeaderboardFilter(\'month\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "month" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "month" ? "#090d16" : "#94a3b8") + ';">🔥 This Month</button><button onclick="switchLeaderboardFilter(\'all\')" style="border:none; padding:5px 9px; border-radius:7px; font-size:11px; font-weight:800; cursor:pointer; background:' + (leaderboardFilter === "all" ? "#f59e0b" : "transparent") + '; color:' + (leaderboardFilter === "all" ? "#090d16" : "#94a3b8") + ';">👑 All-Time</button></div></div>' + (rowsHtml || '<p style="font-size:12px; color:#64748b;">No teams recorded for this trail yet—be the first!</p>') + '</div>';
-    }
-
-    function completeEntireQuest() {
-      huntCompleted = true; if (timerInterval) clearInterval(timerInterval);
-      try { localStorage.removeItem(STORAGE_KEY_SESSION); } catch (e) {}
-      playGameTone("victory");
-      victoryClaimCode = "QATL-" + Math.floor(1000 + Math.random() * 9000);
-      var finalFormatted = formatSeconds(elapsedSeconds);
-      var nowMonth = new Date().toLocaleString("en-US", { month: "short", year: "numeric" });
-      var telemetryStr = "Device:" + getOrCreateDeviceId() + " | GPS:" + gpsVerifiedCount + "/" + clues.length + " | Splits:" + stopSplitLogs.join(",");
-      liveRankings.push({ city: activeCityId, team: teamName, timeSeconds: elapsedSeconds, formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, date: nowMonth });
-      liveRankings.sort(function(a, b) { return a.timeSeconds - b.timeSeconds; });
-      trackQuestEvent({ action: "submit_score", city: activeCityId, team: teamName, captainContact: captainContact, timeSeconds: elapsedSeconds, formattedTime: finalFormatted, hintsUsed: hintsUsedCount, skipsUsed: skipsUsedCount, referral: referralSource, claimCode: victoryClaimCode, telemetry: telemetryStr });
+      saveActiveSession();
       renderMainContent();
     }
 
-    function renderVictoryScreen(container, cityObj) {
-      container.innerHTML = '<div class="card" style="text-align:center; padding:28px 20px;"><div style="font-size:48px; margin-bottom:8px;">🏆</div><h2 style="font-size:26px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Conquered!</h2><p style="font-size:14px; color:#cbd5e1; margin-bottom:16px;">Congratulations, <strong>' + escapeHtml(teamName) + '</strong>! Your official time has been posted to the live ' + escapeHtml(cityObj.name) + ' leaderboard.</p><div style="background:#090d16; border:1px solid #f59e0b; border-radius:16px; padding:16px; margin-bottom:14px;"><div style="font-size:11px; color:#94a3b8; font-weight:800;">OFFICIAL FINISH TIME</div><div style="font-size:34px; font-weight:900; color:#10b981;">' + formatSeconds(elapsedSeconds) + '</div><div style="font-size:11px; color:#64748b; margin-top:4px;">Hints Used: ' + hintsUsedCount + ' &bull; Skips: ' + skipsUsedCount + '</div></div><div style="background:rgba(16,185,129,0.1); border:1px dashed #10b981; border-radius:14px; padding:12px; margin-bottom:16px;"><div style="font-size:10px; font-weight:900; color:#34d399; text-transform:uppercase;">🔒 Official Prize Verification Code</div><div style="font-size:20px; font-weight:900; color:#fff; letter-spacing:1px; margin:4px 0;">#' + escapeHtml(victoryClaimCode || "QATL-VERIFIED") + '</div><div style="font-size:11px; color:#94a3b8;">Screenshot this screen + your trail selfies to claim contest prizes!</div></div><button class="btn-primary" style="background:linear-gradient(135deg,#10b981,#059669); color:#052e16; margin-bottom:10px;" onclick="shareVictoryPost(\'' + escapeQuotes(cityObj.name) + '\')">📲 Share Our Time on Social Media</button><div id="shareCopyFeedback" style="display:none; font-size:12px; color:#34d399; font-weight:700; margin-bottom:10px;">✅ Copied to clipboard! Paste it on your Story or post!</div><button class="btn-secondary" style="width:100%;" onclick="selectCity(\'' + activeCityId + '\')">🔄 Back to Trail Home</button></div>' + renderVipPerksTabHtml() + renderLeaderboardCardHtml();
+    // =========================================================================
+    // MAIN INTERFACE RENDERING & GAMEPLAY ENGINE
+    // =========================================================================
+    function renderMainContent() {
+      var container = document.getElementById("mainContent");
+      if (!container) return;
+
+      if (isLoadingDatabase) {
+        container.innerHTML = '<div class="card" style="text-align:center; padding:36px 20px;"><div style="font-size:38px; margin-bottom:10px;">⏳</div><h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Syncing Live Trail Database...</h2><p style="font-size:13px; color:#94a3b8;">Loading live riddles, VIP shop perks, and rankings from Google Sheets.</p></div>';
+        return;
+      }
+
+      if (GLOBAL_CONFIG.maintenanceMode && !adminModeUnlocked) {
+        container.innerHTML = '<div class="card" style="text-align:center; padding:32px 20px;"><div style="font-size:38px; margin-bottom:10px;">🛠️</div><h2 style="font-size:20px; font-weight:900; color:#fcd34d; margin-bottom:6px;">Trail Maintenance in Progress</h2><p style="font-size:13px; color:#94a3b8;">We are updatingdowntown stops right now. Check back shortly!</p></div>';
+        return;
+      }
+
+      var cityObj = CITIES_DATABASE.find(function(c) { return c.id === activeCityId; }) || CITIES_DATABASE[0];
+      if (!cityObj || cityObj.status !== "LIVE" || clues.length === 0) {
+        renderComingSoonCityInterface(container, cityObj);
+        return;
+      }
+
+      renderActiveHuntInterface(container, cityObj);
     }
 
-    function shareVictoryPost(cityName) {
-      var timeStr = formatSeconds(elapsedSeconds);
-      var msg = "🏆 Team \"" + (teamName || "Explorer") + "\" just conquered the " + cityName + " Scavenger Hunt on QuestATL.com in " + timeStr + "! Think you can beat our time? 🧭🔥 https://QuestATL.com";
-      trackQuestEvent({ action: "social_share", city: activeCityId, team: teamName || "Explorer", claimCode: victoryClaimCode, formattedTime: timeStr });
-      if (navigator.share) navigator.share({ title: "We Conquered QuestATL!", text: msg, url: "https://QuestATL.com" }).catch(function() {});
-      else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(msg).then(function() { var fb = document.getElementById("shareCopyFeedback"); if (fb) fb.style.display = "block"; });
-      else prompt("Copy your official finish brag below:", msg);
+    function renderComingSoonCityInterface(container, cityObj) {
+      var cName = cityObj ? cityObj.name : "New City";
+      container.innerHTML = '<div class="card" style="text-align:center; padding:28px 18px;">' +
+        '<div style="font-size:40px; margin-bottom:8px;">🗺️</div>' +
+        '<h2 style="font-size:22px; font-weight:900; color:#fff; margin-bottom:6px;">' + escapeHtml(cName) + ' Trail Coming Soon!</h2>' +
+        '<p style="font-size:13px; color:#94a3b8; margin-bottom:18px;">We are currently scouting landmarks and partnering with local shops in ' + escapeHtml(cName) + '.</p>' +
+        '<div style="text-align:left; background:#090d16; padding:14px; border-radius:14px; border:1px solid #1e293b;">' +
+        '<div style="font-size:12px; font-weight:800; color:#fcd34d; margin-bottom:8px;">💡 Suggest a Landmark or Favorite Local Shop in ' + escapeHtml(cName) + ':</div>' +
+        '<textarea id="citySuggestionNotes" class="input-field" rows="3" placeholder="Tell us which coffee shop, bookstore, or historic spot we should include..."></textarea>' +
+        '<button class="btn-primary" style="margin-top:10px;" onclick="submitAnonymousSuggestion(\'' + escapeQuotes(cName) + '\')">Submit Suggestion</button>' +
+        '</div></div>';
     }
 
-    function submitAnonymousSuggestion() {
-      var input = document.getElementById("suggestText"), status = document.getElementById("suggestStatusMsg");
-      var val = input ? input.value.trim() : "";
-      if (!val) { alert("Please enter your city request or suggestion first!"); return; }
-      trackQuestEvent({ action: "submit_suggestion", city: activeCityId, message: val });
-      input.value = "";
-      if (status) { status.style.display = "block"; setTimeout(function() { status.style.display = "none"; }, 5000); }
+    function renderActiveHuntInterface(container, cityObj) {
+      var html = "";
+
+      if (adminDayOverride !== null) {
+        html += '<div style="background:rgba(245,158,11,0.18); border:1px solid #f59e0b; color:#fde68a; padding:8px 12px; border-radius:12px; margin-bottom:12px; font-size:12px; font-weight:800; display:flex; justify-content:space-between; align-items:center;">' +
+          '<span>📅 Admin Schedule Preview: ' + (adminDayOverride === "0" ? "SUNDAY MODE (Day 0)" : "MON–SAT MODE") + '</span>' +
+          '<button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="setAdminDayPreview(null)">Reset</button></div>';
+      }
+
+      // Map Card
+      html += '<div class="card" style="padding:14px;">' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
+        '<div><div style="font-size:15px; font-weight:900; color:#fff;">📍 ' + escapeHtml(cityObj.name) + ' Adventure Map</div>' +
+        '<div style="font-size:11px; color:#94a3b8;">' + escapeHtml(cityObj.distanceMiles) + ' • ' + escapeHtml(cityObj.estTime) + ' • ' + escapeHtml(cityObj.trailTags) + '</div></div>' +
+        '<span style="background:rgba(16,185,129,0.16); color:#34d399; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px;">' + Math.min(currentStopIndex, clues.length) + '/' + clues.length + ' Solved</span>' +
+        '</div>' +
+        renderAdventureMapSvg(cityObj) +
+        '</div>';
+
+      // Status / Timer Bar if Started
+      if (huntStarted) {
+        var totalPenaltySec = (hintsUsedCount * GLOBAL_CONFIG.hintPenaltySeconds) + (skipsUsedCount * GLOBAL_CONFIG.skipPenaltySeconds);
+        html += '<div class="card" style="padding:12px 16px; display:flex; justify-content:space-between; align-items:center; background:#090d16; border-color:#334155;">' +
+          '<div><div style="font-size:11px; color:#94a3b8; font-weight:700;">TEAM: <span style="color:#fff; font-weight:900;">' + escapeHtml(teamName) + '</span></div>' +
+          '<div style="font-size:11px; color:#fcd34d; font-weight:700;">Penalties: +' + formatSeconds(totalPenaltySec) + ' (' + hintsUsedCount + ' hints, ' + skipsUsedCount + ' skips)</div></div>' +
+          '<div style="text-align:right;"><div style="font-size:10px; color:#94a3b8; font-weight:800;">' + (isTimerPausedForVip ? "⏸️ PAUSED FOR VIP" : "OFFICIAL CLOCK") + '</div>' +
+          '<div id="liveTimerDisplay" style="font-size:20px; font-weight:900; color:#34d399; font-variant-numeric:tabular-nums;">' + formatSeconds(elapsedSeconds + totalPenaltySec) + '</div></div>' +
+          '</div>';
+      }
+
+      // Navigation Tabs
+      html += '<div class="tab-row">' +
+        '<button class="tab-btn ' + (activeTab === "clue" ? "active" : "") + '" onclick="switchTab(\'clue\')">🧩 Active Clue</button>' +
+        '<button class="tab-btn ' + (activeTab === "vip" ? "active" : "") + '" onclick="switchTab(\'vip\')">🎁 VIP Perks</button>' +
+        '<button class="tab-btn ' + (activeTab === "leaderboard" ? "active" : "") + '" onclick="switchTab(\'leaderboard\')">🏆 Rankings</button>' +
+        '</div>';
+
+      if (activeTab === "vip") {
+        html += '<div class="card"><h3 style="font-size:17px; font-weight:900; color:#fff; margin-bottom:4px;">🎁 Downtown VIP Partner Perks</h3>' +
+          '<p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Solve each stop\'s riddle to unlock exclusive register perks. Opening a voucher pauses your race timer!</p>' +
+          renderVipPerksTabHtml() + '</div>';
+      } else if (activeTab === "leaderboard") {
+        html += renderLeaderboardTabHtml(cityObj);
+      } else {
+        html += renderClueTabHtml(cityObj);
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderAdventureMapSvg(cityObj) {
+      var startX = Number(cityObj.startMapX) || 22;
+      var startY = Number(cityObj.startMapY) || 38;
+      var polyPoints = startX + "," + startY;
+      clues.forEach(function(s) {
+        polyPoints += " " + (Number(s.mapX) || 50) + "," + (Number(s.mapY) || 50);
+      });
+
+      var pinsSvg = '<g transform="translate(' + startX + ',' + startY + ')">' +
+        '<circle r="4.2" fill="#f59e0b" stroke="#090d16" stroke-width="1.2"/>' +
+        '<text y="1.2" text-anchor="middle" font-size="4.5" font-weight="900" fill="#090d16">★</text>' +
+        '</g>';
+
+      for (var i = 0; i < clues.length; i++) {
+        var st = clues[i];
+        var x = Number(st.mapX) || 50;
+        var y = Number(st.mapY) || 50;
+        var solved = (i < currentStopIndex) || huntCompleted;
+        var isCurrent = huntStarted && !huntCompleted && (i === currentStopIndex);
+        var fillCol = solved ? "#10b981" : (isCurrent ? "#f59e0b" : "#334155");
+
+        pinsSvg += '<g transform="translate(' + x + ',' + y + ')">' +
+          (isCurrent ? '<circle r="6.5" fill="rgba(245,158,11,0.28)"/>' : '') +
+          '<circle r="3.8" fill="' + fillCol + '" stroke="#090d16" stroke-width="1"/>' +
+          '<text y="1.3" text-anchor="middle" font-size="3.6" font-weight="900" fill="#ffffff">' + st.number + '</text>' +
+          '</g>';
+      }
+
+      return '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; overflow:hidden; position:relative;">' +
+        '<svg viewBox="0 0 100 100" style="width:100%; height:190px; display:block;">' +
+        '<rect width="100" height="100" fill="#090d16"/>' +
+        '<line x1="0" y1="33" x2="100" y2="33" stroke="#1e293b" stroke-width="2.5"/>' +
+        '<line x1="20" y1="0" x2="20" y2="100" stroke="#1e293b" stroke-width="2"/>' +
+        '<line x1="80" y1="0" x2="80" y2="100" stroke="#1e293b" stroke-width="2"/>' +
+        '<rect x="22" y="55" width="56" height="36" rx="4" fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.2)" stroke-width="0.6"/>' +
+        '<polyline points="' + polyPoints + '" fill="none" stroke="rgba(245,158,11,0.45)" stroke-width="1.2" stroke-dasharray="2.5,2"/>' +
+        pinsSvg +
+        '</svg></div>';
+    }
+
+    function renderClueTabHtml(cityObj) {
+      if (!huntStarted) {
+        return '<div class="card">' +
+          '<h2 style="font-size:20px; font-weight:900; color:#fff; margin-bottom:6px;">🚀 Start Your Downtown Quest</h2>' +
+          '<p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Head to the Starting Star on the map, enter your team name below, and tap Start Clock when you are ready!</p>' +
+          '<input id="teamNameInput" class="input-field" placeholder="Enter Team Name (e.g. Square Sleuths)" value="' + escapeHtml(teamName) + '" style="margin-bottom:12px;" />' +
+          '<button class="btn-primary" onclick="startNewHunt()">Start Official Team Clock ⏱️</button>' +
+          '</div>';
+      }
+
+      if (huntCompleted || currentStopIndex >= clues.length) {
+        var totalPenaltySec = (hintsUsedCount * GLOBAL_CONFIG.hintPenaltySeconds) + (skipsUsedCount * GLOBAL_CONFIG.skipPenaltySeconds);
+        var finalTotalSec = elapsedSeconds + totalPenaltySec;
+        return '<div class="card" style="text-align:center; border-color:#10b981;">' +
+          '<div style="font-size:44px; margin-bottom:6px;">🏆</div>' +
+          '<h2 style="font-size:22px; font-weight:900; color:#fff; margin-bottom:4px;">Trail Completed!</h2>' +
+          '<p style="font-size:13px; color:#94a3b8; margin-bottom:12px;">Awesome job, <b>' + escapeHtml(teamName) + '</b>! You conquered all ' + clues.length + ' stops.</p>' +
+          '<div style="background:#090d16; border:1px solid #10b981; border-radius:14px; padding:14px; margin-bottom:14px;">' +
+          '<div style="font-size:11px; color:#94a3b8; font-weight:800;">FINAL OFFICIAL TIME</div>' +
+          '<div style="font-size:28px; font-weight:900; color:#34d399; margin:4px 0;">' + formatSeconds(finalTotalSec) + '</div>' +
+          '<div style="font-size:12px; color:#fcd34d; font-weight:800;">Victory Claim Code: ' + escapeHtml(victoryClaimCode) + '</div>' +
+          '</div>' +
+          '<div style="display:flex; gap:8px; margin-bottom:10px;">' +
+          '<button class="btn-primary" style="flex:1;" onclick="switchTab(\'vip\')">🎁 View Unlocked VIP Perks</button>' +
+          '<button class="btn-secondary" style="flex:1;" onclick="shareVictoryScore(\'' + formatSeconds(finalTotalSec) + '\')">📲 Share Score</button>' +
+          '</div></div>';
+      }
+
+      var stop = clues[currentStopIndex];
+      var hintShown = !!hintRevealedForStop[stop.number];
+      var hintPenaltyMin = Math.round(GLOBAL_CONFIG.hintPenaltySeconds / 60);
+
+      var vipTeaserHtml = "";
+      if (stop.sponsorName && stop.sponsorPerk && !isPartnerCapReached(stop)) {
+        vipTeaserHtml = '<div style="margin-top:12px; padding:10px 12px; border-radius:12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.35); font-size:12px; color:#34d399; font-weight:700;">' +
+          '🎁 Solve this stop to unlock a VIP Perk at <b>' + escapeHtml(stop.sponsorName) + '</b>' +
+          (stop.bonusSponsorName && stop.bonusSponsorPerk ? ' + a Next-Door Bonus at <b>' + escapeHtml(stop.bonusSponsorName) + '</b>!' : '!') +
+          '</div>';
+      }
+
+      return '<div class="card">' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
+        '<span style="background:rgba(245,158,11,0.18); color:#fcd34d; font-size:11px; font-weight:900; padding:4px 10px; border-radius:99px;">STOP #' + stop.number + ' OF ' + clues.length + '</span>' +
+        '<span style="font-size:12px; color:#94a3b8; font-weight:700;">' + escapeHtml(stop.shortLabel) + '</span>' +
+        '</div>' +
+        '<h3 style="font-size:19px; font-weight:900; color:#fff; margin-bottom:10px;">' + escapeHtml(stop.title) + '</h3>' +
+        '<div style="background:#090d16; border:1px solid #1e293b; border-radius:14px; padding:15px; font-size:15px; color:#f1f5f9; line-height:1.6; font-weight:600; margin-bottom:14px;">' +
+        escapeHtml(stop.riddle) +
+        '</div>' +
+        (hintShown
+          ? '<div style="background:rgba(245,158,11,0.12); border:1px solid #f59e0b; border-radius:12px; padding:10px 12px; font-size:12px; color:#fde68a; margin-bottom:12px;">💡 <b>Hint:</b> ' + escapeHtml(stop.hint) + '</div>'
+          : '') +
+        '<input id="clueAnswerInput" class="input-field" placeholder="Type your answer here..." onkeydown="if(event.key===\'Enter\') submitAnswer()" style="margin-bottom:10px;" />' +
+        '<div id="answerFeedbackMsg" style="display:none; font-size:12px; font-weight:800; color:#f87171; margin-bottom:10px;"></div>' +
+        '<button class="btn-primary" onclick="submitAnswer()">Unlock Stop #' + stop.number + ' 🔓</button>' +
+        '<div style="display:flex; gap:8px; margin-top:10px;">' +
+        (!hintShown && stop.hint
+          ? '<button class="btn-secondary" style="flex:1;" onclick="useClueHint(' + stop.number + ')">💡 Use Hint (+' + hintPenaltyMin + 'm)</button>'
+          : '') +
+        '<button class="btn-secondary" style="flex:1; color:#94a3b8;" onclick="handleSkipStopClick()">⏭️ Skip Stop (+' + Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60) + 'm)</button>' +
+        '</div>' +
+        vipTeaserHtml +
+        '</div>';
+    }
+
+    function renderLeaderboardTabHtml(cityObj) {
+      var cityRanks = rankings.filter(function(r) { return r.city === cityObj.id; });
+      cityRanks.sort(function(a, b) { return (Number(a.timeSeconds) || 0) - (Number(b.timeSeconds) || 0); });
+
+      var rowsHtml = "";
+      cityRanks.forEach(function(r, idx) {
+        var medal = idx === 0 ? "🥇" : (idx === 1 ? "🥈" : (idx === 2 ? "🥉" : "#" + (idx + 1)));
+        rowsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:11px 12px; background:#090d16; border:1px solid #1e293b; border-radius:12px; margin-bottom:8px;">' +
+          '<div style="display:flex; align-items:center; gap:10px;">' +
+          '<span style="font-size:15px; font-weight:900; color:#fcd34d; min-width:26px;">' + medal + '</span>' +
+          '<div><div style="font-size:14px; font-weight:800; color:#fff;">' + escapeHtml(r.team) + '</div>' +
+          '<div style="font-size:11px; color:#64748b;">Hints: ' + (r.hintsUsed || 0) + ' • Skips: ' + (r.skipsUsed || 0) + '</div></div>' +
+          '</div>' +
+          '<div style="font-size:15px; font-weight:900; color:#34d399;">' + escapeHtml(r.formattedTime || formatSeconds(r.timeSeconds)) + '</div>' +
+          '</div>';
+      });
+
+      return '<div class="card">' +
+        '<h3 style="font-size:17px; font-weight:900; color:#fff; margin-bottom:4px;">🏆 ' + escapeHtml(cityObj.name) + ' Leaderboard</h3>' +
+        '<p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Official verified team completions ranked by fastest total time.</p>' +
+        (rowsHtml || '<div style="text-align:center; color:#94a3b8; padding:20px;">Be the first team to set the record!</div>') +
+        '</div>';
+    }
+
+    function switchTab(tabName) {
+      activeTab = tabName;
+      renderMainContent();
+    }
+
+    // =========================================================================
+    // HUNT START, ANSWER CHECK, HINTS, SKIPS & FINISH
+    // =========================================================================
+    function startNewHunt() {
+      var inputEl = document.getElementById("teamNameInput");
+      var rawName = inputEl ? inputEl.value.trim() : "";
+      if (!rawName) {
+        alert("Please enter a Team Name to start your clock!");
+        return;
+      }
+
+      var exists = rankings.some(function(r) {
+        return r.city === activeCityId && String(r.team || "").trim().toLowerCase() === rawName.toLowerCase();
+      });
+      if (exists && !adminModeUnlocked) {
+        alert("That team name is already on the leaderboard! Pick a unique team name.");
+        return;
+      }
+
+      teamName = rawName;
+      huntStarted = true;
+      huntCompleted = false;
+      currentStopIndex = 0;
+      startTimeMs = Date.now();
+      stopEnteredMs = Date.now();
+      elapsedSeconds = 0;
+      totalPausedMs = 0;
+      hintsUsedCount = 0;
+      skipsUsedCount = 0;
+      hintRevealedForStop = {};
+      stopSplitSeconds = {};
+      victoryClaimCode = "";
+
+      saveActiveSession();
+      startMainClockLoop();
+      trackQuestEvent({ action: "start_team", city: activeCityId, team: teamName, deviceId: getDeviceId() });
+      renderMainContent();
+    }
+
+    function startMainClockLoop() {
+      if (mainTimerInterval) clearInterval(mainTimerInterval);
+      mainTimerInterval = setInterval(function() {
+        if (!huntStarted || huntCompleted || isTimerPausedForVip) return;
+        elapsedSeconds = Math.max(0, Math.floor((Date.now() - startTimeMs - totalPausedMs) / 1000));
+        var el = document.getElementById("liveTimerDisplay");
+        if (el) {
+          var totalPenaltySec = (hintsUsedCount * GLOBAL_CONFIG.hintPenaltySeconds) + (skipsUsedCount * GLOBAL_CONFIG.skipPenaltySeconds);
+          el.innerText = formatSeconds(elapsedSeconds + totalPenaltySec);
+        }
+      }, 1000);
+    }
+
+    function normalizeAnswerString(s) {
+      return String(s || "").toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
+    }
+
+    function submitAnswer() {
+      var stop = clues[currentStopIndex];
+      if (!stop) return;
+      var inputEl = document.getElementById("clueAnswerInput");
+      var userRaw = inputEl ? inputEl.value : "";
+      var userClean = normalizeAnswerString(userRaw);
+      if (!userClean) return;
+
+      var matched = (stop.acceptedAnswers || []).some(function(ans) {
+        return normalizeAnswerString(ans) === userClean;
+      });
+
+      if (!matched) {
+        var fb = document.getElementById("answerFeedbackMsg");
+        if (fb) {
+          fb.style.display = "block";
+          fb.innerText = "❌ Not quite! Double-check the clue details or use a hint.";
+        }
+        return;
+      }
+
+      var solvedStop = stop;
+      var splitSec = Math.max(1, Math.round((Date.now() - (stopEnteredMs || Date.now())) / 1000));
+      stopSplitSeconds["S" + solvedStop.number] = splitSec;
+      stopEnteredMs = Date.now();
+      currentStopIndex++;
+
+      if (currentStopIndex >= clues.length) {
+        completeHuntRun();
+      } else {
+        saveActiveSession();
+      }
+
+      renderMainContent();
+      showClueSolvedCelebrationModal(solvedStop);
+    }
+
+    function useClueHint(stopNumber) {
+      if (!hintRevealedForStop[stopNumber]) {
+        hintRevealedForStop[stopNumber] = true;
+        hintsUsedCount++;
+        saveActiveSession();
+      }
+      renderMainContent();
+    }
+
+    function handleSkipStopClick() {
+      var skipMin = Math.round(GLOBAL_CONFIG.skipPenaltySeconds / 60);
+      if (!confirm("Skip this stop for a +" + skipMin + " minute time penalty?")) return;
+      var skippedStop = clues[currentStopIndex];
+      skipsUsedCount++;
+      stopEnteredMs = Date.now();
+      currentStopIndex++;
+
+      if (currentStopIndex >= clues.length) {
+        completeHuntRun();
+      } else {
+        saveActiveSession();
+      }
+      renderMainContent();
+      if (skippedStop) showClueSolvedCelebrationModal(skippedStop);
+    }
+
+    function completeHuntRun() {
+      huntCompleted = true;
+      if (mainTimerInterval) clearInterval(mainTimerInterval);
+      var totalPenaltySec = (hintsUsedCount * GLOBAL_CONFIG.hintPenaltySeconds) + (skipsUsedCount * GLOBAL_CONFIG.skipPenaltySeconds);
+      var finalSec = elapsedSeconds + totalPenaltySec;
+      var formatted = formatSeconds(finalSec);
+      victoryClaimCode = "QATL-" + Math.floor(1000 + Math.random() * 9000);
+
+      var splitsArr = [];
+      Object.keys(stopSplitSeconds).forEach(function(k) {
+        splitsArr.push(k + ":" + stopSplitSeconds[k] + "s");
+      });
+      var telemetryStr = "Device:" + getDeviceId() + " | Splits:" + splitsArr.join(",");
+
+      rankings.push({
+        city: activeCityId,
+        team: teamName,
+        timeSeconds: finalSec,
+        formattedTime: formatted,
+        hintsUsed: hintsUsedCount,
+        skipsUsed: skipsUsedCount,
+        date: "Just Now",
+        claimCode: victoryClaimCode
+      });
+
+      saveActiveSession();
+      trackQuestEvent({
+        action: "submit_score",
+        city: activeCityId,
+        team: teamName,
+        timeSeconds: finalSec,
+        formattedTime: formatted,
+        hintsUsed: hintsUsedCount,
+        skipsUsed: skipsUsedCount,
+        claimCode: victoryClaimCode,
+        telemetry: telemetryStr
+      });
+    }
+
+    function shareVictoryScore(formattedTimeStr) {
+      var text = "🏆 My team (" + teamName + ") just conquered the " + activeCityId.toUpperCase() + " scavenger hunt on QuestATL.com in " + formattedTimeStr + "! (Claim Code: " + victoryClaimCode + ")";
+      trackQuestEvent({ action: "social_share", city: activeCityId, team: teamName, claimCode: victoryClaimCode, formattedTime: formattedTimeStr });
+      if (navigator.share) {
+        navigator.share({ title: "QuestATL Victory!", text: text, url: window.location.href }).catch(function() {});
+      } else {
+        navigator.clipboard.writeText(text);
+        alert("Score copied to clipboard! Paste it on Instagram or Facebook.");
+      }
+    }
+
+    // =========================================================================
+    // SESSION PERSISTENCE, FORMS & ADMIN TOOLS
+    // =========================================================================
+    function saveActiveSession() {
+      var payload = {
+        activeCityId: activeCityId,
+        teamName: teamName,
+        huntStarted: huntStarted,
+        huntCompleted: huntCompleted,
+        currentStopIndex: currentStopIndex,
+        startTimeMs: startTimeMs,
+        stopEnteredMs: stopEnteredMs,
+        elapsedSeconds: elapsedSeconds,
+        totalPausedMs: totalPausedMs,
+        hintsUsedCount: hintsUsedCount,
+        skipsUsedCount: skipsUsedCount,
+        hintRevealedForStop: hintRevealedForStop,
+        stopSplitSeconds: stopSplitSeconds,
+        victoryClaimCode: victoryClaimCode
+      };
+      localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(payload));
+    }
+
+    function restoreActiveSession() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY_SESSION);
+        if (!raw) return;
+        var s = JSON.parse(raw);
+        if (s && s.huntStarted) {
+          activeCityId = s.activeCityId || activeCityId;
+          teamName = s.teamName || "";
+          huntStarted = !!s.huntStarted;
+          huntCompleted = !!s.huntCompleted;
+          currentStopIndex = Number(s.currentStopIndex) || 0;
+          startTimeMs = Number(s.startTimeMs) || Date.now();
+          stopEnteredMs = Number(s.stopEnteredMs) || Date.now();
+          elapsedSeconds = Number(s.elapsedSeconds) || 0;
+          totalPausedMs = Number(s.totalPausedMs) || 0;
+          hintsUsedCount = Number(s.hintsUsedCount) || 0;
+          skipsUsedCount = Number(s.skipsUsedCount) || 0;
+          hintRevealedForStop = s.hintRevealedForStop || {};
+          stopSplitSeconds = s.stopSplitSeconds || {};
+          victoryClaimCode = s.victoryClaimCode || "";
+          if (huntStarted && !huntCompleted) startMainClockLoop();
+        }
+      } catch (e) {}
+    }
+
+    function resetCurrentDeviceSession() {
+      if (!confirm("Reset active team session and clear all redeemed VIP locks on this phone?")) return;
+      localStorage.removeItem(STORAGE_KEY_SESSION);
+      localStorage.removeItem(STORAGE_KEY_REDEEMED);
+      huntStarted = false;
+      huntCompleted = false;
+      currentStopIndex = 0;
+      elapsedSeconds = 0;
+      totalPausedMs = 0;
+      hintsUsedCount = 0;
+      skipsUsedCount = 0;
+      vipPauseUsedForShop = {};
+      closeAdminDemoModal();
+      renderMainContent();
+    }
+
+    function trackQuestEvent(payload) {
+      if (!GOOGLE_SHEET_API_URL) return;
+      fetch(GOOGLE_SHEET_API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      }).catch(function() {});
+    }
+
+    function openRulesModal() {
+      document.getElementById("rulesModalText").innerText = GLOBAL_CONFIG.rulesText;
+      document.getElementById("rulesModal").classList.add("show");
+    }
+
+    function closeRulesModal() {
+      document.getElementById("rulesModal").classList.remove("show");
+    }
+
+    function openPartnerInfoModal() {
+      document.getElementById("partnerFormFeedback").style.display = "none";
+      document.getElementById("partnerInfoModal").classList.add("show");
+    }
+
+    function closePartnerInfoModal() {
+      document.getElementById("partnerInfoModal").classList.remove("show");
     }
 
     function submitPartnerInquiryForm() {
-      var shop = document.getElementById("partnerShopInput").value.trim(), person = document.getElementById("partnerPersonInput").value.trim(), contact = document.getElementById("partnerContactInput").value.trim(), note = document.getElementById("partnerNoteInput").value.trim();
-      if (!shop || !contact) { alert("Please enter your Business Name and best Email or Phone Number."); return; }
-      trackQuestEvent({ action: "submit_partner_inquiry", city: activeCityId, shopName: shop, contactName: person, contactInfo: contact, message: note });
-      document.getElementById("partnerShopInput").value = ""; document.getElementById("partnerPersonInput").value = ""; document.getElementById("partnerContactInput").value = ""; document.getElementById("partnerNoteInput").value = "";
-      var fb = document.getElementById("partnerFormFeedback"); if (fb) fb.style.display = "block";
+      var shop = document.getElementById("partnerShopInput").value.trim();
+      var person = document.getElementById("partnerPersonInput").value.trim();
+      var contact = document.getElementById("partnerContactInput").value.trim();
+      var notes = document.getElementById("partnerNoteInput").value.trim();
+      if (!shop || !contact) {
+        alert("Please enter your business name and best contact info.");
+        return;
+      }
+      trackQuestEvent({
+        action: "submit_partner_inquiry",
+        city: activeCityId,
+        shopName: shop,
+        personName: person,
+        contactInfo: contact,
+        notes: notes
+      });
+      var fb = document.getElementById("partnerFormFeedback");
+      fb.style.display = "block";
+      fb.innerText = "✅ Inquiry sent! We will reach out shortly to set up your VIP stop.";
+      setTimeout(closePartnerInfoModal, 1800);
     }
 
-    function openRulesModal() { document.getElementById("rulesModal").classList.add("show"); }
-    function openPartnerInfoModal() { var fb = document.getElementById("partnerFormFeedback"); if (fb) fb.style.display = "none"; document.getElementById("partnerInfoModal").classList.add("show"); }
+    function submitAnonymousSuggestion(cityName) {
+      var el = document.getElementById("citySuggestionNotes");
+      var notes = el ? el.value.trim() : "";
+      if (!notes) {
+        alert("Please enter your landmark or shop suggestion first!");
+        return;
+      }
+      trackQuestEvent({
+        action: "submit_suggestion",
+        city: activeCityId,
+        suggestionCity: cityName,
+        notes: notes
+      });
+      if (el) el.value = "";
+      alert("✅ Thanks! Your suggestion for " + cityName + " has been logged.");
+    }
+
+    function toggleSoundMute() {
+      soundMuted = !soundMuted;
+      var btn = document.getElementById("soundToggleBtn");
+      if (btn) btn.innerText = soundMuted ? "🔇" : "🔊";
+    }
 
     function handleSecretAdminTap() {
       adminTapCount++;
+      if (adminTapTimer) clearTimeout(adminTapTimer);
+      adminTapTimer = setTimeout(function() { adminTapCount = 0; }, 1800);
       if (adminTapCount >= 5) {
-        adminModeUnlocked = true;
-        document.getElementById("adminPill").style.display = "inline-block";
-        renderCitySelector(); renderMainContent(); openAdminDemoModal();
         adminTapCount = 0;
+        if (!adminModeUnlocked) {
+          var pin = prompt("Enter QuestATL Admin PIN:");
+          if (pin !== GLOBAL_CONFIG.adminPin) return;
+          adminModeUnlocked = true;
+          document.getElementById("adminPill").style.display = "inline-block";
+        }
+        openAdminDemoModal();
       }
     }
 
     function openAdminDemoModal() {
-      var listEl = document.getElementById("adminStopJumpList"), html = "";
-      for (var i = 0; i < clues.length; i++) {
-        var c = clues[i], customMin = c.sponsorTimerMinutes || GLOBAL_CONFIG.vipVoucherTimerMinutes || 5;
-        html += '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #1e293b; font-size:12px;"><span><strong>#' + c.number + '</strong> ' + escapeHtml(c.shortLabel) + (c.sponsorName ? ' <span style="color:#10b981;">(' + escapeHtml(c.sponsorName) + ')</span>' : '') + '</span><div style="display:flex; gap:6px;"><button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="adminJumpToStop(' + i + ')">Jump</button>' + (c.sponsorName ? '<button class="btn-secondary" style="padding:4px 8px; font-size:11px; border-color:#10b981; color:#34d399;" onclick="closeAdminDemoModal(); openVipVoucher(\'' + escapeQuotes(c.sponsorName) + '\', \'' + escapeQuotes(c.sponsorPerk) + '\', ' + customMin + ')">VIP</button>' : '') + '</div></div>';
+      var listEl = document.getElementById("adminStopJumpList");
+      if (listEl) {
+        var html = "";
+        clues.forEach(function(s, idx) {
+          var spLabel = s.sponsorName ? (" • 🎁 " + s.sponsorName + (s.bonusSponsorName ? " + " + s.bonusSponsorName : "")) : "";
+          html += '<div style="display:flex; justify-content:space-between; align-items:center; background:#111827; padding:8px 10px; border-radius:8px; border:1px solid #1e293b;">' +
+            '<span style="font-size:12px; color:#e2e8f0; font-weight:700;">Stop #' + s.number + ': ' + escapeHtml(s.shortLabel) + escapeHtml(spLabel) + '</span>' +
+            '<button class="btn-secondary" style="padding:4px 8px; font-size:11px;" onclick="adminJumpToStop(' + idx + ')">Jump & Solve</button>' +
+            '</div>';
+        });
+        listEl.innerHTML = html;
       }
-      listEl.innerHTML = html || '<div style="font-size:12px; color:#94a3b8; padding:8px;">No clues loaded from Google Sheets yet.</div>';
       document.getElementById("adminDemoModal").classList.add("show");
     }
 
-    function closeAdminDemoModal() { document.getElementById("adminDemoModal").classList.remove("show"); }
-    function adminJumpToStop(idx) {
-      if (!huntStarted) { teamName = "Partner Demo"; huntStarted = true; startTimeMs = Date.now(); lastStopTimestampMs = startTimeMs; startLiveTimerLoop(); }
-      currentStopIndex = idx; activeGameTab = "clue"; closeAdminDemoModal(); renderMainContent();
+    function closeAdminDemoModal() {
+      document.getElementById("adminDemoModal").classList.remove("show");
     }
 
-    function formatSeconds(sec) { var m = Math.floor(sec / 60), s = sec % 60; return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s); }
-    function escapeHtml(str) { return String(str || "").replace(/[&<>"']/g, function(m) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]; }); }
-    function escapeQuotes(str) { return String(str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;"); }
+    function adminJumpToStop(idx) {
+      if (!huntStarted) {
+        teamName = "Partner Demo";
+        huntStarted = true;
+        startTimeMs = Date.now();
+      }
+      currentStopIndex = idx + 1;
+      closeAdminDemoModal();
+      renderMainContent();
+      if (clues[idx]) showClueSolvedCelebrationModal(clues[idx]);
+    }
 
-    window.onload = function() {
-      applyUrlDeepLinks();
-      autoDetectMonthlyTheme();
-      restoreSavedSession();
-      fetchLiveDatabase();
-    };
+    window.addEventListener("DOMContentLoaded", function() {
+      fetchLiveDatabase(false);
+    });
   </script>
 </body>
 </html>
