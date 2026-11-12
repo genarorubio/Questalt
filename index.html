@@ -14,9 +14,9 @@
     gtag('config', 'G-51N0DTM4L3');
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Leaflet Real-World Dark Map CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- MapLibre GL JS (100% Free Vector Map Engine with OpenFreeMap — NO API Key Required) -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <style>
     :root {
       --bg-top: #172036;
@@ -202,10 +202,10 @@
       color: #fcd34d;
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.18);
     }
-    /* Custom Dark Map Styling (Matches Screenshot Color Palette & Street Labels) */
+    /* Custom No-API-Key Dark Map Container & Markers */
     #questLeafletMap {
       width: 100%;
-      height: 390px;
+      height: 400px;
       border-radius: 14px;
       background: #0b1322;
       border: 1px solid #1e293b;
@@ -213,35 +213,14 @@
       position: relative;
       z-index: 1;
     }
-    .leaflet-tile-pane {
-      filter: brightness(1.08) contrast(1.12) saturate(1.25) hue-rotate(195deg);
-    }
-    .leaflet-control-attribution {
-      font-size: 8px !important;
-      background: rgba(7, 11, 20, 0.65) !important;
+    .maplibregl-ctrl-attrib {
+      font-size: 9px !important;
+      background: rgba(7, 11, 20, 0.72) !important;
       color: #64748b !important;
+      padding: 2px 6px !important;
+      border-radius: 6px !important;
     }
-    .leaflet-control-attribution a { color: #94a3b8 !important; }
-    .map-street-label {
-      color: #cbd5e1;
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 800;
-      text-shadow: 0 1px 4px #000, 0 0 6px #000;
-      white-space: nowrap;
-      pointer-events: none;
-      letter-spacing: 0.3px;
-    }
-    .map-park-label {
-      color: rgba(52, 211, 153, 0.78);
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 900;
-      text-shadow: 0 1px 4px #000;
-      white-space: nowrap;
-      pointer-events: none;
-      letter-spacing: 0.4px;
-    }
+    .maplibregl-ctrl-attrib a { color: #94a3b8 !important; }
     .claimed-star-marker {
       display: flex;
       flex-direction: column;
@@ -263,18 +242,18 @@
       box-shadow: 0 0 12px rgba(251, 191, 36, 0.65);
     }
     .claimed-star-num {
-      background: rgba(9, 13, 22, 0.9);
+      background: rgba(9, 13, 22, 0.92);
       color: #fde68a;
       font-size: 10px;
       font-weight: 900;
       padding: 1px 5px;
       border-radius: 6px;
       margin-top: 2px;
-      border: 1px solid rgba(251, 191, 36, 0.4);
+      border: 1px solid rgba(251, 191, 36, 0.45);
     }
     .active-radar-zone-wrapper {
-      width: 110px;
-      height: 110px;
+      width: 112px;
+      height: 112px;
       position: relative;
       display: flex;
       align-items: center;
@@ -285,8 +264,8 @@
       width: 82px;
       height: 82px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(245,158,11,0.58) 0%, rgba(234,88,12,0.28) 55%, rgba(245,158,11,0) 100%);
-      border: 2px solid rgba(251, 191, 36, 0.75);
+      background: radial-gradient(circle, rgba(245,158,11,0.6) 0%, rgba(234,88,12,0.3) 55%, rgba(245,158,11,0) 100%);
+      border: 2px solid rgba(251, 191, 36, 0.8);
       animation: beaconBreath 2.2s ease-in-out infinite;
     }
     .active-radar-ring {
@@ -299,8 +278,8 @@
     }
     .active-radar-caption {
       position: absolute;
-      bottom: -18px;
-      background: rgba(9, 13, 22, 0.92);
+      bottom: -16px;
+      background: rgba(9, 13, 22, 0.94);
       border: 1px solid #f59e0b;
       color: #fcd34d;
       font-size: 9px;
@@ -308,7 +287,7 @@
       padding: 2px 6px;
       border-radius: 6px;
       white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.65);
     }
     .modal-overlay {
       position: fixed;
@@ -544,7 +523,7 @@
 
     // UI, Map & Admin State
     var activeTab = "clue"; // "clue", "map", "vip", "leaderboard"
-    var leafletMapInstance = null;
+    var mapLibreInstance = null;
     var userGpsMarker = null;
     var soundMuted = false;
     var adminTapCount = 0;
@@ -983,9 +962,10 @@
       var container = document.getElementById("mainContent");
       if (!container) return;
 
-      if (leafletMapInstance) {
-        try { leafletMapInstance.remove(); } catch (e) {}
-        leafletMapInstance = null;
+      if (mapLibreInstance) {
+        try { mapLibreInstance.remove(); } catch (e) {}
+        mapLibreInstance = null;
+        userGpsMarker = null;
       }
 
       if (isLoadingDatabase) {
@@ -1077,7 +1057,7 @@
     }
 
     // =========================================================================
-    // DEDICATED MAP TAB (REAL DARK STREET MAP + GLOW ZONE + GOLD STARS)
+    // DEDICATED MAP TAB (OPENFREEMAP + MAPLIBRE GL — NO API KEY, NO STORE NAMES)
     // =========================================================================
     function renderMapTabHtml(cityObj) {
       var isSundayEdition = getEffectiveDayStr() === "0";
@@ -1106,9 +1086,8 @@
       var mapEl = document.getElementById("questLeafletMap");
       if (!mapEl) return;
 
-      // Fallback if Leaflet CDN is unavailable offline
-      if (typeof window.L === "undefined") {
-        mapEl.innerHTML = '<div style="padding:24px; text-align:center; color:#94a3b8;">Map library loading... Check connection or switch back to Clue tab.</div>';
+      if (typeof window.maplibregl === "undefined") {
+        mapEl.innerHTML = '<div style="padding:24px; text-align:center; color:#94a3b8;">Map library loading... Check internet connection or switch back to Clue tab.</div>';
         return;
       }
 
@@ -1119,106 +1098,143 @@
       var centerLat = (targetStop && targetStop.lat) ? Number(targetStop.lat) : 33.9557;
       var centerLng = (targetStop && targetStop.lng) ? Number(targetStop.lng) : -83.9877;
 
-      leafletMapInstance = L.map("questLeafletMap", {
-        center: [centerLat, centerLng],
-        zoom: 17,
-        minZoom: 15,
+      // Initialize MapLibre GL with OpenFreeMap (100% Free, Zero API Key Required)
+      mapLibreInstance = new maplibregl.Map({
+        container: "questLeafletMap",
+        style: "https://tiles.openfreemap.org/styles/dark",
+        center: [centerLng, centerLat],
+        zoom: 16.3,
+        minZoom: 14,
         maxZoom: 19,
-        zoomControl: false
+        pitch: 0,
+        attributionControl: true
       });
 
-      // Clean Dark Street Base Layer WITH ZERO STORE / BUSINESS LABELS
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
-        subdomains: "abcd",
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap &copy; CARTO"
-      }).addTo(leafletMapInstance);
+      mapLibreInstance.on("load", function() {
+        if (!mapLibreInstance) return;
 
-      // Custom Clean Street & Park Labels for Downtown Lawrenceville (No Business Clutter)
-      if (cityObj.id.indexOf("lawrenceville") !== -1) {
-        var streetLabels = [
-          { lat: 33.95718, lng: -83.98830, text: "W Pike St", cls: "map-street-label" },
-          { lat: 33.95628, lng: -83.98810, text: "W Crogan St", cls: "map-street-label" },
-          { lat: 33.95632, lng: -83.98685, text: "E Crogan St", cls: "map-street-label" },
-          { lat: 33.95492, lng: -83.98795, text: "Luckie St", cls: "map-street-label" },
-          { lat: 33.95585, lng: -83.98912, text: "S Perry St", cls: "map-street-label" },
-          { lat: 33.95665, lng: -83.98805, text: "N Clayton St", cls: "map-street-label" },
-          { lat: 33.95565, lng: -83.98692, text: "S Chestnut St", cls: "map-street-label" },
-          { lat: 33.95682, lng: -83.98882, text: "COURTHOUSE SQUARE", cls: "map-park-label" },
-          { lat: 33.95448, lng: -83.98715, text: "LAWRENCEVILLE LAWN", cls: "map-park-label" }
-        ];
-        streetLabels.forEach(function(lbl) {
-          L.marker([lbl.lat, lbl.lng], {
-            interactive: false,
-            icon: L.divIcon({
-              className: "",
-              html: '<div class="' + lbl.cls + '">' + lbl.text + '</div>',
-              iconSize: [100, 18],
-              iconAnchor: [50, 9]
-            })
-          }).addTo(leafletMapInstance);
-        });
-      }
+        // 1. Strip ALL store/business/POI names & icons and restyle colors to match dark navy/slate/teal screenshot
+        try {
+          var layers = mapLibreInstance.getStyle().layers || [];
+          layers.forEach(function(layer) {
+            var id = String(layer.id || "").toLowerCase();
+            var srcLayer = String(layer["source-layer"] || "").toLowerCase();
 
-      // Starting Flag Pin
-      L.marker([startLat, startLng], {
-        icon: L.divIcon({
-          className: "",
-          html: '<div style="background:#090d16; border:2px solid #38bdf8; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; box-shadow:0 0 10px rgba(56,189,248,0.5);">🚩</div>',
-          iconSize: [24, 24],
-          iconAnchor: [12, 12]
-        })
-      }).addTo(leafletMapInstance);
+            // Hide every POI / business / shop / transit icon or label
+            if (
+              id.indexOf("poi") !== -1 ||
+              srcLayer.indexOf("poi") !== -1 ||
+              id.indexOf("housenumber") !== -1 ||
+              srcLayer.indexOf("housenumber") !== -1 ||
+              id.indexOf("transit") !== -1 ||
+              id.indexOf("aeroway") !== -1
+            ) {
+              mapLibreInstance.setLayoutProperty(layer.id, "visibility", "none");
+              return;
+            }
 
-      // Trail Polyline Through Claimed Stops + Current Active Glow Zone Only (Future Stops Hidden!)
-      var trailLatLngs = [[startLat, startLng]];
-      var maxVisibleIdx = huntCompleted ? (clues.length - 1) : currentStopIndex;
+            // Tint background to deep navy (#0b1322)
+            if (layer.type === "background") {
+              mapLibreInstance.setPaintProperty(layer.id, "background-color", "#0b1322");
+            }
+            // Tint parks / Lawrenceville Lawn / Courthouse Square to emerald-teal (#123536)
+            else if (layer.type === "fill" && (id.indexOf("park") !== -1 || id.indexOf("landuse") !== -1 || id.indexOf("Landcover") !== -1 || srcLayer.indexOf("park") !== -1 || srcLayer.indexOf("landcover") !== -1)) {
+              mapLibreInstance.setPaintProperty(layer.id, "fill-color", "#123536");
+            }
+            // Tint building footprints to subtle dark slate (#152033)
+            else if (layer.type === "fill" && (id.indexOf("building") !== -1 || srcLayer.indexOf("building") !== -1)) {
+              mapLibreInstance.setPaintProperty(layer.id, "fill-color", "#152033");
+            }
+            // Tint streets/roads to steel-blue (#334868)
+            else if (layer.type === "line" && (id.indexOf("road") !== -1 || id.indexOf("highway") !== -1 || id.indexOf("transportation") !== -1 || srcLayer.indexOf("transportation") !== -1)) {
+              if (id.indexOf("casing") !== -1) {
+                mapLibreInstance.setPaintProperty(layer.id, "line-color", "#080e1a");
+              } else if (id.indexOf("path") !== -1 || id.indexOf("pedestrian") !== -1 || id.indexOf("footway") !== -1) {
+                mapLibreInstance.setPaintProperty(layer.id, "line-color", "#2dd4bf");
+              } else {
+                mapLibreInstance.setPaintProperty(layer.id, "line-color", "#334868");
+              }
+            }
+            // Make street name labels crisp and readable
+            else if (layer.type === "symbol" && (id.indexOf("road") !== -1 || id.indexOf("highway") !== -1 || id.indexOf("transportation") !== -1 || srcLayer.indexOf("transportation_name") !== -1)) {
+              mapLibreInstance.setPaintProperty(layer.id, "text-color", "#cbd5e1");
+              mapLibreInstance.setPaintProperty(layer.id, "text-halo-color", "#070b14");
+              mapLibreInstance.setPaintProperty(layer.id, "text-halo-width", 1.8);
+            }
+          });
+        } catch (styleErr) {}
 
-      for (var i = 0; i <= maxVisibleIdx && i < clues.length; i++) {
-        var st = clues[i];
-        if (!st.lat || !st.lng) continue;
-        var lat = Number(st.lat);
-        var lng = Number(st.lng);
-        trailLatLngs.push([lat, lng]);
+        // 2. Build Trail Line Through Solved Stops + Current Active Glow Zone Only (Future Stops Hidden!)
+        var trailCoords = [[startLng, startLat]];
+        var maxVisibleIdx = huntCompleted ? (clues.length - 1) : currentStopIndex;
 
-        var isSolved = (i < currentStopIndex) || huntCompleted;
-        var isCurrentActive = (!huntCompleted) && (i === currentStopIndex);
-
-        if (isSolved) {
-          // Claimed Stop -> Permanent Gold Star (★)
-          L.marker([lat, lng], {
-            icon: L.divIcon({
-              className: "claimed-star-marker",
-              html: '<div class="claimed-star-badge">★</div><div class="claimed-star-num">#' + st.number + '</div>',
-              iconSize: [34, 42],
-              iconAnchor: [17, 21]
-            })
-          }).addTo(leafletMapInstance);
-        } else if (isCurrentActive) {
-          // Single Active Stop -> Pulsing Orange Directional Radar Glow Zone
-          L.marker([lat, lng], {
-            icon: L.divIcon({
-              className: "",
-              html: '<div class="active-radar-zone-wrapper">' +
-                '<div class="active-radar-ring"></div>' +
-                '<div class="active-radar-core"></div>' +
-                '<div class="active-radar-caption">NEXT CLUE ZONE (#' + st.number + ')</div>' +
-                '</div>',
-              iconSize: [110, 110],
-              iconAnchor: [55, 55]
-            })
-          }).addTo(leafletMapInstance);
+        for (var i = 0; i <= maxVisibleIdx && i < clues.length; i++) {
+          var st = clues[i];
+          if (!st.lat || !st.lng) continue;
+          trailCoords.push([Number(st.lng), Number(st.lat)]);
         }
-      }
 
-      if (trailLatLngs.length > 1) {
-        L.polyline(trailLatLngs, {
-          color: "#f59e0b",
-          weight: 3,
-          opacity: 0.75,
-          dashArray: "6, 6"
-        }).addTo(leafletMapInstance);
-      }
+        if (trailCoords.length > 1) {
+          mapLibreInstance.addSource("quest-trail-line", {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              geometry: {
+                type: "LineString",
+                coordinates: trailCoords
+              }
+            }
+          });
+          mapLibreInstance.addLayer({
+            id: "quest-trail-line-layer",
+            type: "line",
+            source: "quest-trail-line",
+            paint: {
+              "line-color": "#f59e0b",
+              "line-width": 3,
+              "line-opacity": 0.82,
+              "line-dasharray": [2, 2]
+            }
+          });
+        }
+
+        // 3. Add Starting Flag Pin
+        var startPinEl = document.createElement("div");
+        startPinEl.innerHTML = '<div style="background:#090d16; border:2px solid #38bdf8; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; box-shadow:0 0 10px rgba(56,189,248,0.55);">🚩</div>';
+        new maplibregl.Marker({ element: startPinEl, anchor: "center" })
+          .setLngLat([startLng, startLat])
+          .addTo(mapLibreInstance);
+
+        // 4. Add Claimed Gold Stars (★) & Single Pulsing Orange Radar Glow Zone
+        for (var j = 0; j <= maxVisibleIdx && j < clues.length; j++) {
+          var stopObj = clues[j];
+          if (!stopObj.lat || !stopObj.lng) continue;
+          var sLat = Number(stopObj.lat);
+          var sLng = Number(stopObj.lng);
+
+          var isSolved = (j < currentStopIndex) || huntCompleted;
+          var isCurrentActive = (!huntCompleted) && (j === currentStopIndex);
+
+          if (isSolved) {
+            var starEl = document.createElement("div");
+            starEl.className = "claimed-star-marker";
+            starEl.innerHTML = '<div class="claimed-star-badge">★</div><div class="claimed-star-num">#' + stopObj.number + '</div>';
+            new maplibregl.Marker({ element: starEl, anchor: "center" })
+              .setLngLat([sLng, sLat])
+              .addTo(mapLibreInstance);
+          } else if (isCurrentActive) {
+            var radarEl = document.createElement("div");
+            radarEl.innerHTML = '<div class="active-radar-zone-wrapper">' +
+              '<div class="active-radar-ring"></div>' +
+              '<div class="active-radar-core"></div>' +
+              '<div class="active-radar-caption">NEXT CLUE ZONE (#' + stopObj.number + ')</div>' +
+              '</div>';
+            new maplibregl.Marker({ element: radarEl, anchor: "center" })
+              .setLngLat([sLng, sLat])
+              .addTo(mapLibreInstance);
+          }
+        }
+      });
     }
 
     function locatePlayerOnMap() {
@@ -1230,17 +1246,14 @@
         function(pos) {
           var lat = pos.coords.latitude;
           var lng = pos.coords.longitude;
-          if (leafletMapInstance) {
-            if (userGpsMarker) leafletMapInstance.removeLayer(userGpsMarker);
-            userGpsMarker = L.marker([lat, lng], {
-              icon: L.divIcon({
-                className: "",
-                html: '<div style="width:16px; height:16px; border-radius:50%; background:#3b82f6; border:3px solid #fff; box-shadow:0 0 12px #3b82f6;"></div>',
-                iconSize: [16, 16],
-                iconAnchor: [8, 8]
-              })
-            }).addTo(leafletMapInstance);
-            leafletMapInstance.setView([lat, lng], 17);
+          if (mapLibreInstance) {
+            if (userGpsMarker) userGpsMarker.remove();
+            var gpsEl = document.createElement("div");
+            gpsEl.innerHTML = '<div style="width:16px; height:16px; border-radius:50%; background:#3b82f6; border:3px solid #fff; box-shadow:0 0 12px #3b82f6;"></div>';
+            userGpsMarker = new maplibregl.Marker({ element: gpsEl, anchor: "center" })
+              .setLngLat([lng, lat])
+              .addTo(mapLibreInstance);
+            mapLibreInstance.flyTo({ center: [lng, lat], zoom: 17 });
           }
         },
         function() {
